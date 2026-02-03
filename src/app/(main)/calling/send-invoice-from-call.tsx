@@ -62,7 +62,7 @@ export function SendInvoiceFromCall({ lead, onSuccess, onCancel }: SendInvoiceFr
     loadClients()
   }, [])
 
-  function updateLineItem(index: number, field: keyof LineItem, value: string | number) {
+  function updateLineItem(index: number, field: keyof LineItem, value: string | number | boolean) {
     const next = lineItems.map((item, i) => {
       if (i !== index) return item
       const updated = { ...item, [field]: value }
