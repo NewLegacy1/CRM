@@ -125,7 +125,9 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
       if (calendlyRes.ok && calendlyData.bookingLink) {
         calendlyBookingLink = calendlyData.bookingLink
         // Open the booking link in a new tab for the user to complete
-        window.open(calendlyBookingLink, '_blank')
+        if (calendlyBookingLink) {
+          window.open(calendlyBookingLink, '_blank')
+        }
       }
     } catch (err) {
       console.error('Failed to generate Calendly booking link:', err)
