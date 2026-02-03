@@ -25,7 +25,7 @@ export interface NavItem {
 }
 
 export const navItems: NavItem[] = [
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, roles: ['owner', 'closer', 'media_buyer', 'cold_caller'] },
+  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, roles: ['pending', 'owner', 'closer', 'media_buyer', 'cold_caller'] },
   { label: 'Clients', href: '/clients', icon: Users, roles: ['owner', 'closer', 'media_buyer'] },
   { label: 'Projects', href: '/projects', icon: FolderKanban, roles: ['owner', 'closer', 'media_buyer'] },
   { label: 'Deals', href: '/deals', icon: HandCoins, roles: ['owner', 'closer'] },

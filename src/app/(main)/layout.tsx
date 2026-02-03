@@ -18,7 +18,7 @@ export default async function MainLayout({
     .eq('id', user.id)
     .single()
 
-  const role = (profile?.role as UserRole) ?? 'cold_caller'
+  const role = (profile?.role as UserRole) ?? 'pending'
 
   return (
     <MainLayoutClient

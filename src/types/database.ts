@@ -1,4 +1,4 @@
-export type UserRole = 'owner' | 'account_manager' | 'closer' | 'media_buyer' | 'cold_caller'
+export type UserRole = 'pending' | 'owner' | 'account_manager' | 'closer' | 'media_buyer' | 'cold_caller'
 
 export interface Profile {
   id: string
