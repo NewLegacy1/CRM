@@ -72,9 +72,10 @@ export function ProjectsTable({ initialProjects, clients }: ProjectsTableProps) 
       const { updateText, ...updatePayload } = formData
       
       // If there's an update text, append it to the updates array
+      const payload: Record<string, unknown> = { ...updatePayload }
       if (updateText && updateText.trim()) {
         const currentUpdates = (editingProject.updates as { text: string; at: string }[]) ?? []
-        updatePayload.updates = [
+        payload.updates = [
           ...currentUpdates,
           {
             text: updateText.trim(),
@@ -85,7 +86,7 @@ export function ProjectsTable({ initialProjects, clients }: ProjectsTableProps) 
 
       const { data, error } = await supabase
         .from('projects')
-        .update(updatePayload)
+        .update(payload)
         .eq('id', editingProject.id)
         .select('*, client:clients(id, name)')
         .single()
