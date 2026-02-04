@@ -18,11 +18,11 @@ create policy "All users can read all leads"
   using (auth.uid() is not null);
 
 -- 2. Owners and closers can insert/update/delete leads
--- Using explicit boolean conversion to prevent NULL issues
+-- Explicitly cast to boolean to prevent type errors
 create policy "Owners and closers can manage leads"
   on public.leads for all
   using (
-    coalesce(public.get_user_role(), '') in ('owner', 'closer')
+    (coalesce(public.get_user_role(), '') in ('owner', 'closer'))::boolean
   );
 
 -- 3. Cold callers can update leads they're assigned to
