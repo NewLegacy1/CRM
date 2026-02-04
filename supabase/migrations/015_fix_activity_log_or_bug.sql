@@ -13,11 +13,12 @@ returns void as $$
 declare
   v_user_name text;
 begin
-  -- Get user name from profiles (FIXED: use coalesce not OR)
-  select coalesce(display_name, email) into v_user_name
+  -- Get user name from profiles (profiles table only has display_name, not email)
+  select display_name into v_user_name
   from public.profiles
   where id = p_user_id;
   
+  -- If no display_name in profiles, get email from auth.users
   if v_user_name is null then
     select email into v_user_name from auth.users where id = p_user_id;
   end if;
