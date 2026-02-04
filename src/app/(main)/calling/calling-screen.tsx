@@ -43,14 +43,20 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
     if (!selectedList) return
     setLoading(true)
     const supabase = createClient()
-    const { data } = await supabase
+    
+    let query = supabase
       .from('leads')
       .select('*')
       .eq('list_id', selectedList)
       .in('status', ['new', 'no_answer'])
       .order('created_at')
-      .limit(1)
-      .single()
+    
+    // Skip current lead if exists
+    if (currentLead) {
+      query = query.neq('id', currentLead.id)
+    }
+    
+    const { data } = await query.limit(1).single()
 
     setCurrentLead(data || null)
     setLoading(false)
