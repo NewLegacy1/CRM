@@ -31,7 +31,8 @@ interface LeadsTableProps {
 const LEAD_STATUSES = ['new', 'called', 'no_answer', 'didnt_book', 'booked']
 
 export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsTableProps) {
-  const [leads, setLeads] = useState<Lead[]>(initialLeads)
+  const [allLeads, setAllLeads] = useState<Lead[]>(initialLeads)
+  const [selectedListId, setSelectedListId] = useState<string>('all')
   const [leadLists, setLeadLists] = useState<{ id: string; name: string }[]>(initialLeadLists)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isListDialogOpen, setIsListDialogOpen] = useState(false)
@@ -59,6 +60,11 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
   })
   const [batchLoading, setBatchLoading] = useState(false)
 
+  // Filter leads based on selected list
+  const leads = selectedListId === 'all' 
+    ? allLeads 
+    : allLeads.filter(lead => lead.list_id === selectedListId)
+
   // Refresh leads when CSV upload completes
   useEffect(() => {
     async function refreshLeads() {
@@ -68,7 +74,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
         .select('*, list:lead_lists(id, name)')
         .order('created_at', { ascending: false })
       if (data) {
-        setLeads(data)
+        setAllLeads(data)
       }
     }
 
@@ -119,7 +125,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
         .single()
 
       if (!error && data) {
-        setLeads((prev) =>
+        setAllLeads((prev) =>
           prev.map((l) => (l.id === data.id ? data : l))
         )
         setIsDialogOpen(false)
@@ -132,7 +138,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
         .single()
 
       if (!error && data) {
-        setLeads((prev) => [data, ...prev])
+        setAllLeads((prev) => [data, ...prev])
         setIsDialogOpen(false)
       }
     }
@@ -144,7 +150,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
     const supabase = createClient()
     const { error } = await supabase.from('leads').delete().eq('id', id)
     if (!error) {
-      setLeads((prev) => prev.filter((l) => l.id !== id))
+      setAllLeads((prev) => prev.filter((l) => l.id !== id))
       setSelectedLeads((prev) => {
         const next = new Set(prev)
         next.delete(id)
@@ -186,7 +192,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
         .in('id', Array.from(selectedLeads))
 
       if (!error) {
-        setLeads((prev) => prev.filter((l) => !selectedLeads.has(l.id)))
+        setAllLeads((prev) => prev.filter((l) => !selectedLeads.has(l.id)))
         setSelectedLeads(new Set())
       }
       setBatchLoading(false)
@@ -225,7 +231,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
         .order('created_at', { ascending: false })
 
       if (data) {
-        setLeads(data)
+        setAllLeads(data)
       }
       setSelectedLeads(new Set())
       setIsBatchDialogOpen(false)
@@ -273,7 +279,33 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
   return (
     <>
       <div className="flex flex-wrap justify-between items-center gap-2 mb-4">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          <div className="flex items-center gap-2">
+            <Label htmlFor="list-filter" className="text-sm text-zinc-400 whitespace-nowrap">
+              Filter by list:
+            </Label>
+            <select
+              id="list-filter"
+              value={selectedListId}
+              onChange={(e) => {
+                setSelectedListId(e.target.value)
+                setSelectedLeads(new Set()) // Clear selection when filter changes
+              }}
+              className="flex h-9 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+            >
+              <option value="all">View All</option>
+              {leadLists.map((list) => (
+                <option key={list.id} value={list.id}>
+                  {list.name}
+                </option>
+              ))}
+            </select>
+            {selectedListId !== 'all' && (
+              <span className="text-xs text-zinc-500">
+                ({leads.length} {leads.length === 1 ? 'lead' : 'leads'})
+              </span>
+            )}
+          </div>
           {selectedCount > 0 && (
             <div className="flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-500/20 bg-amber-500/10">
               <span className="text-sm text-amber-400 font-medium">
