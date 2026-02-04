@@ -18,28 +18,22 @@ create policy "All users can read all leads"
   using (auth.uid() is not null);
 
 -- 2. Owners and closers can insert/update/delete leads
--- Using CASE WHEN to ensure boolean return, never NULL
+-- Using explicit boolean conversion to prevent NULL issues
 create policy "Owners and closers can manage leads"
   on public.leads for all
   using (
-    case 
-      when public.get_user_role() in ('owner', 'closer') then true
-      else false
-    end
+    coalesce(public.get_user_role(), '') in ('owner', 'closer')
   );
 
 -- 3. Cold callers can update leads they're assigned to
--- Using CASE WHEN to ensure boolean return, never NULL
+-- Using COALESCE to handle NULL role, then explicit boolean check
 create policy "Cold callers can update assigned leads"
   on public.leads for update
   using (
-    case 
-      when public.get_user_role() = 'cold_caller' and
-           (cold_caller_id = auth.uid() or
-            list_id in (
-              select id from public.lead_lists
-              where auth.uid() = any(assigned_cold_callers)
-            )) then true
-      else false
-    end
+    coalesce(public.get_user_role(), '') = 'cold_caller' and
+    (cold_caller_id = auth.uid() or
+     list_id in (
+       select id from public.lead_lists
+       where auth.uid() = any(assigned_cold_callers)
+     ))
   );
