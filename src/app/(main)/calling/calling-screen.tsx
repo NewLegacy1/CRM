@@ -33,6 +33,7 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false)
   const [clients, setClients] = useState<{ id: string; name: string; email: string | null }[]>([])
+  const [viewedLeadIds, setViewedLeadIds] = useState<string[]>([])
   const [bookingData, setBookingData] = useState({
     date: '',
     time: '',
@@ -51,14 +52,19 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
       .in('status', ['new', 'no_answer'])
       .order('created_at')
     
-    // Skip current lead if exists
-    if (currentLead) {
-      query = query.neq('id', currentLead.id)
+    // Skip all leads that have been viewed in this session
+    if (viewedLeadIds.length > 0) {
+      query = query.not('id', 'in', `(${viewedLeadIds.join(',')})`)
     }
     
     const { data } = await query.limit(1).single()
 
-    setCurrentLead(data || null)
+    if (data) {
+      setCurrentLead(data)
+      setViewedLeadIds(prev => [...prev, data.id])
+    } else {
+      setCurrentLead(null)
+    }
     setLoading(false)
   }
 
@@ -206,6 +212,7 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
             setSelectedList(e.target.value)
             setCallingStarted(false)
             setCurrentLead(null)
+            setViewedLeadIds([])
           }}
           className="mt-2 flex h-10 w-full max-w-md rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
         >
