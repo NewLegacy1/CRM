@@ -118,12 +118,16 @@ export function DealsTable({ initialDeals, clients }: DealsTableProps) {
       .select('*, client:clients(id, name)')
       .single()
 
-    if (!error && data) {
+    if (error) {
+      console.error('Error updating deal stage:', error)
+      alert(`Failed to update deal stage: ${error.message}`)
+      return
+    }
+
+    if (data) {
       setDeals((prev) =>
         prev.map((d) => (d.id === data.id ? data : d))
       )
-    } else {
-      console.error('Error updating deal stage:', error)
     }
   }
 
