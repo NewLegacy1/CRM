@@ -61,20 +61,20 @@ export async function POST(request: NextRequest) {
               from: 'contact@contact.newlegacyai.ca',
               subject: 'Made you a brand new website',
               html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                  <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                <div style="font-family: Arial, sans-serif; max-width: 600px; padding: 20px;">
+                  <p style="font-size: 14px; line-height: 1.5; color: #000; margin: 0 0 12px 0;">
                     Hi ${lead.name}, it's Nathan with New Legacy.
                   </p>
-                  <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                  <p style="font-size: 14px; line-height: 1.5; color: #000; margin: 0 0 12px 0;">
                     I tried calling you earlier at ${phone} but wasn't able to connect.
                   </p>
-                  <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                  <p style="font-size: 14px; line-height: 1.5; color: #000; margin: 0 0 12px 0;">
                     I actually made you a brand new website and was wondering if you'd have any time to chat about it!
                   </p>
-                  <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                  <p style="font-size: 14px; line-height: 1.5; color: #000; margin: 0 0 12px 0;">
                     Thanks!
                   </p>
-                  <p style="font-size: 16px; line-height: 1.6; color: #333; margin-top: 30px;">
+                  <p style="font-size: 14px; line-height: 1.5; color: #000; margin: 24px 0 0 0;">
                     <strong>Nathan</strong><br/>
                     New Legacy
                   </p>
