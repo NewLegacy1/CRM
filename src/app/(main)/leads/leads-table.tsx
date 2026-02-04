@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Plus, Pencil, Trash2, CheckSquare, Square } from 'lucide-react'
+import { Pencil, Trash2, CheckSquare, Square } from 'lucide-react'
 
 interface Lead {
   id: string
@@ -85,12 +85,6 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
     return () => window.removeEventListener('leads-refresh', handleRefresh)
   }, [])
 
-  function openCreateDialog() {
-    setEditingLead(null)
-    setFormData({ name: '', email: '', phone: '', niche: '', city: '', website: '', list_id: '', status: 'new' })
-    setIsDialogOpen(true)
-  }
-
   function openEditDialog(lead: Lead) {
     setEditingLead(lead)
     setFormData({
@@ -123,47 +117,33 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
       status: formData.status,
     }
 
-    if (editingLead) {
-      const { data, error } = await supabase
-        .from('leads')
-        .update(payload)
-        .eq('id', editingLead.id)
-        .select('*, list:lead_lists(id, name)')
-        .single()
+    // Only allow editing existing leads
+    if (!editingLead) {
+      alert('Creating new leads is currently disabled')
+      setLoading(false)
+      return
+    }
 
-      if (error) {
-        console.error('Error updating lead:', error)
-        alert(`Failed to update lead: ${error.message}`)
-        setLoading(false)
-        return
-      }
+    const { data, error } = await supabase
+      .from('leads')
+      .update(payload)
+      .eq('id', editingLead.id)
+      .select('*, list:lead_lists(id, name)')
+      .single()
 
-      if (data) {
-        setAllLeads((prev) =>
-          prev.map((l) => (l.id === data.id ? data : l))
-        )
-        setIsDialogOpen(false)
-        setFormData({ name: '', email: '', phone: '', niche: '', city: '', website: '', list_id: '', status: 'new' })
-      }
-    } else {
-      const { data, error } = await supabase
-        .from('leads')
-        .insert([payload])
-        .select('*, list:lead_lists(id, name)')
-        .single()
+    if (error) {
+      console.error('Error updating lead:', error)
+      alert(`Failed to update lead: ${error.message}`)
+      setLoading(false)
+      return
+    }
 
-      if (error) {
-        console.error('Error creating lead:', error)
-        alert(`Failed to create lead: ${error.message}`)
-        setLoading(false)
-        return
-      }
-
-      if (data) {
-        setAllLeads((prev) => [data, ...prev])
-        setIsDialogOpen(false)
-        setFormData({ name: '', email: '', phone: '', niche: '', city: '', website: '', list_id: '', status: 'new' })
-      }
+    if (data) {
+      setAllLeads((prev) =>
+        prev.map((l) => (l.id === data.id ? data : l))
+      )
+      setIsDialogOpen(false)
+      setFormData({ name: '', email: '', phone: '', niche: '', city: '', website: '', list_id: '', status: 'new' })
     }
     setLoading(false)
   }
@@ -375,10 +355,6 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => setIsListDialogOpen(true)}>
             Create new list
-          </Button>
-          <Button onClick={openCreateDialog}>
-            <Plus className="mr-2 h-4 w-4" />
-            Add Lead
           </Button>
         </div>
       </div>
