@@ -40,23 +40,28 @@ export async function POST(request: NextRequest) {
           body: {
             to: lead.email,
             from: 'contact@contact.newlegacyai.ca',
-            subject: 'We tried to reach you',
+            subject: 'Made you a brand new website',
             html: `
-              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2>Hi ${lead.name},</h2>
-                <p>We tried calling you earlier at ${phone} but weren't able to connect.</p>
-                <p>We'd love to chat with you about how we can help your business grow.</p>
-                <p>Feel free to:</p>
-                <ul>
-                  <li>Call us back at your convenience</li>
-                  <li>Reply to this email</li>
-                  <li>Book a call at a time that works for you</li>
-                </ul>
-                <p>We look forward to speaking with you soon!</p>
-                <p>Best regards,<br/>The Team</p>
+              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                  Hi ${lead.name}, it's Nathan with New Legacy.
+                </p>
+                <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                  I tried calling you earlier at ${phone} but wasn't able to connect.
+                </p>
+                <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                  I actually made you a brand new website and was wondering if you'd have any time to chat about it!
+                </p>
+                <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                  Thanks!
+                </p>
+                <p style="font-size: 16px; line-height: 1.6; color: #333; margin-top: 30px;">
+                  <strong>Nathan</strong><br/>
+                  New Legacy
+                </p>
               </div>
             `,
-            text: `Hi ${lead.name},\n\nWe tried calling you earlier at ${phone} but weren't able to connect.\n\nWe'd love to chat with you about how we can help your business grow.\n\nFeel free to call us back, reply to this email, or book a call at your convenience.\n\nWe look forward to speaking with you soon!\n\nBest regards,\nThe Team`
+            text: `Hi ${lead.name}, it's Nathan with New Legacy.\n\nI tried calling you earlier at ${phone} but wasn't able to connect.\n\nI actually made you a brand new website and was wondering if you'd have any time to chat about it!\n\nThanks!\n\nNathan\nNew Legacy`
           }
         })
 
