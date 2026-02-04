@@ -15,6 +15,7 @@ import {
   Settings,
   UserCog,
   FileText,
+  Activity,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -36,6 +37,7 @@ export const navItems: NavItem[] = [
   { label: 'Meetings', href: '/meetings', icon: Calendar, roles: ['owner', 'closer', 'cold_caller'] },
   { label: 'Analytics', href: '/analytics', icon: BarChart3, roles: ['owner', 'media_buyer'] },
   { label: 'AI Insights', href: '/insights', icon: Sparkles, roles: ['owner'] },
+  { label: 'Activity Updates', href: '/updates', icon: Activity, roles: ['owner'] },
   { label: 'Team', href: '/team', icon: UserCog, roles: ['owner'] },
   { label: 'Settings', href: '/settings', icon: Settings, roles: ['owner'] },
 ]
