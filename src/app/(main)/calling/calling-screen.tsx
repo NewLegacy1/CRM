@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog'
-import { Phone, X, Calendar, PhoneCall, ChevronRight, Receipt } from 'lucide-react'
+import { Phone, X, Calendar, PhoneCall, ChevronRight, Receipt, ExternalLink } from 'lucide-react'
 import { SendInvoiceFromCall } from './send-invoice-from-call'
 
 interface Lead {
@@ -16,6 +16,7 @@ interface Lead {
   phone: string
   email: string | null
   niche: string | null
+  website: string | null
   status: string
 }
 
@@ -240,6 +241,19 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
                   )}
                   {currentLead.email && (
                     <p className="mt-1 text-sm text-zinc-400">{currentLead.email}</p>
+                  )}
+                  {currentLead.website ? (
+                    <a
+                      href={currentLead.website.startsWith('http') ? currentLead.website : `https://${currentLead.website}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 inline-flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                      View Site
+                    </a>
+                  ) : (
+                    <p className="mt-2 text-sm text-zinc-600">No site</p>
                   )}
                 </div>
 
