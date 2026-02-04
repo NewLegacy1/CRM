@@ -1,9 +1,16 @@
 -- Comprehensive fix for all leads RLS policies
--- Drop ALL possible policies that might exist (from various migrations)
--- and recreate them with proper boolean handling
+-- This fixes the root cause: get_user_role() returning NULL causes RLS policy errors
+-- when PostgreSQL combines policies with OR
 
--- Helper function to check if user has role (returns boolean, never NULL)
--- Note: get_user_role() now never returns NULL (see migration 012)
+-- STEP 1: Fix get_user_role() to never return NULL (root cause fix)
+-- When get_user_role() returns NULL, comparisons like NULL in ('owner', 'closer')
+-- don't return proper boolean values, causing "argument of OR must be type boolean" errors
+create or replace function public.get_user_role()
+returns text as $$
+  select coalesce(role, '') from public.profiles where id = auth.uid();
+$$ language sql security definer stable;
+
+-- STEP 2: Helper function to check if user has role (returns boolean, never NULL)
 create or replace function public.user_has_role(p_role text)
 returns boolean as $$
 begin
@@ -11,8 +18,7 @@ begin
 end;
 $$ language plpgsql security definer stable;
 
--- Helper function to check if user has any of the roles (returns boolean, never NULL)
--- Note: get_user_role() now never returns NULL (see migration 012)
+-- STEP 3: Helper function to check if user has any of the roles (returns boolean, never NULL)
 create or replace function public.user_has_any_role(p_roles text[])
 returns boolean as $$
 begin
