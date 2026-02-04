@@ -185,20 +185,13 @@ export function DealsTable({ initialDeals, clients }: DealsTableProps) {
                   <TableCell>
                     <select
                       value={deal.stage}
-                      onChange={(e) => handleStageChange(deal.id, e.target.value)}
-                      className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium border-0 cursor-pointer focus:outline-none focus:ring-1 focus:ring-amber-500 ${getStageColor(
+                      onChange={(e) => {
+                        e.preventDefault()
+                        handleStageChange(deal.id, e.target.value)
+                      }}
+                      className={`inline-flex items-center rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium cursor-pointer focus:outline-none focus:ring-1 focus:ring-amber-500 ${getStageColor(
                         deal.stage
                       )}`}
-                      style={{ 
-                        appearance: 'none',
-                        WebkitAppearance: 'none',
-                        MozAppearance: 'none',
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E")`,
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'right 0.25rem center',
-                        backgroundSize: '0.75em',
-                        paddingRight: '1.5rem',
-                      }}
                     >
                       {DEAL_STAGES.map((stage) => (
                         <option key={stage} value={stage} className="bg-zinc-800 text-zinc-100">
