@@ -111,9 +111,16 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
     setLoading(true)
     const supabase = createClient()
 
+    // Clean up payload - convert empty strings to null for optional fields
     const payload = {
-      ...formData,
+      name: formData.name.trim(),
+      phone: formData.phone.trim(),
+      email: formData.email.trim() || null,
+      niche: formData.niche.trim() || null,
+      city: formData.city.trim() || null,
+      website: formData.website.trim() || null,
       list_id: formData.list_id || null,
+      status: formData.status,
     }
 
     if (editingLead) {
@@ -124,11 +131,19 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
         .select('*, list:lead_lists(id, name)')
         .single()
 
-      if (!error && data) {
+      if (error) {
+        console.error('Error updating lead:', error)
+        alert(`Failed to update lead: ${error.message}`)
+        setLoading(false)
+        return
+      }
+
+      if (data) {
         setAllLeads((prev) =>
           prev.map((l) => (l.id === data.id ? data : l))
         )
         setIsDialogOpen(false)
+        setFormData({ name: '', email: '', phone: '', niche: '', city: '', website: '', list_id: '', status: 'new' })
       }
     } else {
       const { data, error } = await supabase
@@ -137,9 +152,17 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
         .select('*, list:lead_lists(id, name)')
         .single()
 
-      if (!error && data) {
+      if (error) {
+        console.error('Error creating lead:', error)
+        alert(`Failed to create lead: ${error.message}`)
+        setLoading(false)
+        return
+      }
+
+      if (data) {
         setAllLeads((prev) => [data, ...prev])
         setIsDialogOpen(false)
+        setFormData({ name: '', email: '', phone: '', niche: '', city: '', website: '', list_id: '', status: 'new' })
       }
     }
     setLoading(false)
