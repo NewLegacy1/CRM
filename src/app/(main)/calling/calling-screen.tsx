@@ -81,7 +81,9 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
 
     if (outcome === 'no_answer') {
       await supabase.from('leads').update({ status: 'no_answer' }).eq('id', currentLead.id)
-      await fetch('/api/webhooks/no-answer', {
+      
+      // Send follow-up email - don't await, let it happen in background
+      fetch('/api/webhooks/no-answer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -90,10 +92,14 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
           coldCallerId: userId,
           listId: selectedList,
         }),
-      })
+      }).catch(err => console.error('Failed to send follow-up email:', err))
+      
+      // Immediately load next lead
       loadNextLead()
     } else if (outcome === 'didnt_book') {
       await supabase.from('leads').update({ status: 'didnt_book' }).eq('id', currentLead.id)
+      
+      // Immediately load next lead
       loadNextLead()
     } else if (outcome === 'booked') {
       setIsBookingOpen(true)
