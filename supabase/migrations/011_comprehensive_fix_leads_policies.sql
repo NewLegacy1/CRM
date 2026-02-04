@@ -3,18 +3,20 @@
 -- and recreate them with proper boolean handling
 
 -- Helper function to check if user has role (returns boolean, never NULL)
+-- Note: get_user_role() now never returns NULL (see migration 012)
 create or replace function public.user_has_role(p_role text)
 returns boolean as $$
 begin
-  return coalesce(public.get_user_role(), '') = p_role;
+  return public.get_user_role() = p_role;
 end;
 $$ language plpgsql security definer stable;
 
 -- Helper function to check if user has any of the roles (returns boolean, never NULL)
+-- Note: get_user_role() now never returns NULL (see migration 012)
 create or replace function public.user_has_any_role(p_roles text[])
 returns boolean as $$
 begin
-  return coalesce(public.get_user_role(), '') = any(p_roles);
+  return public.get_user_role() = any(p_roles);
 end;
 $$ language plpgsql security definer stable;
 
