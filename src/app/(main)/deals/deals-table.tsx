@@ -14,6 +14,8 @@ interface Deal {
   client_id: string
   name: string
   value: number
+  min_value?: number
+  max_value?: number
   stage: string
   created_at: string
   client?: { id: string; name: string }
@@ -40,13 +42,15 @@ export function DealsTable({ initialDeals, clients }: DealsTableProps) {
     name: '',
     client_id: '',
     value: '',
+    min_value: '',
+    max_value: '',
     stage: 'qualification',
   })
   const [loading, setLoading] = useState(false)
 
   function openCreateDialog() {
     setEditingDeal(null)
-    setFormData({ name: '', client_id: '', value: '', stage: 'qualification' })
+    setFormData({ name: '', client_id: '', value: '', min_value: '', max_value: '', stage: 'qualification' })
     setIsDialogOpen(true)
   }
 
@@ -56,6 +60,8 @@ export function DealsTable({ initialDeals, clients }: DealsTableProps) {
       name: deal.name,
       client_id: deal.client_id,
       value: deal.value.toString(),
+      min_value: deal.min_value?.toString() ?? '',
+      max_value: deal.max_value?.toString() ?? '',
       stage: deal.stage,
     })
     setIsDialogOpen(true)
@@ -69,6 +75,8 @@ export function DealsTable({ initialDeals, clients }: DealsTableProps) {
     const payload = {
       ...formData,
       value: parseFloat(formData.value) || 0,
+      min_value: formData.min_value ? parseFloat(formData.min_value) : null,
+      max_value: formData.max_value ? parseFloat(formData.max_value) : null,
     }
 
     if (editingDeal) {
@@ -181,7 +189,16 @@ export function DealsTable({ initialDeals, clients }: DealsTableProps) {
                 <TableRow key={deal.id}>
                   <TableCell className="font-medium">{deal.name}</TableCell>
                   <TableCell>{deal.client?.name || '—'}</TableCell>
-                  <TableCell>{formatCurrency(deal.value)}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-col gap-1">
+                      <div>{formatCurrency(deal.value)}</div>
+                      {(deal.min_value || deal.max_value) && (
+                        <div className="text-xs text-zinc-500">
+                          Range: {deal.min_value ? formatCurrency(deal.min_value) : '—'} - {deal.max_value ? formatCurrency(deal.max_value) : '—'}
+                        </div>
+                      )}
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <select
                       value={deal.stage}
@@ -276,6 +293,34 @@ export function DealsTable({ initialDeals, clients }: DealsTableProps) {
                 }
                 required
               />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="min_value">Min Value ($)</Label>
+                <Input
+                  id="min_value"
+                  type="number"
+                  step="0.01"
+                  value={formData.min_value}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, min_value: e.target.value }))
+                  }
+                  placeholder="Optional"
+                />
+              </div>
+              <div>
+                <Label htmlFor="max_value">Max Value ($)</Label>
+                <Input
+                  id="max_value"
+                  type="number"
+                  step="0.01"
+                  value={formData.max_value}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, max_value: e.target.value }))
+                  }
+                  placeholder="Optional"
+                />
+              </div>
             </div>
             <div>
               <Label htmlFor="stage">Stage</Label>

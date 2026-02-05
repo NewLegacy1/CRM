@@ -19,7 +19,7 @@ export function MeetingsPageClient({ role }: MeetingsPageClientProps) {
         <Plus className="mr-2 h-3 w-3" />
         New Meeting
       </Button>
-      {role === 'owner' && (
+      {(role === 'owner' || role === 'demo') && (
         <Button
           size="sm"
           variant="outline"

@@ -125,6 +125,27 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
     }
   }
 
+  function formatPhoneNumber(phone: string): string {
+    // Remove all non-digit characters
+    const digits = phone.replace(/\D/g, '')
+    
+    // Format as (xxx) xxx-xxxx
+    if (digits.length === 10) {
+      return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
+    }
+    
+    // Return original if not 10 digits
+    return phone
+  }
+
+  function handlePhoneChange(value: string) {
+    // Remove all non-digit characters for storage
+    const digits = value.replace(/\D/g, '')
+    
+    // Update with just digits
+    setFormData((prev) => ({ ...prev, phone: digits }))
+  }
+
   return (
     <>
       <div className="flex justify-end mb-4">
@@ -157,7 +178,7 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
                 <TableRow key={client.id}>
                   <TableCell className="font-medium">{client.name}</TableCell>
                   <TableCell>{client.email || '—'}</TableCell>
-                  <TableCell>{client.phone || '—'}</TableCell>
+                  <TableCell>{client.phone ? formatPhoneNumber(client.phone) : '—'}</TableCell>
                   <TableCell>{client.company || '—'}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
@@ -254,10 +275,9 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
               <Label htmlFor="phone">Phone</Label>
               <Input
                 id="phone"
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, phone: e.target.value }))
-                }
+                value={formData.phone ? formatPhoneNumber(formData.phone) : ''}
+                onChange={(e) => handlePhoneChange(e.target.value)}
+                placeholder="(555) 123-4567"
               />
             </div>
             <div>

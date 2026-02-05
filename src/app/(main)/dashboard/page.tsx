@@ -34,7 +34,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-zinc-100">Dashboard</h1>
-      {role === 'owner' && <OwnerDashboard />}
+      {(role === 'owner' || role === 'demo') && <OwnerDashboard />}
       {role === 'closer' && <CloserDashboard />}
       {role === 'media_buyer' && <MediaBuyerDashboard />}
       {role === 'cold_caller' && <ColdCallerDashboard />}

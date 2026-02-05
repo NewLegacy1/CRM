@@ -5,18 +5,18 @@ export default async function UpdatesPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   
-  // Check if user is owner
+  // Check if user is owner or demo
   const { data: profile } = await supabase
     .from('profiles')
     .select('role')
     .eq('id', user?.id ?? '')
     .single()
 
-  if (profile?.role !== 'owner') {
+  if (profile?.role !== 'owner' && profile?.role !== 'demo') {
     return (
       <div className="space-y-6">
         <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-4">
-          <p className="text-red-400">Access denied. Only owners can view activity updates.</p>
+          <p className="text-red-400">Access denied. Only owners and demo users can view activity updates.</p>
         </div>
       </div>
     )

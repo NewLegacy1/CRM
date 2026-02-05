@@ -159,7 +159,15 @@ export function ProjectsTable({ initialProjects, clients }: ProjectsTableProps) 
                 const progress = project.progress ?? 0
                 return (
                   <TableRow key={project.id}>
-                    <TableCell className="font-medium">{project.name}</TableCell>
+                    <TableCell className="font-medium">
+                      <Link 
+                        href={`/projects/${project.id}`}
+                        className="hover:text-amber-500 transition-colors flex items-center gap-2"
+                      >
+                        {project.name}
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                    </TableCell>
                     <TableCell>{project.client?.name || '—'}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -202,14 +210,20 @@ export function ProjectsTable({ initialProjects, clients }: ProjectsTableProps) 
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => openEditDialog(project)}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            openEditDialog(project)
+                          }}
                         >
                           <Pencil className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleDelete(project.id)}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDelete(project.id)
+                          }}
                         >
                           <Trash2 className="h-4 w-4 text-red-400" />
                         </Button>

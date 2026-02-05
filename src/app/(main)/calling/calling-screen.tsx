@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog'
-import { Phone, X, Calendar, PhoneCall, ChevronRight, Receipt, ExternalLink } from 'lucide-react'
+import { Phone, X, Calendar, PhoneCall, ChevronRight, Receipt, ExternalLink, ChevronLeft, Trash2, Plus } from 'lucide-react'
 import { SendInvoiceFromCall } from './send-invoice-from-call'
 
 interface Lead {
@@ -34,6 +34,7 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(false)
   const [clients, setClients] = useState<{ id: string; name: string; email: string | null }[]>([])
   const [viewedLeadIds, setViewedLeadIds] = useState<string[]>([])
+  const [leadHistory, setLeadHistory] = useState<Lead[]>([])
   const [bookingData, setBookingData] = useState({
     date: '',
     time: '',
@@ -60,6 +61,9 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
     const { data } = await query.limit(1).single()
 
     if (data) {
+      if (currentLead) {
+        setLeadHistory(prev => [...prev, currentLead])
+      }
       setCurrentLead(data)
       setViewedLeadIds(prev => [...prev, data.id])
     } else {
@@ -68,8 +72,35 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
     setLoading(false)
   }
 
+  function goToPreviousLead() {
+    if (leadHistory.length === 0) return
+    const previousLead = leadHistory[leadHistory.length - 1]
+    setLeadHistory(prev => prev.slice(0, -1))
+    if (currentLead) {
+      setViewedLeadIds(prev => prev.filter(id => id !== currentLead.id))
+    }
+    setCurrentLead(previousLead)
+  }
+
+  async function deleteLead() {
+    if (!currentLead) return
+    if (!confirm('Are you sure you want to delete this lead?')) return
+    
+    setLoading(true)
+    const supabase = createClient()
+    const { error } = await supabase.from('leads').delete().eq('id', currentLead.id)
+    
+    if (!error) {
+      loadNextLead()
+    } else {
+      alert('Failed to delete lead')
+      setLoading(false)
+    }
+  }
+
   function handleStartCalling() {
     setCallingStarted(true)
+    setLeadHistory([])
     loadNextLead()
     loadClients()
   }
@@ -224,16 +255,27 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
           ))}
         </select>
 
-        {selectedList && !callingStarted && (
-          <Button
-            className="mt-4"
-            size="lg"
-            onClick={handleStartCalling}
-          >
-            <PhoneCall className="mr-2 h-5 w-5" />
-            Start calling
-          </Button>
-        )}
+        <div className="flex gap-3 mt-4">
+          {selectedList && !callingStarted && (
+            <Button
+              size="lg"
+              onClick={handleStartCalling}
+            >
+              <PhoneCall className="mr-2 h-5 w-5" />
+              Start calling
+            </Button>
+          )}
+          {callingStarted && (
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => window.open('https://calendly.com/newlegacyai/consultation', '_blank')}
+            >
+              <Plus className="mr-2 h-5 w-5" />
+              New Meeting
+            </Button>
+          )}
+        </div>
       </div>
 
       {callingStarted && (
@@ -325,7 +367,16 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
                   </Button>
                 </div>
 
-                <div className="flex justify-center pt-6 border-t border-zinc-800">
+                <div className="flex justify-center gap-3 pt-6 border-t border-zinc-800">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={goToPreviousLead}
+                    disabled={loading || leadHistory.length === 0}
+                  >
+                    <ChevronLeft className="mr-2 h-4 w-4" />
+                    Previous
+                  </Button>
                   <Button
                     variant="outline"
                     size="lg"
@@ -334,6 +385,15 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
                   >
                     Next call
                     <ChevronRight className="ml-2 h-5 w-5" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={deleteLead}
+                    disabled={loading}
+                    className="text-red-400 hover:text-red-300"
+                  >
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
