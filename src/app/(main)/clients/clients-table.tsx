@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
+import { Plus, Pencil, Trash2, Search } from 'lucide-react'
 import type { Client } from '@/types/database'
 
 interface ClientsTableProps {
@@ -27,11 +27,47 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
     notes: '',
   })
   const [loading, setLoading] = useState(false)
+  const [leadSearch, setLeadSearch] = useState('')
+  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [searchingLeads, setSearchingLeads] = useState(false)
 
   function openCreateDialog() {
     setEditingClient(null)
     setFormData({ name: '', email: '', phone: '', company: '', notes: '' })
+    setLeadSearch('')
+    setSearchResults([])
     setIsDialogOpen(true)
+  }
+
+  async function searchLeads(query: string) {
+    setLeadSearch(query)
+    if (query.length < 2) {
+      setSearchResults([])
+      return
+    }
+    
+    setSearchingLeads(true)
+    const supabase = createClient()
+    const { data } = await supabase
+      .from('leads')
+      .select('*')
+      .or(`name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%`)
+      .limit(5)
+    
+    setSearchResults(data || [])
+    setSearchingLeads(false)
+  }
+
+  function selectLead(lead: any) {
+    setFormData({
+      name: lead.name,
+      email: lead.email || '',
+      phone: lead.phone || '',
+      company: lead.niche || '',
+      notes: `Converted from lead. City: ${lead.city || 'N/A'}`,
+    })
+    setLeadSearch('')
+    setSearchResults([])
   }
 
   function openEditDialog(client: Client) {
@@ -157,6 +193,41 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {!editingClient && (
+              <div>
+                <Label htmlFor="leadSearch">Search from Leads</Label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-zinc-500" />
+                  <Input
+                    id="leadSearch"
+                    placeholder="Search by name, email, or phone..."
+                    value={leadSearch}
+                    onChange={(e) => searchLeads(e.target.value)}
+                    className="pl-9"
+                  />
+                </div>
+                {searchResults.length > 0 && (
+                  <div className="mt-2 rounded-lg border border-zinc-700 bg-zinc-800 max-h-48 overflow-y-auto">
+                    {searchResults.map((lead) => (
+                      <button
+                        key={lead.id}
+                        type="button"
+                        onClick={() => selectLead(lead)}
+                        className="w-full px-4 py-2 text-left hover:bg-zinc-700 border-b border-zinc-700 last:border-0"
+                      >
+                        <div className="font-medium text-zinc-100">{lead.name}</div>
+                        <div className="text-sm text-zinc-400">
+                          {lead.email || lead.phone || 'No contact info'}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {searchingLeads && (
+                  <p className="mt-2 text-sm text-zinc-500">Searching...</p>
+                )}
+              </div>
+            )}
             <div>
               <Label htmlFor="name">Name *</Label>
               <Input
