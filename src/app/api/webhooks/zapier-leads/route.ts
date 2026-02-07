@@ -9,10 +9,16 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient()
 
-    // Extract fields from Zapier payload
-    // Zapier typically sends data in a flat format like:
-    // { "full_name": "John Doe", "email": "john@example.com", "phone": "555-1234", ... }
+    // Extract any custom fields (fields not in the standard set)
+    const standardFields = ['id', 'leadgen_id', 'page_id', 'ad_id', 'form_id', 'full_name', 'name', 'email', 'phone_number', 'phone']
+    const customFields: Record<string, string> = {}
     
+    for (const [key, value] of Object.entries(body)) {
+      if (!standardFields.includes(key) && typeof value === 'string') {
+        customFields[key] = value
+      }
+    }
+
     const leadData = {
       leadgen_id: body.id || body.leadgen_id || `zapier_${Date.now()}`,
       page_id: body.page_id || null,
@@ -21,23 +27,9 @@ export async function POST(request: NextRequest) {
       name: body.full_name || body.name || null,
       email: body.email || null,
       phone: body.phone_number || body.phone || null,
-      custom_fields: null,
+      custom_fields: Object.keys(customFields).length > 0 ? customFields : null,
       raw_data: body,
       synced_at: new Date().toISOString(),
-    }
-
-    // Extract any custom fields (fields not in the standard set)
-    const standardFields = ['id', 'leadgen_id', 'page_id', 'ad_id', 'form_id', 'full_name', 'name', 'email', 'phone_number', 'phone']
-    const customFields: Record<string, any> = {}
-    
-    for (const [key, value] of Object.entries(body)) {
-      if (!standardFields.includes(key)) {
-        customFields[key] = value
-      }
-    }
-
-    if (Object.keys(customFields).length > 0) {
-      leadData.custom_fields = customFields
     }
 
     console.log('Storing lead data:', leadData)
