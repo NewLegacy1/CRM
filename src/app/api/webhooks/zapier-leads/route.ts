@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
 // Simple webhook endpoint for Zapier to send Facebook Lead Ads data
 export async function POST(request: NextRequest) {
@@ -7,7 +7,17 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     console.log('Zapier lead received:', JSON.stringify(body, null, 2))
 
-    const supabase = await createClient()
+    // Use service role client to bypass RLS for webhook inserts
+    const supabase = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
 
     // Extract any custom fields (fields not in the standard set)
     const standardFields = ['id', 'leadgen_id', 'page_id', 'ad_id', 'form_id', 'full_name', 'name', 'email', 'phone_number', 'phone']
