@@ -62,13 +62,25 @@ export async function POST() {
     const campaignsData = await campaignsRes.json()
     const campaigns: CampaignWithInsights[] = campaignsData.data || []
 
+    console.log(`Meta API returned ${campaigns.length} campaigns`)
+
     // Sync to database
     const supabase = await createClient()
     const syncedAds = []
+    const errors = []
+    const skippedCampaigns = []
 
     for (const campaign of campaigns) {
       const insights = campaign.insights?.data?.[0]
-      if (!insights) continue
+      if (!insights) {
+        skippedCampaigns.push({
+          id: campaign.id,
+          name: campaign.name,
+          reason: 'No insights data available'
+        })
+        console.log(`Skipping campaign ${campaign.name} (${campaign.id}): no insights`)
+        continue
+      }
 
       // Extract conversions from actions array
       let conversions = 0
@@ -103,19 +115,32 @@ export async function POST() {
         .single()
 
       if (error) {
-        console.error('DB upsert error:', error)
-        // Continue syncing other campaigns even if one fails
+        console.error('DB upsert error for campaign', campaign.name, ':', error)
+        errors.push({
+          campaign: campaign.name,
+          error: error.message
+        })
       } else if (data) {
         syncedAds.push(data)
       }
     }
 
-    return NextResponse.json({
-      success: true,
+    const response = {
+      success: errors.length === 0,
       synced: syncedAds.length,
       total: campaigns.length,
-      ads: syncedAds,
-    })
+      skipped: skippedCampaigns.length,
+      errors: errors.length,
+      details: {
+        syncedCampaigns: syncedAds.map(ad => ad.campaign_name),
+        skippedCampaigns,
+        errors
+      }
+    }
+
+    console.log('Sync complete:', response)
+
+    return NextResponse.json(response)
   } catch (error) {
     console.error('Meta sync error:', error)
     return NextResponse.json(

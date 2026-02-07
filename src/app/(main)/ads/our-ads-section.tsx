@@ -36,15 +36,38 @@ export function OurAdsSection({ initialAds }: OurAdsSectionProps) {
       
       const data = await res.json()
       
+      console.log('Sync response:', data)
+      
       if (res.ok) {
-        // Refresh the page to get updated data from DB
-        router.refresh()
+        // Show detailed sync results
+        let message = `Synced ${data.synced} of ${data.total} campaigns`
+        
+        if (data.skipped > 0) {
+          message += `\n${data.skipped} campaigns skipped (no insights data)`
+        }
+        
+        if (data.errors > 0) {
+          message += `\n${data.errors} errors occurred`
+          if (data.details?.errors?.length > 0) {
+            message += '\nErrors:\n' + data.details.errors.map((e: any) => 
+              `- ${e.campaign}: ${e.error}`
+            ).join('\n')
+          }
+        }
+        
+        if (data.synced > 0) {
+          alert(message)
+          // Refresh the page to get updated data from DB
+          router.refresh()
+        } else {
+          alert(message + '\n\nNo campaigns were synced. Check that:\n1. You have active campaigns with data\n2. Database migration is applied\n3. Token has correct permissions')
+        }
       } else {
-        alert(`Sync failed: ${data.error || 'Unknown error'}`)
+        alert(`Sync failed: ${data.error || 'Unknown error'}\n${data.details || ''}`)
       }
     } catch (error) {
       console.error('Sync error:', error)
-      alert('Failed to sync ads. Check console for details.')
+      alert('Failed to sync ads. Check console for details.\nError: ' + String(error))
     } finally {
       setSyncing(false)
     }

@@ -105,3 +105,20 @@ export interface Invoice {
   created_at: string
   updated_at: string
 }
+
+export interface FacebookLeadAd {
+  id: string
+  leadgen_id: string
+  page_id: string | null
+  ad_id: string | null
+  adset_id: string | null
+  campaign_id: string | null
+  form_id: string | null
+  name: string | null
+  email: string | null
+  phone: string | null
+  custom_fields: Record<string, unknown> | null
+  raw_data: Record<string, unknown> | null
+  created_at: string
+  synced_at: string | null
+}
