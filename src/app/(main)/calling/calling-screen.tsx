@@ -146,7 +146,9 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
       // Immediately load next lead
       loadNextLead()
     } else if (outcome === 'booked') {
-      setIsBookingOpen(true)
+      window.open('https://calendly.com/newlegacyai/consultation', '_blank')
+      await supabase.from('leads').update({ status: 'booked' }).eq('id', currentLead.id)
+      loadNextLead()
     }
   }
 
