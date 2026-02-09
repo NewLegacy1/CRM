@@ -110,6 +110,28 @@ INSERT INTO deals (id, client_id, name, value, min_value, max_value, stage, is_d
 ('e5555555-5555-5555-5555-555555555555', 'a3333333-3333-3333-3333-333333333333', 'Global Ventures Portal', 125000.00, 100000.00, 150000.00, 'closed_won', true, NOW() - INTERVAL '60 days')
 ON CONFLICT (id) DO NOTHING;
 
+-- Demo Ads (for analytics)
+INSERT INTO ads (id, client_id, name, platform, spend, revenue, status, is_demo, created_at) VALUES
+('f1111111-1111-1111-1111-111111111111', 'a1111111-1111-1111-1111-111111111111', 'Acme Q1 Meta Ads', 'meta', 4200.00, 12600.00, 'active', true, NOW() - INTERVAL '20 days'),
+('f2222222-2222-2222-2222-222222222222', 'a2222222-2222-2222-2222-222222222222', 'TechStart Google Search', 'google', 3100.00, 9300.00, 'active', true, NOW() - INTERVAL '18 days'),
+('f3333333-3333-3333-3333-333333333333', 'a4444444-4444-4444-4444-444444444444', 'Peak Performance Meta', 'meta', 1500.00, 4200.00, 'active', true, NOW() - INTERVAL '12 days'),
+('f4444444-4444-4444-4444-444444444444', 'a5555555-5555-5555-5555-555555555555', 'Urban Eats Local Ads', 'google', 900.00, 2700.00, 'active', true, NOW() - INTERVAL '7 days')
+ON CONFLICT (id) DO NOTHING;
+
+-- Demo Agency Ads (agency overview)
+INSERT INTO agency_ads (id, platform, campaign_name, campaign_id, spend, impressions, clicks, conversions, synced_at, is_demo, created_at) VALUES
+('f5555555-5555-5555-5555-555555555555', 'meta', 'Acme Retargeting', 'camp_001', 2800.00, 145000, 4200, 120.00, NOW() - INTERVAL '2 days', true, NOW() - INTERVAL '20 days'),
+('f6666666-6666-6666-6666-666666666666', 'google', 'TechStart Search', 'camp_002', 2300.00, 98000, 3100, 95.00, NOW() - INTERVAL '3 days', true, NOW() - INTERVAL '18 days'),
+('f7777777-7777-7777-7777-777777777777', 'meta', 'Peak Performance Leads', 'camp_003', 1200.00, 56000, 1700, 60.00, NOW() - INTERVAL '1 day', true, NOW() - INTERVAL '12 days')
+ON CONFLICT (id) DO NOTHING;
+
+-- Demo AI Insights
+INSERT INTO ai_insights (id, date, summary, actionable_items, is_demo, created_at) VALUES
+('f8888888-8888-8888-8888-888888888888', (CURRENT_DATE - INTERVAL '2 days')::date, 'Ad spend efficiency improved this week. Meta campaigns show strong ROAS while Google search is stable. Cold calling booking rate rose slightly.', '["Prioritize top Meta creatives with ROAS > 3x","Increase daily Meta budget by 10%","Follow up on unbooked leads within 24 hours"]'::jsonb, true, NOW() - INTERVAL '2 days'),
+('f9999999-9999-9999-9999-999999999999', (CURRENT_DATE - INTERVAL '1 day')::date, 'Pipeline velocity increased with two deals moving to negotiation. Average deal value increased due to larger enterprise opportunities.', '["Review negotiation notes for Acme Corp","Send updated proposal to Peak Performance","Schedule QBR with Global Ventures"]'::jsonb, true, NOW() - INTERVAL '1 day'),
+('f0000000-0000-0000-0000-000000000001', CURRENT_DATE, 'Meetings booked from cold calls are trending upward. Emails with short subject lines are getting higher response rates.', '["A/B test subject lines under 6 words","Block 2 hours daily for call follow-ups","Add CTA to booking emails"]'::jsonb, true, NOW())
+ON CONFLICT (id) DO NOTHING;
+
 -- Demo Meetings (with is_demo flag)
 INSERT INTO meetings (id, lead_id, scheduled_at, booked_by, source, notes, is_demo, created_at) VALUES
 ('f1111111-1111-1111-1111-111111111111', 'c1111111-1111-1111-1111-111111111111', NOW() + INTERVAL '2 days', (SELECT id FROM auth.users LIMIT 1), 'cold_call', 'Interested in complete website redesign', true, NOW() - INTERVAL '5 days'),
@@ -232,7 +254,7 @@ ON CONFLICT DO NOTHING;
 DO $$
 BEGIN
   RAISE NOTICE '✅ Demo data successfully loaded with is_demo=true flag!';
-  RAISE NOTICE '📊 Added: 5 clients, 5 leads, 5 projects, 5 deals, 3 meetings, 5 invoices';
+  RAISE NOTICE '📊 Added: 5 clients, 5 leads, 5 projects, 5 deals, 4 ads, 3 agency ads, 3 AI insights, 3 meetings, 5 invoices';
   RAISE NOTICE '🔒 Only users with role="demo" can see this data';
   RAISE NOTICE '👤 Next: Create a demo user and set their profile role to "demo"';
 END $$;

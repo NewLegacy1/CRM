@@ -346,7 +346,7 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
                   </Button>
                   <Button
                     size="lg"
-                    onClick={() => handleOutcome('booked')}
+                    onClick={() => window.open('https://calendly.com/newlegacyai/consultation', '_blank')}
                     disabled={loading}
                   >
                     <Calendar className="mr-2 h-5 w-5" />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,15 +19,17 @@ interface Creative {
   headline: string | null
   cta: string | null
   image_urls: string[]
+  video_urls: string[]
   created_at: string
 }
 
 interface AdCreativesListProps {
   projectId: string
   initialCreatives: Creative[]
+  isDemo?: boolean
 }
 
-export function AdCreativesList({ projectId, initialCreatives }: AdCreativesListProps) {
+export function AdCreativesList({ projectId, initialCreatives, isDemo = false }: AdCreativesListProps) {
   const [creatives, setCreatives] = useState<Creative[]>(initialCreatives)
   const [open, setOpen] = useState(false)
   const [form, setForm] = useState({
@@ -37,7 +39,9 @@ export function AdCreativesList({ projectId, initialCreatives }: AdCreativesList
     headline: '',
     cta: '',
   })
+  const [files, setFiles] = useState<File[]>([])
   const [loading, setLoading] = useState(false)
+  const acceptTypes = useMemo(() => 'image/*,video/*', [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -45,13 +49,68 @@ export function AdCreativesList({ projectId, initialCreatives }: AdCreativesList
     const supabase = createClient()
     const { data, error } = await supabase
       .from('ad_creatives')
-      .insert([{ project_id: projectId, ...form, image_urls: [] }])
+      .insert([
+        {
+          project_id: projectId,
+          ...form,
+          image_urls: [],
+          video_urls: [],
+          is_demo: isDemo,
+        },
+      ])
       .select()
       .single()
     if (!error && data) {
-      setCreatives((prev) => [data, ...prev])
+      let imageUrls: string[] = []
+      let videoUrls: string[] = []
+
+      if (files.length > 0) {
+        const folder = isDemo ? 'demo' : 'prod'
+        for (const file of files) {
+          const cleanName = file.name.replace(/\s+/g, '-')
+          const filePath = `${folder}/${projectId}/${data.id}/${Date.now()}-${cleanName}`
+          const { error: uploadError } = await supabase.storage
+            .from('ad-creatives')
+            .upload(filePath, file, { contentType: file.type })
+
+          if (uploadError) {
+            console.error('Upload failed:', uploadError)
+            continue
+          }
+
+          const { data: publicUrl } = supabase.storage
+            .from('ad-creatives')
+            .getPublicUrl(filePath)
+
+          if (file.type.startsWith('image/')) {
+            imageUrls.push(publicUrl.publicUrl)
+          } else if (file.type.startsWith('video/')) {
+            videoUrls.push(publicUrl.publicUrl)
+          }
+        }
+      }
+
+      let updatedCreative = data
+      if (imageUrls.length > 0 || videoUrls.length > 0) {
+        const { data: updated, error: updateError } = await supabase
+          .from('ad_creatives')
+          .update({
+            image_urls: imageUrls,
+            video_urls: videoUrls,
+          })
+          .eq('id', data.id)
+          .select()
+          .single()
+
+        if (!updateError && updated) {
+          updatedCreative = updated
+        }
+      }
+
+      setCreatives((prev) => [updatedCreative, ...prev])
       setOpen(false)
       setForm({ name: '', platform: 'meta', primary_text: '', headline: '', cta: '' })
+      setFiles([])
     }
     setLoading(false)
   }
@@ -73,12 +132,13 @@ export function AdCreativesList({ projectId, initialCreatives }: AdCreativesList
               <TableHead>Primary Text</TableHead>
               <TableHead>Headline</TableHead>
               <TableHead>CTA</TableHead>
+              <TableHead>Media</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {creatives.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center text-zinc-500">
+                <TableCell colSpan={6} className="text-center text-zinc-500">
                   No creatives. Add one for copy/designer uploads.
                 </TableCell>
               </TableRow>
@@ -90,6 +150,11 @@ export function AdCreativesList({ projectId, initialCreatives }: AdCreativesList
                   <TableCell className="max-w-[200px] truncate">{c.primary_text || '—'}</TableCell>
                   <TableCell className="max-w-[120px] truncate">{c.headline || '—'}</TableCell>
                   <TableCell>{c.cta || '—'}</TableCell>
+                  <TableCell>
+                    <div className="text-xs text-zinc-400">
+                      {c.image_urls?.length ?? 0} images • {c.video_urls?.length ?? 0} videos
+                    </div>
+                  </TableCell>
                 </TableRow>
               ))
             )}
@@ -130,6 +195,17 @@ export function AdCreativesList({ projectId, initialCreatives }: AdCreativesList
             <div>
               <Label htmlFor="cta">CTA</Label>
               <Input id="cta" value={form.cta} onChange={(e) => setForm((p) => ({ ...p, cta: e.target.value }))} placeholder="Learn More, Sign Up, etc." />
+            </div>
+            <div>
+              <Label htmlFor="media">Upload photos/videos</Label>
+              <Input
+                id="media"
+                type="file"
+                accept={acceptTypes}
+                multiple
+                onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
+              />
+              <p className="mt-1 text-xs text-zinc-500">PNG, JPG, MP4, MOV supported.</p>
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>

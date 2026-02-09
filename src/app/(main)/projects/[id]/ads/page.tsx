@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { AdCreativesList } from '@/app/(main)/ads/ad-creatives-list'
+import type { UserRole } from '@/types/database'
 
 export default async function ProjectAdsPage({
   params,
@@ -17,6 +18,15 @@ export default async function ProjectAdsPage({
 
   if (!project) notFound()
 
+  const { data: { user } } = await supabase.auth.getUser()
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user?.id ?? '')
+    .single()
+
+  const role = (profile?.role as UserRole) ?? 'pending'
+
   const { data: creatives } = await supabase
     .from('ad_creatives')
     .select('*')
@@ -29,7 +39,7 @@ export default async function ProjectAdsPage({
       <p className="text-sm text-zinc-400">
         Copy and creative assets for this project. Media buyers can use these in the main Ads page.
       </p>
-      <AdCreativesList projectId={id} initialCreatives={creatives ?? []} />
+      <AdCreativesList projectId={id} initialCreatives={creatives ?? []} isDemo={role === 'demo'} />
     </div>
   )
 }

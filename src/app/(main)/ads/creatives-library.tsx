@@ -9,6 +9,8 @@ interface Creative {
   primary_text: string | null
   headline: string | null
   cta: string | null
+  image_urls: string[] | null
+  video_urls: string[] | null
   project?: { id: string; name: string }
 }
 
@@ -35,12 +37,13 @@ export function CreativesLibrary({ initialCreatives }: CreativesLibraryProps) {
               <TableHead>Primary text</TableHead>
               <TableHead>Headline</TableHead>
               <TableHead>CTA</TableHead>
+              <TableHead>Media</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {creatives.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-zinc-500">
+                <TableCell colSpan={7} className="text-center text-zinc-500">
                   No creatives yet. Add them under Projects → Client Ads.
                 </TableCell>
               </TableRow>
@@ -53,6 +56,11 @@ export function CreativesLibrary({ initialCreatives }: CreativesLibraryProps) {
                   <TableCell className="max-w-[200px] truncate">{c.primary_text || '—'}</TableCell>
                   <TableCell className="max-w-[120px] truncate">{c.headline || '—'}</TableCell>
                   <TableCell>{c.cta || '—'}</TableCell>
+                  <TableCell>
+                    <div className="text-xs text-zinc-400">
+                      {c.image_urls?.length ?? 0} images • {c.video_urls?.length ?? 0} videos
+                    </div>
+                  </TableCell>
                 </TableRow>
               ))
             )}
