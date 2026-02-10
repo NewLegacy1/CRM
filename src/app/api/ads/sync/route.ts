@@ -54,6 +54,7 @@ export async function POST() {
       impressions: number
       clicks: number
       conversions: number
+      lead_count: number
     }[] = []
 
     for (const account of accounts) {
