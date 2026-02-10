@@ -79,6 +79,7 @@ export async function POST() {
           impressions,
           clicks,
           conversions: 0,
+          lead_count: 0,
         })
       }
 
@@ -98,6 +99,7 @@ export async function POST() {
             impressions: parseInt(ins.impressions || '0', 10) || 0,
             clicks: parseInt(ins.clicks || '0', 10) || 0,
             conversions: 0,
+            lead_count: 0,
           })
         }
       }

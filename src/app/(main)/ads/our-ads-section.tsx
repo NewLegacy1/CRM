@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { RefreshCw } from 'lucide-react'
 
 interface AgencyAd {
@@ -15,6 +17,7 @@ interface AgencyAd {
   impressions: number
   clicks: number
   conversions: number
+  lead_count: number
   synced_at: string | null
 }
 
@@ -26,7 +29,16 @@ export function OurAdsSection({ initialAds }: OurAdsSectionProps) {
   const router = useRouter()
   const [syncing, setSyncing] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-  const ads = initialAds
+  const [ads, setAds] = useState<AgencyAd[]>(initialAds)
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
+
+  async function updateLeadCount(id: string, lead_count: number) {
+    setUpdatingId(id)
+    const supabase = createClient()
+    await supabase.from('agency_ads').update({ lead_count }).eq('id', id)
+    setAds((prev) => prev.map((a) => (a.id === id ? { ...a, lead_count } : a)))
+    setUpdatingId(null)
+  }
 
   async function handleRefresh() {
     setSyncing(true)
@@ -88,13 +100,14 @@ export function OurAdsSection({ initialAds }: OurAdsSectionProps) {
               <TableHead>Impressions</TableHead>
               <TableHead>Clicks</TableHead>
               <TableHead>Conversions</TableHead>
+              <TableHead>Leads</TableHead>
               <TableHead>Last synced</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {ads.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center text-zinc-500">
+                <TableCell colSpan={8} className="text-center text-zinc-500">
                   No ad data yet. Add API credentials and run sync (or wait for midnight refresh).
                 </TableCell>
               </TableRow>
@@ -107,6 +120,27 @@ export function OurAdsSection({ initialAds }: OurAdsSectionProps) {
                   <TableCell>{ad.impressions?.toLocaleString() ?? '—'}</TableCell>
                   <TableCell>{ad.clicks?.toLocaleString() ?? '—'}</TableCell>
                   <TableCell>{ad.conversions ?? '—'}</TableCell>
+                  <TableCell className="w-24">
+                    <Input
+                      type="number"
+                      min={0}
+                      value={ad.lead_count ?? 0}
+                      onChange={(e) => {
+                        const v = parseInt(e.target.value, 10)
+                        if (!Number.isNaN(v) && v >= 0) {
+                          setAds((prev) => prev.map((a) => (a.id === ad.id ? { ...a, lead_count: v } : a)))
+                        }
+                      }}
+                      onBlur={(e) => {
+                        const v = parseInt(e.target.value, 10)
+                        if (!Number.isNaN(v) && v >= 0 && v !== (ad.lead_count ?? 0)) {
+                          updateLeadCount(ad.id, v)
+                        }
+                      }}
+                      disabled={updatingId === ad.id}
+                      className="h-8 w-20 bg-zinc-800 border-zinc-700 text-zinc-100"
+                    />
+                  </TableCell>
                   <TableCell className="text-zinc-500">
                     {ad.synced_at ? new Date(ad.synced_at).toLocaleString() : '—'}
                   </TableCell>

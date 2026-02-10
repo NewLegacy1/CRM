@@ -28,16 +28,7 @@ interface LeadsTableProps {
   leadLists: { id: string; name: string }[]
 }
 
-const LEAD_STATUSES = [
-  'new',
-  'called',
-  'no_answer',
-  'didnt_book',
-  'booked',
-  'called_no_answer',
-  'answered_declined_demo',
-  'answered_accepted_demo',
-]
+const LEAD_STATUSES = ['new', 'called', 'no_answer', 'didnt_book', 'booked']
 
 function getStatusLabel(status: string) {
   const labels: Record<string, string> = {
@@ -46,9 +37,6 @@ function getStatusLabel(status: string) {
     no_answer: 'no answer',
     didnt_book: "didn't book",
     booked: 'booked',
-    called_no_answer: 'called no answer',
-    answered_declined_demo: 'answered but declined the demo video',
-    answered_accepted_demo: 'answered and accepted the demo video',
   }
   return labels[status] ?? status.replace(/_/g, ' ')
 }
@@ -294,9 +282,6 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
       no_answer: 'bg-amber-500/10 text-amber-500',
       didnt_book: 'bg-red-500/10 text-red-500',
       booked: 'bg-green-500/10 text-green-500',
-      called_no_answer: 'bg-amber-500/10 text-amber-500',
-      answered_declined_demo: 'bg-red-500/10 text-red-500',
-      answered_accepted_demo: 'bg-green-500/10 text-green-500',
     }
     return colors[status] || 'bg-zinc-500/10 text-zinc-500'
   }
