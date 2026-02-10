@@ -5,13 +5,17 @@ export default async function AnalyticsPage() {
 
   const [
     { data: ads },
+    { data: agencyAds },
     { data: wonDeals },
   ] = await Promise.all([
     supabase.from('ads').select('spend, revenue'),
+    supabase.from('agency_ads').select('spend'),
     supabase.from('deals').select('value').eq('stage', 'closed_won'),
   ])
 
-  const totalSpend = ads?.reduce((sum, ad) => sum + (ad.spend || 0), 0) || 0
+  const adsTableSpend = ads?.reduce((sum, ad) => sum + (ad.spend || 0), 0) || 0
+  const agencyAdsSpend = agencyAds?.reduce((sum, ad) => sum + Number(ad.spend || 0), 0) || 0
+  const totalSpend = adsTableSpend + agencyAdsSpend
   const adsRevenue = ads?.reduce((sum, ad) => sum + (ad.revenue || 0), 0) || 0
   const wonDealsRevenue = wonDeals?.reduce((sum, d) => sum + Number(d.value || 0), 0) || 0
   const totalRevenue = adsRevenue + wonDealsRevenue
