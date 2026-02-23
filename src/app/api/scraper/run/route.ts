@@ -7,6 +7,7 @@ interface ApifyPlace {
   title?: string
   phone?: string
   email?: string
+  emails?: string[]
   website?: string
   address?: string
   totalScore?: number
@@ -98,18 +99,24 @@ export async function POST(request: NextRequest) {
     }
     const items = (await itemsRes.json()) as ApifyPlace[]
 
-    const allLeads = items.map((place) => ({
+    const allLeads = items.map((place) => {
+      const email =
+        (Array.isArray(place.emails) && place.emails.length > 0
+          ? place.emails[0]
+          : place.email) ?? ''
+      return {
       businessName: place.title ?? '',
       website: place.website ?? '',
       phone: place.phone ?? '',
-      email: place.email ?? '',
+      email,
       address: place.address ?? '',
       city: location,
       niche: niche ?? null,
       rating: place.totalScore ?? null,
       googleMapsUrl: place.url ?? '',
       status: 'New' as const,
-    }))
+    }
+    })
 
     const withWebsite = allLeads.filter((l) => l.website)
     const withEmail = allLeads.filter((l) => l.email)

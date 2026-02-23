@@ -80,7 +80,7 @@ export function LeadScraper() {
   } | null>(null)
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [addLoading, setAddLoading] = useState(false)
-  const [addSuccess, setAddSuccess] = useState<number | null>(null)
+  const [addSuccess, setAddSuccess] = useState<{ count: number; skipped?: number } | null>(null)
 
   async function fetchLeadLists() {
     const supabase = createClient()
@@ -194,8 +194,11 @@ export function LeadScraper() {
       })
       const data = await res.json()
       if (res.ok) {
-        setAddSuccess(leads.length)
-        setTimeout(() => setAddSuccess(null), 4000)
+        setAddSuccess({
+          count: data.count ?? leads.length,
+          skipped: data.skipped,
+        })
+        setTimeout(() => setAddSuccess(null), 5000)
         window.dispatchEvent(new CustomEvent('leads-refresh'))
         window.dispatchEvent(new CustomEvent('lead-lists-refresh'))
         setSelected(new Set())
@@ -464,7 +467,10 @@ export function LeadScraper() {
 
       {addSuccess !== null && (
         <div className="rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-300">
-          {addSuccess} lead{addSuccess !== 1 ? 's' : ''} added to list.
+          {addSuccess.count} lead{addSuccess.count !== 1 ? 's' : ''} added to list.
+          {addSuccess.skipped != null && addSuccess.skipped > 0 && (
+            <span className="ml-1"> {addSuccess.skipped} duplicate(s) skipped.</span>
+          )}
         </div>
       )}
 

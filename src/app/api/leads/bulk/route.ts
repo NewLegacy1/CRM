@@ -4,6 +4,11 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
+/** Normalize phone to digits only for duplicate check across lists */
+function phoneKey(phone: string): string {
+  return phone.replace(/\D/g, '')
+}
+
 interface BulkLeadInput {
   name: string
   phone: string
@@ -57,7 +62,36 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const rows = leads.map((l) => ({
+    const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+    // Dedupe within batch (keep first occurrence per phone)
+    const seenPhones = new Set<string>()
+    const dedupedLeads = leads.filter((l) => {
+      const key = phoneKey(l.phone)
+      if (seenPhones.has(key)) return false
+      seenPhones.add(key)
+      return true
+    })
+
+    // Find phones that already exist in any list (no duplicates across lists)
+    const phonesToCheck = [...new Set(dedupedLeads.map((l) => l.phone))]
+    const { data: existing } = await supabase
+      .from('leads')
+      .select('phone')
+      .in('phone', phonesToCheck)
+    const existingPhones = new Set((existing ?? []).map((r) => r.phone))
+    const toInsert = dedupedLeads.filter((l) => !existingPhones.has(l.phone))
+
+    if (toInsert.length === 0) {
+      return NextResponse.json({
+        ok: true,
+        count: 0,
+        skipped: dedupedLeads.length,
+        message: 'All leads already exist (duplicate phone numbers).',
+      })
+    }
+
+    const rows = toInsert.map((l) => ({
       list_id: listId.trim(),
       name: l.name,
       phone: l.phone,
@@ -69,7 +103,6 @@ export async function POST(request: NextRequest) {
       source: 'scraper',
     }))
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey)
     const { data, error } = await supabase.from('leads').insert(rows).select('id')
 
     if (error) {
@@ -81,6 +114,7 @@ export async function POST(request: NextRequest) {
     }
 
     const insertedCount = data?.length ?? rows.length
+    const skipped = dedupedLeads.length - toInsert.length
     const { data: list } = await supabase
       .from('lead_lists')
       .select('total_count')
@@ -92,7 +126,11 @@ export async function POST(request: NextRequest) {
       .update({ total_count: prevCount + insertedCount })
       .eq('id', listId)
 
-    return NextResponse.json({ ok: true, count: insertedCount })
+    return NextResponse.json({
+      ok: true,
+      count: insertedCount,
+      ...(skipped > 0 && { skipped, message: `${skipped} duplicate(s) skipped.` }),
+    })
   } catch (err) {
     console.error('leads/bulk error:', err)
     const message = err instanceof Error ? err.message : 'Bulk insert failed'

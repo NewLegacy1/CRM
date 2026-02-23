@@ -4,6 +4,11 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
+/** Normalize phone to digits only for dedupe within file */
+function phoneKey(phone: string): string {
+  return phone.replace(/\D/g, '')
+}
+
 export async function POST(request: NextRequest) {
   if (!supabaseServiceKey) {
     return NextResponse.json({ error: 'Server not configured' }, { status: 500 })
@@ -114,34 +119,68 @@ export async function POST(request: NextRequest) {
 
     console.log('Parsed leads count:', leads.length)
     if (leads.length === 0) {
-      return NextResponse.json({ 
+      return NextResponse.json({
         error: 'No valid leads found. Make sure CSV has phone numbers.',
-        details: 'CSV must contain at least one row with a phone number.'
+        details: 'CSV must contain at least one row with a phone number.',
       }, { status: 400 })
     }
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
-    const { data, error } = await supabase.from('leads').insert(leads).select('id')
+
+    // Dedupe within file (keep first per normalized phone)
+    const seenPhones = new Set<string>()
+    const dedupedLeads = leads.filter((l) => {
+      const key = phoneKey(l.phone)
+      if (seenPhones.has(key)) return false
+      seenPhones.add(key)
+      return true
+    })
+
+    // Skip leads that already exist in any list (exact phone match)
+    const phonesToCheck = [...new Set(dedupedLeads.map((l) => l.phone))]
+    const { data: existing } = await supabase
+      .from('leads')
+      .select('phone')
+      .in('phone', phonesToCheck)
+    const existingPhones = new Set((existing ?? []).map((r) => r.phone))
+    const toInsert = dedupedLeads.filter((l) => !existingPhones.has(l.phone))
+
+    if (toInsert.length === 0) {
+      return NextResponse.json({
+        ok: true,
+        count: 0,
+        skipped: dedupedLeads.length,
+        message: 'All leads already exist (duplicate phone numbers).',
+        columnMap,
+      })
+    }
+
+    const { data, error } = await supabase.from('leads').insert(toInsert).select('id')
 
     if (error) {
       console.error('CSV upload error:', error)
       console.error('Error details:', JSON.stringify(error, null, 2))
-      return NextResponse.json({ 
+      return NextResponse.json({
         error: error.message || 'Database error',
-        details: error.details || error.hint || 'Check server logs for details'
+        details: error.details || error.hint || 'Check server logs for details',
       }, { status: 500 })
     }
 
+    const insertedCount = data?.length ?? toInsert.length
     const { data: list } = await supabase.from('lead_lists').select('total_count').eq('id', listId).single()
     const prevCount = (list?.total_count as number) ?? 0
     await supabase
       .from('lead_lists')
-      .update({ total_count: prevCount + leads.length, csv_column_map: columnMap })
+      .update({ total_count: prevCount + insertedCount, csv_column_map: columnMap })
       .eq('id', listId)
 
     return NextResponse.json({
       ok: true,
-      count: data?.length ?? leads.length,
+      count: insertedCount,
+      ...(dedupedLeads.length - toInsert.length > 0 && {
+        skipped: dedupedLeads.length - toInsert.length,
+        message: `${dedupedLeads.length - toInsert.length} duplicate(s) skipped.`,
+      }),
       columnMap,
     })
   } catch (err) {
