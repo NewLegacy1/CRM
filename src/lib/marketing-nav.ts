@@ -1,32 +1,42 @@
-import { BOOK_CONSULTATION_PATH } from "@/lib/links";
-
+/**
+ * Static marketing menu definition. Paths are resolved in the shell using
+ * `resolveMarketingNavHref` so hash links work from any marketing route.
+ */
 export type MarketingNavEntry =
   | {
       id: string;
       kind: "link";
       label: string;
+      /** In-page section on home (becomes #id or /#id) */
       hash?: string;
+      /** Absolute path within the app */
       path?: string;
+      /** Opens in new tab */
       external?: string;
       isGradient?: boolean;
     }
-  | { id: string; kind: "lead"; label: string };
+  | {
+      id: string;
+      kind: "lead";
+      label: string;
+    }
+  | {
+      id: string;
+      kind: "calendly";
+      label: string;
+      isGradient?: boolean;
+    };
 
 export const MARKETING_NAV_ENTRIES: MarketingNavEntry[] = [
   { id: "services", kind: "link", label: "SERVICES", hash: "services" },
-  { id: "work", kind: "link", label: "CASE STUDIES", path: "/case-studies" },
+  { id: "case-studies", kind: "link", label: "CASE STUDIES", path: "/case-studies" },
   { id: "industries", kind: "link", label: "INDUSTRIES", path: "/industries" },
-  { id: "about", kind: "link", label: "ABOUT", hash: "why-us" },
-  { id: "sign-in", kind: "link", label: "SIGN IN", path: "/login" },
   { id: "contact", kind: "lead", label: "CONTACT" },
-  {
-    id: "book",
-    kind: "link",
-    label: "BOOK A CONSULT",
-    path: BOOK_CONSULTATION_PATH,
-  },
+  { id: "book", kind: "calendly", label: "BOOK A CONSULTATION" },
+  { id: "sign-in", kind: "link", label: "SIGN IN", path: "/login", isGradient: true },
 ];
 
+/** Home pathname — hash-only links are valid here. */
 export function isMarketingHomePath(pathname: string): boolean {
   return pathname === "/" || pathname === "";
 }

@@ -1,7 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# leftover dev folder (see repo root layout)
+# leftover dev folder (see docs/PROJECT_STRUCTURE.md)
 /CRM-main/
+
+# local scratch / transcript extraction helpers (not part of the app)
+/.tmp/
 
 # dependencies
 /node_modules

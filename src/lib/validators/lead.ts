@@ -1,10 +1,13 @@
 import { z } from "zod";
 
+/** Match homepage Services `leadService` strings for consistent pre-select from CTAs */
 export const LEAD_SERVICE_OPTIONS = [
-  "Custom website",
-  "CRM & automations",
-  "Growth / ops",
-  "Custom app",
+  "AI-Powered Website",
+  "AI Lead Automation",
+  "Custom CRM & Apps",
+  "AI Customer Agents",
+  "Data & Insights",
+  "Business Automation",
   "Not sure yet",
 ] as const;
 

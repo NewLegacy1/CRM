@@ -1,18 +1,17 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect } from "react";
+import dynamic from "next/dynamic";
 import ServicesScroll from "@/components/marketing/ServicesScroll";
 import Clients from "@/components/marketing/Clients";
 import WhyUs from "@/components/marketing/WhyUs";
 import CaseStudies from "@/components/marketing/CaseStudies";
 import StartNow from "@/components/marketing/StartNow";
 import Footer from "@/components/marketing/Footer";
-import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 
 const HeroSection = dynamic(
   () => import("@/components/marketing/HeroSection"),
-  { ssr: true }
+  { ssr: false }
 );
 
 export default function HomePage() {
@@ -34,24 +33,15 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--charcoal)] text-[var(--pure-white)]">
+    <div className="min-h-screen text-foreground">
       <HeroSection />
-      <div className="marketing-page-bg">
-        <ContainerScroll>
-          <ServicesScroll />
-        </ContainerScroll>
-        <ContainerScroll>
-          <Clients />
-        </ContainerScroll>
-        <ContainerScroll>
-          <WhyUs />
-        </ContainerScroll>
-        <ContainerScroll>
-          <CaseStudies />
-        </ContainerScroll>
-        <ContainerScroll>
-          <StartNow />
-        </ContainerScroll>
+      {/* Stack above fixed .hero-canvas (z-0) so headings/body below the hero stay visible */}
+      <div className="relative z-10">
+        <ServicesScroll />
+        <Clients />
+        <WhyUs />
+        <CaseStudies />
+        <StartNow />
         <Footer />
       </div>
     </div>

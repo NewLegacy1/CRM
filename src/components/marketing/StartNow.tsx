@@ -1,28 +1,24 @@
 "use client";
 
-import Link from "next/link";
-import { BOOK_CONSULTATION_PATH } from "@/lib/links";
-import { marketingCtaPrimaryLinkClasses } from "@/lib/marketing-cta-classes";
+import { MarketingCtaDuo } from "@/components/marketing/MarketingCtaDuo";
 
 export default function StartNow() {
   return (
-    <section className="px-4 py-24 sm:px-6">
-      <div className="mx-auto max-w-3xl rounded-2xl border border-[var(--phoenix-gold)]/25 bg-gradient-to-br from-[var(--phoenix-gold)]/10 to-transparent p-10 text-center">
-        <h2 className="text-3xl font-bold sm:text-4xl">
-          READY TO BUILD IT <span className="fire-text">RIGHT?</span>
+    <section
+      id="start-now"
+      className="relative pt-6 pb-28 md:pt-12 md:pb-40"
+    >
+      <div className="container mx-auto relative max-w-4xl px-4 text-center">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl mb-6 leading-[0.95]">
+          LET&apos;S EXPLORE THE{" "}
+          <span className="gradient-text-highlight">UNIVERSE OF AI.</span>
         </h2>
-        <p className="mt-4 text-[var(--ash-gray)]">
-          If your website looks good but your systems feel messy, we can fix
-          both — and make everything measurable.
+        <p className="text-white/90 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+          If your site isn&apos;t pulling its weight or the day-to-day still runs on manual work,
+          we&apos;ll help you modernize — in plain terms, with results you can see.
         </p>
-        <Link
-          href={BOOK_CONSULTATION_PATH}
-          className={`${marketingCtaPrimaryLinkClasses} relative mt-8 inline-flex`}
-        >
-          <span className="neon-cta-line-top" aria-hidden />
-          <span className="neon-cta-line-bottom" aria-hidden />
-          <span className="relative z-[1]">BOOK A CONSULTATION</span>
-        </Link>
+
+        <MarketingCtaDuo />
       </div>
     </section>
   );

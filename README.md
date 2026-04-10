@@ -1,6 +1,18 @@
 # Agency CRM
 
-Full-stack CRM for agencies: clients, projects, deals, leads, cold calling, ads, funnels, analytics, and AI insights.
+Full-stack CRM for agencies: clients, projects, deals, leads, cold calling, ads, funnels, analytics, and AI insights. The **public marketing site** (galaxy landing, case studies, booking) lives in the **same** Next.js app as the CRM.
+
+## Where to run `npm install` and `npm run dev`
+
+Use the **repository root** only — the folder that contains `package.json` and `next.config.ts`:
+
+```bash
+npm install
+npm run dev
+```
+
+- **One app:** Marketing routes and CRM routes are both under `src/app/` (see [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)).
+- **Do not** run npm inside a nested `CRM-main/` folder; that path is legacy and not the app root.
 
 ## Tech Stack
 
@@ -97,12 +109,19 @@ Open [http://localhost:3000](http://localhost:3000).
 - ✅ Team management (view users, change roles)
 - ✅ Settings page (integrations, cron info)
 
-## Project Structure
+## Project structure
 
-- `src/app/(main)/` - Protected app routes (dashboard, clients, deals, etc.)
-- `src/app/login`, `src/app/signup` - Auth pages
-- `src/app/api/` - API routes (webhooks, AI insights)
-- `src/components/` - Shared UI components
-- `src/lib/` - Supabase client, utils, nav config
-- `supabase/migrations/` - SQL schema and RLS
-- `vercel.json` - Cron configuration
+| Path | Contents |
+|------|----------|
+| `src/app/(marketing)/` | Public marketing site: home, `/book`, `/case-studies`, `/industries` |
+| `src/app/(main)/` | CRM app routes (dashboard, leads, projects, …) — typically behind auth |
+| `src/app/login`, `src/app/signup` | Auth entry points |
+| `src/app/api/` | API routes (lead capture, webhooks, Calendly, etc.) |
+| `src/components/marketing/` | Marketing-only components (hero, shell, CTAs) |
+| `src/components/` | Shared UI (tables, dialogs, …) |
+| `src/lib/` | Supabase clients, validators, marketing nav helpers |
+| `supabase/migrations/` | SQL schema and RLS |
+| `docs/PROJECT_STRUCTURE.md` | Detailed layout and notes on the legacy `CRM-main/` folder |
+| `vercel.json` | Cron and platform config |
+
+Demo and ops guides at repo root: `DEMO_README.md`, `TROUBLESHOOTING.md`, `VERCEL_SETUP.md`.

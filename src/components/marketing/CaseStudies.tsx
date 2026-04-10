@@ -1,68 +1,134 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ArrowUpRight, Clock, Star, TrendingUp, Users, type LucideIcon } from "lucide-react";
 import { CASE_STUDIES } from "@/lib/case-studies-data";
+import { marketingWhileInView } from "@/lib/marketing-motion-viewport";
+import { marketingCtaOutlineLinkClasses } from "@/lib/marketing-cta-classes";
+
+type MetricRow = { icon: React.ReactNode; value: string; label: string };
+
+function metricsWithIcons(slug: string, metrics: { value: string; label: string }[]): MetricRow[] {
+  const iconSets: Record<string, LucideIcon[]> = {
+    detailops: [TrendingUp, Users, Clock],
+    "showroom-autocare": [Star, Users, TrendingUp],
+    "jay-that-drain-guy": [Star, Clock, TrendingUp],
+  };
+  const icons = iconSets[slug] ?? [TrendingUp, Users, Clock];
+  return metrics.map((m, i) => {
+    const Icon = icons[i] ?? TrendingUp;
+    return {
+      icon: <Icon size={18} aria-hidden />,
+      value: m.value,
+      label: m.label,
+    };
+  });
+}
+
+type CaseStudyCardProps = {
+  company: string;
+  industry: string;
+  logoUrl?: string;
+  metrics: MetricRow[];
+  testimonial: string;
+  figcaption?: string;
+  delay: number;
+};
+
+function CaseStudyCard({
+  company,
+  industry,
+  logoUrl,
+  metrics,
+  testimonial,
+  figcaption,
+  delay,
+}: CaseStudyCardProps) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={marketingWhileInView}
+      transition={{ delay: delay / 1000, duration: 0.5 }}
+      className="flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 ring-1 ring-white/[0.04] backdrop-blur-sm"
+    >
+      {logoUrl ? (
+        <div className="mb-4 flex h-10 items-center md:h-11">
+          <Image
+            src={logoUrl}
+            alt={`${company} logo`}
+            width={200}
+            height={48}
+            className="h-8 w-auto max-w-[180px] object-contain object-left md:h-9"
+            sizes="180px"
+          />
+        </div>
+      ) : null}
+      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-400/90">{industry}</p>
+      <h3 className="mt-2 text-lg font-bold leading-tight">{company}</h3>
+
+      <dl className="mt-5 grid grid-cols-3 gap-2 text-center">
+        {metrics.map((m) => (
+          <div key={m.label} className="rounded-lg bg-white/[0.04] py-2.5">
+            <dt className="text-[10px] uppercase tracking-wide text-zinc-500">{m.label}</dt>
+            <dd className="mt-0.5 flex items-center justify-center gap-1 text-base font-bold">
+              <span className="text-violet-400/70">{m.icon}</span>
+              {m.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <blockquote className="mt-5 flex-1 border-l-2 border-violet-500/40 pl-4 text-sm italic leading-relaxed text-zinc-400">
+        &ldquo;{testimonial}&rdquo;
+      </blockquote>
+      {figcaption ? <p className="mt-2 pl-4 text-[11px] text-zinc-500">{figcaption}</p> : null}
+    </motion.article>
+  );
+}
 
 export default function CaseStudies() {
+  const delays = [100, 200, 300];
+
   return (
-    <section className="border-t border-white/[0.06] px-4 py-24 sm:px-6">
+    <section id="case-studies" className="relative px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
-          <div>
-            <h2 className="text-3xl font-bold sm:text-4xl">
-              REAL BUILDS.{" "}
-              <span className="fire-text">REAL OUTCOMES.</span>
-            </h2>
-            <p className="mt-3 max-w-xl text-[var(--ash-gray)]">
-              Every project is designed to remove friction, improve clarity, and
-              support growth — not just look good.
-            </p>
-          </div>
-          <Link
-            href="/case-studies"
-            className="text-sm font-semibold uppercase tracking-wider text-[var(--phoenix-gold)] hover:underline"
-          >
-            View all →
-          </Link>
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold sm:text-4xl">
+            REAL BUILDS. <span className="gradient-text-highlight">REAL OUTCOMES.</span>
+          </h2>
+          <p className="mt-3 max-w-xl text-white/60">
+            Every project is designed to remove friction, improve clarity, and support growth — not just look good.
+          </p>
         </div>
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-3">
-          {CASE_STUDIES.map((c, i) => (
-            <motion.article
-              key={c.slug}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08 }}
-              className="flex flex-col rounded-2xl border border-white/10 bg-zinc-900/40 p-6 backdrop-blur-sm"
-            >
-              <p className="text-xs font-semibold uppercase tracking-widest text-[var(--phoenix-gold)]">
-                {c.industry}
-              </p>
-              <h3 className="mt-2 text-xl font-bold text-[var(--pure-white)]">
-                {c.company}
-              </h3>
-              <dl className="mt-6 grid grid-cols-3 gap-2 text-center">
-                {c.metrics.map((m) => (
-                  <div
-                    key={m.label}
-                    className="rounded-lg bg-white/[0.04] py-3"
-                  >
-                    <dt className="text-[10px] uppercase tracking-wide text-zinc-500">
-                      {m.label}
-                    </dt>
-                    <dd className="text-lg font-bold text-[var(--pure-white)]">
-                      {m.value}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-              <blockquote className="mt-6 flex-1 border-l-2 border-[var(--phoenix-gold)]/50 pl-4 text-sm italic leading-relaxed text-zinc-400">
-                &ldquo;{c.quote}&rdquo;
-              </blockquote>
-            </motion.article>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {CASE_STUDIES.map((study, i) => (
+            <CaseStudyCard
+              key={study.slug}
+              company={study.company}
+              industry={study.industry}
+              logoUrl={study.logoUrl}
+              metrics={metricsWithIcons(study.slug, study.metrics)}
+              testimonial={study.testimonial}
+              figcaption={
+                study.testimonialAttribution ? `— ${study.testimonialAttribution}` : undefined
+              }
+              delay={delays[i] ?? 100 * (i + 1)}
+            />
           ))}
+        </div>
+
+        <div className="mt-12 flex justify-center">
+          <Link href="/case-studies" className={marketingCtaOutlineLinkClasses}>
+            Full case studies
+            <ArrowUpRight
+              size={16}
+              className="text-white/50 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-violet-300"
+            />
+          </Link>
         </div>
       </div>
     </section>

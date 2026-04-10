@@ -1,6 +1,16 @@
-/** Shared CTA styling for marketing pages */
+/**
+ * Homepage Services section CTA styling — use across marketing for consistency.
+ */
 export const marketingCtaPrimaryLinkClasses =
-  "group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 px-8 py-4 text-sm font-semibold uppercase tracking-wide text-zinc-950 shadow-lg shadow-amber-500/20 transition hover:from-amber-400 hover:to-orange-400";
+  "marketing-neon-cta group relative inline-flex items-center justify-center gap-3 px-7 py-3.5 font-heading font-semibold text-sm text-[#09090B] active:scale-[0.98]";
 
 export const marketingCtaSecondaryButtonClasses =
-  "inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/[0.04] px-8 py-4 text-sm font-medium uppercase tracking-wide text-zinc-100 transition hover:bg-white/[0.08]";
+  "inline-flex items-center justify-center gap-2 rounded-[0.875rem] border border-white/[0.12] bg-white/[0.04] px-7 py-3.5 font-heading font-semibold text-sm text-white/95 ring-1 ring-white/[0.06] backdrop-blur-sm transition-colors hover:bg-white/[0.08] hover:border-violet-400/30 active:scale-[0.98]";
+
+/** Compact secondary (nav, small chrome) */
+export const marketingCtaSecondaryCompactClasses =
+  "inline-flex items-center justify-center gap-2 rounded-[0.875rem] border border-white/[0.12] bg-white/[0.04] px-6 py-2 font-heading font-semibold text-sm text-white/95 ring-1 ring-white/[0.06] backdrop-blur-sm transition-colors hover:bg-white/[0.08] hover:border-violet-400/30 active:scale-[0.98]";
+
+/** Text-style / outline links: case studies, industries, etc. */
+export const marketingCtaOutlineLinkClasses =
+  "group inline-flex items-center gap-2 rounded-[0.875rem] border border-white/[0.12] bg-white/[0.04] px-6 py-3 font-heading text-sm font-semibold uppercase tracking-[0.12em] text-white/90 ring-1 ring-white/[0.06] backdrop-blur-sm transition-colors hover:bg-white/[0.08] hover:border-violet-400/30";

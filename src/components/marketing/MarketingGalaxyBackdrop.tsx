@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { mulberry32 } from "@/components/marketing/galaxy-shared";
+import { mulberry32 } from "@/components/marketing/galaxy-canvas-shared";
 
 /**
  * Subtle animated starfield for marketing subpages (hero already has the full scene on /).

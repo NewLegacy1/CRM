@@ -66,10 +66,15 @@ export function DialogHeader({ children }: DialogHeaderProps) {
 
 interface DialogTitleProps {
   children: React.ReactNode
+  className?: string
 }
 
-export function DialogTitle({ children }: DialogTitleProps) {
-  return <h2 className="text-lg font-semibold text-zinc-100">{children}</h2>
+export function DialogTitle({ children, className }: DialogTitleProps) {
+  return (
+    <h2 className={cn('text-lg font-semibold text-zinc-100', className)}>
+      {children}
+    </h2>
+  )
 }
 
 interface DialogCloseProps {
@@ -80,7 +85,7 @@ export function DialogClose({ onClick }: DialogCloseProps) {
   return (
     <button
       onClick={onClick}
-      className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-zinc-900 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+      className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-zinc-900 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-violet-500/80 focus:ring-offset-2"
     >
       <X className="h-4 w-4 text-zinc-400" />
       <span className="sr-only">Close</span>

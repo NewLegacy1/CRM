@@ -1,19 +1,24 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import { useLeadCapture } from "@/components/marketing/LeadCaptureProvider";
-import {
-  MARKETING_NAV_ENTRIES,
-  resolveMarketingNavHref,
-} from "@/lib/marketing-nav";
+import { MARKETING_NAV_ENTRIES, resolveMarketingNavHref } from "@/lib/marketing-nav";
+import { BOOK_CONSULTATION_PATH } from "@/lib/links";
+
+function isTypingTarget(el: EventTarget | null): boolean {
+  if (!el || !(el instanceof HTMLElement)) return false;
+  return !!el.closest(
+    'input, textarea, select, [contenteditable="true"], [role="textbox"]'
+  );
+}
 
 const MOBILE_NAV_MQ = "(max-width: 767px)";
 
 function useMarketingMobileNav(): boolean {
   const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     const mq = window.matchMedia(MOBILE_NAV_MQ);
     const update = () => setIsMobile(mq.matches);
@@ -21,6 +26,7 @@ function useMarketingMobileNav(): boolean {
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
+
   return isMobile;
 }
 
@@ -29,8 +35,21 @@ export default function MarketingSideNav() {
   const [open, setOpen] = useState(false);
   const isMobile = useMarketingMobileNav();
   const { openLeadForm } = useLeadCapture();
+
   const close = useCallback(() => setOpen(false), []);
   const toggle = useCallback(() => setOpen((o) => !o), []);
+
+  useEffect(() => {
+    if (isMobile) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.code !== "Space") return;
+      if (isTypingTarget(e.target)) return;
+      e.preventDefault();
+      setOpen((o) => !o);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isMobile]);
 
   useEffect(() => {
     if (!open) return;
@@ -60,76 +79,101 @@ export default function MarketingSideNav() {
             <span />
             <span />
           </span>
+          <span className="marketing-side-nav-vertical-text">MENU</span>
         </button>
       </div>
 
-      {open && (
-        <div
-          id="marketing-side-nav-panel"
-          className="marketing-side-nav-panel"
-          role="dialog"
-          aria-modal="true"
+      {open && isMobile && (
+        <button
+          type="button"
+          className="marketing-side-nav-mobile-close"
+          aria-label="Close menu"
+          onClick={close}
         >
-          <div className="marketing-side-nav-panel-inner">
-            <button
-              type="button"
-              className="marketing-side-nav-close"
-              onClick={close}
-              aria-label="Close navigation"
-            >
-              <X className="h-5 w-5" />
-            </button>
-            {MARKETING_NAV_ENTRIES.map((entry) => {
-              if (entry.kind === "lead") {
-                return (
-                  <button
-                    key={entry.id}
-                    type="button"
-                    className="marketing-side-nav-link text-left"
-                    onClick={() => {
-                      openLeadForm();
-                      close();
-                    }}
-                  >
-                    {entry.label}
-                  </button>
-                );
-              }
-              const href = resolveMarketingNavHref(pathname, entry);
-              if (!href) return null;
-              if (entry.path && href.startsWith("/")) {
-                return (
-                  <Link
-                    key={entry.id}
-                    href={href}
-                    className="marketing-side-nav-link"
-                    onClick={close}
-                  >
-                    {entry.label}
-                  </Link>
-                );
-              }
+          <X className="h-6 w-6" strokeWidth={2} />
+        </button>
+      )}
+
+      {open && (
+        <button
+          type="button"
+          className="marketing-side-nav-backdrop"
+          aria-label="Close menu"
+          onClick={close}
+        />
+      )}
+
+      <div
+        id="marketing-side-nav-panel"
+        className={`marketing-side-nav-panel ${open ? "is-open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site navigation"
+      >
+        <a href="/" className="marketing-side-nav-wordmark" onClick={close}>
+          <span className="font-heading font-bold text-lg leading-tight tracking-[0.06em] text-foreground block">
+            NEW LEGACY AI
+          </span>
+        </a>
+        <nav className="marketing-side-nav-links">
+          {MARKETING_NAV_ENTRIES.map((entry) => {
+            if (entry.kind === "lead") {
+              return (
+                <button
+                  key={entry.id}
+                  type="button"
+                  className="marketing-side-nav-link marketing-side-nav-cta-secondary"
+                  onClick={() => {
+                    close();
+                    openLeadForm();
+                  }}
+                >
+                  {entry.label}
+                </button>
+              );
+            }
+            if (entry.kind === "calendly") {
               return (
                 <a
                   key={entry.id}
-                  href={href}
-                  className="marketing-side-nav-link"
+                  href={BOOK_CONSULTATION_PATH}
+                  className="marketing-side-nav-link marketing-side-nav-cta-solid"
                   onClick={close}
                 >
                   {entry.label}
                 </a>
               );
-            })}
-          </div>
-          <button
-            type="button"
-            className="flex-1 cursor-default bg-transparent"
-            aria-hidden
-            tabIndex={-1}
-            onClick={close}
-          />
-        </div>
-      )}
+            }
+            const href = resolveMarketingNavHref(pathname, entry);
+            if (!href) return null;
+            const isSignIn = entry.id === "sign-in";
+            return (
+              <a
+                key={entry.id}
+                href={href}
+                className={`marketing-side-nav-link ${
+                  isSignIn
+                    ? "marketing-side-nav-signin"
+                    : entry.isGradient
+                      ? "gradient-text-highlight"
+                      : ""
+                }`}
+                onClick={close}
+                {...(entry.external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+              >
+                {entry.label}
+              </a>
+            );
+          })}
+        </nav>
+        {!isMobile ? (
+          <p className="marketing-side-nav-hint text-[10px] uppercase tracking-[0.2em] text-muted opacity-50 mt-8">
+            Space to toggle
+          </p>
+        ) : null}
+      </div>
     </>
   );
 }
