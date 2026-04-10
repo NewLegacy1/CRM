@@ -1,16 +1,27 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import "./marketing.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
+const inter = Inter({
   variable: "--font-sans",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-display",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "New Legacy",
-  description: "CRM for agency clients, deals, leads, and cold calling",
+  title: {
+    default: "New Legacy AI",
+    template: "%s | New Legacy AI",
+  },
+  description:
+    "Custom websites, CRMs, automations, and operations for teams that move fast.",
 };
 
 export default function RootLayout({
@@ -21,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${plusJakarta.variable} font-sans antialiased`}
+        className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased`}
       >
         {children}
       </body>

@@ -1,0 +1,210 @@
+/* Marketing site — tokens + side nav (complements globals.css) */
+
+:root {
+  --charcoal: #0c0c0e;
+  --pure-white: #fafafa;
+  --ash-gray: #a1a1aa;
+  --phoenix-gold: #e58a40;
+  --sunset-orange: #ea580c;
+}
+
+.marketing-page-bg h1,
+.marketing-page-bg h2,
+section#home h1 {
+  font-family:
+    var(--font-display),
+    var(--font-sans),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+}
+
+.marketing-page-bg {
+  min-height: 100vh;
+  background: radial-gradient(
+      ellipse 120% 80% at 50% -20%,
+      rgba(229, 138, 64, 0.12),
+      transparent 55%
+    ),
+    var(--charcoal);
+}
+
+.fire-text {
+  background: linear-gradient(
+    135deg,
+    var(--phoenix-gold) 0%,
+    var(--sunset-orange) 50%,
+    #fbbf24 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.neon-cta-line-top,
+.neon-cta-line-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.neon-cta-line-top {
+  top: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(251, 191, 36, 0.6),
+    transparent
+  );
+}
+
+.neon-cta-line-bottom {
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(234, 88, 12, 0.5),
+    transparent
+  );
+}
+
+/* Fixed side rail */
+.marketing-side-nav-rail {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  pointer-events: none;
+}
+
+.marketing-side-nav-rail > * {
+  pointer-events: auto;
+}
+
+.marketing-side-nav-trigger {
+  display: flex;
+  height: 3rem;
+  width: 3rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(12, 12, 14, 0.85);
+  backdrop-filter: blur(12px);
+  color: var(--pure-white);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.marketing-side-nav-trigger:hover {
+  border-color: rgba(229, 138, 64, 0.4);
+  background: rgba(24, 24, 27, 0.95);
+}
+
+.marketing-side-nav-burger {
+  display: flex;
+  height: 0.875rem;
+  width: 1.125rem;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.marketing-side-nav-burger span {
+  display: block;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--pure-white);
+}
+
+.marketing-side-nav-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  display: flex;
+  justify-content: flex-start;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+}
+
+.marketing-side-nav-panel-inner {
+  display: flex;
+  height: 100%;
+  width: min(20rem, 88vw);
+  flex-direction: column;
+  gap: 0.25rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(12, 12, 14, 0.97);
+  padding: 5rem 1.25rem 1.5rem;
+}
+
+.marketing-side-nav-link {
+  display: block;
+  border-radius: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--ash-gray);
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+}
+
+.marketing-side-nav-link:hover {
+  color: var(--pure-white);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.marketing-side-nav-close {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  z-index: 10;
+  display: flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(24, 24, 27, 0.9);
+  color: var(--pure-white);
+  cursor: pointer;
+}
+
+.marketing-side-nav-rail--trigger-hidden .marketing-side-nav-trigger {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .marketing-side-nav-rail {
+    padding-left: 0.75rem;
+  }
+}
+
+.marketing-galaxy-placeholder {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+      circle at 20% 30%,
+      rgba(229, 138, 64, 0.08) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 80% 70%,
+      rgba(99, 102, 241, 0.06) 0%,
+      transparent 40%
+    ),
+    var(--charcoal);
+}
