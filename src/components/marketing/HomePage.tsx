@@ -1,7 +1,7 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect } from "react";
-import Hero from "@/components/marketing/Hero";
 import ServicesScroll from "@/components/marketing/ServicesScroll";
 import Clients from "@/components/marketing/Clients";
 import WhyUs from "@/components/marketing/WhyUs";
@@ -9,6 +9,11 @@ import CaseStudies from "@/components/marketing/CaseStudies";
 import StartNow from "@/components/marketing/StartNow";
 import Footer from "@/components/marketing/Footer";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
+
+const HeroSection = dynamic(
+  () => import("@/components/marketing/HeroSection"),
+  { ssr: true }
+);
 
 export default function HomePage() {
   useEffect(() => {
@@ -29,24 +34,26 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="marketing-page-bg min-h-screen text-[var(--pure-white)]">
-      <Hero />
-      <ContainerScroll>
-        <ServicesScroll />
-      </ContainerScroll>
-      <ContainerScroll>
-        <Clients />
-      </ContainerScroll>
-      <ContainerScroll>
-        <WhyUs />
-      </ContainerScroll>
-      <ContainerScroll>
-        <CaseStudies />
-      </ContainerScroll>
-      <ContainerScroll>
-        <StartNow />
-      </ContainerScroll>
-      <Footer />
+    <div className="min-h-screen bg-[var(--charcoal)] text-[var(--pure-white)]">
+      <HeroSection />
+      <div className="marketing-page-bg">
+        <ContainerScroll>
+          <ServicesScroll />
+        </ContainerScroll>
+        <ContainerScroll>
+          <Clients />
+        </ContainerScroll>
+        <ContainerScroll>
+          <WhyUs />
+        </ContainerScroll>
+        <ContainerScroll>
+          <CaseStudies />
+        </ContainerScroll>
+        <ContainerScroll>
+          <StartNow />
+        </ContainerScroll>
+        <Footer />
+      </div>
     </div>
   );
 }

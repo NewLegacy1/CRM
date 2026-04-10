@@ -208,3 +208,56 @@ section#home h1 {
     ),
     var(--charcoal);
 }
+
+.marketing-galaxy-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* WebGL hero (scroll-synced galaxy) */
+.hero-container {
+  position: relative;
+  width: 100%;
+}
+
+.hero-scroll-section {
+  box-sizing: border-box;
+}
+
+.hero-scroll-section-inner {
+  pointer-events: none;
+}
+
+.hero-title {
+  font-size: clamp(2rem, 6vw, 3.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.gradient-text-highlight {
+  background: linear-gradient(
+    120deg,
+    #fef9c3 0%,
+    #fbbf24 35%,
+    #f97316 70%,
+    #ea580c 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-subtitle .subtitle-line {
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  line-height: 1.45;
+}
+
+@media (max-width: 767px) {
+  .hero-title {
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+  }
+}
