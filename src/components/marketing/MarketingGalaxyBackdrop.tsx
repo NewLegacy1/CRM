@@ -28,12 +28,12 @@ export default function MarketingGalaxyBackdrop() {
 
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
-      alpha: false,
+      alpha: true,
       powerPreference: "high-performance",
     });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(el.clientWidth, el.clientHeight);
-    renderer.setClearColor(0x050508, 1);
+    renderer.setClearColor(0x000000, 0);
     el.appendChild(renderer.domElement);
 
     const starCount = 6000;

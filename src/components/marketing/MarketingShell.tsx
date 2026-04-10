@@ -17,7 +17,12 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
   return (
     <LeadCaptureProvider>
       <MarketingSideNav />
-      {!isHome && <MarketingGalaxyBackdrop />}
+      {!isHome ? (
+        <>
+          <div className="marketing-subpage-atmosphere" aria-hidden />
+          <MarketingGalaxyBackdrop />
+        </>
+      ) : null}
       {children}
     </LeadCaptureProvider>
   );

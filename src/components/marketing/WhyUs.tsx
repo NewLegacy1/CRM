@@ -3,11 +3,11 @@
 import { useCallback, useId, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+  Bot,
   Compass,
   Layers,
   MessageSquare,
   RefreshCw,
-  LifeBuoy,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { MarketingCtaDuo } from "@/components/marketing/MarketingCtaDuo";
@@ -41,7 +41,7 @@ const points: {
   {
     title: "Ongoing optimization & support",
     body: "Long-term support to keep performance, uptime, and data clean.",
-    icon: LifeBuoy,
+    icon: Bot,
   },
 ];
 

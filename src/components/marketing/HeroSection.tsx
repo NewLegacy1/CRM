@@ -250,6 +250,15 @@ export default function HeroSection() {
   const smoothNebulaOpacity = useRef<number>(HERO_SCENE.baseNebulaOpacity);
   const smoothBloom = useRef<number>(HERO_SCENE.bloomStrength);
 
+  /** Coalesce scroll/touch to one main-thread pass per frame (avoids mobile jank). */
+  const scrollRafRef = useRef<number | null>(null);
+  const lastScrollProgressUi = useRef(-1);
+  const lastSectionUi = useRef(-1);
+  const lastHeroInViewUi = useRef(true);
+  /** Low-pass scroll progress for Three.js only — kills Z “breathing” from dvh/vv jitter */
+  const cameraProgressSmoothRef = useRef(0);
+  const cameraProgressSceneSmoothRef = useRef(0);
+
   const [scrollProgress, setScrollProgress] = useState(0);
   const [currentSection, setCurrentSection] = useState(0);
   const [heroInView, setHeroInView] = useState(true);
@@ -373,11 +382,21 @@ export default function HeroSection() {
       refs.scene = new THREE.Scene();
       refs.scene.fog = new THREE.FogExp2(0x000000, HERO_SCENE.fogDensity);
 
+      let lastSyncW = 0;
+      let lastSyncH = 0;
       const syncRendererToCanvas = () => {
         if (!refs.camera || !refs.renderer || !canvasEl || cancelled) return;
         const cw = Math.max(1, Math.floor(canvasEl.clientWidth));
         const ch = Math.max(1, Math.floor(canvasEl.clientHeight));
         if (cw < 2 || ch < 2) return;
+        if (
+          Math.abs(cw - lastSyncW) < 3 &&
+          Math.abs(ch - lastSyncH) < 3
+        ) {
+          return;
+        }
+        lastSyncW = cw;
+        lastSyncH = ch;
         refs.camera.aspect = cw / ch;
         refs.camera.updateProjectionMatrix();
         refs.renderer.setPixelRatio(Math.min(window.devicePixelRatio, tier.pixelRatioCap));
@@ -747,10 +766,14 @@ void main() {
           refs.bloomPass.strength = smoothBloom.current;
         }
 
-        const sf = 0.05;
-        smoothCameraPos.current.x += (refs.targetCameraX - smoothCameraPos.current.x) * sf;
-        smoothCameraPos.current.y += (refs.targetCameraY - smoothCameraPos.current.y) * sf;
-        smoothCameraPos.current.z += (refs.targetCameraZ - smoothCameraPos.current.z) * sf;
+        const narrowNow =
+          typeof window !== "undefined" &&
+          Math.min(window.innerWidth, window.innerHeight) < MOBILE_BREAKPOINT_PX;
+        const sfXY = narrowNow ? 0.042 : 0.05;
+        const sfZ = narrowNow ? 0.03 : 0.05;
+        smoothCameraPos.current.x += (refs.targetCameraX - smoothCameraPos.current.x) * sfXY;
+        smoothCameraPos.current.y += (refs.targetCameraY - smoothCameraPos.current.y) * sfXY;
+        smoothCameraPos.current.z += (refs.targetCameraZ - smoothCameraPos.current.z) * sfZ;
 
         smoothMountainOpacity.current += (refs.mountainOpacity - smoothMountainOpacity.current) * 0.04;
         refs.mountains.forEach((m) => {
@@ -855,7 +878,10 @@ void main() {
     const parent = sectionsRef.current;
     if (!parent || prefersReducedMotionRef.current) return;
     const secs = parent.querySelectorAll<HTMLElement>(".hero-scroll-section");
-    const vh = getViewportHeightForReveal();
+    const vh =
+      secs.length > 0
+        ? secs[0]!.offsetHeight
+        : getViewportHeightForReveal();
     const coarse = window.matchMedia("(pointer: coarse)").matches;
     const viewCenter = vh * (coarse ? 0.36 : 0.44);
     const band = vh * (coarse ? 0.62 : 0.45);
@@ -887,14 +913,15 @@ void main() {
       }
     }
 
-    const opacityEps = coarse ? 0.03 : 0.04;
+    const opacityEps = coarse ? 0.065 : 0.04;
+    const translateEps = coarse ? 3.2 : 1.5;
     setBeatReveal((prev) => {
       if (
         prev.length === next.length &&
         next.every(
           (n, i) =>
             Math.abs(n.opacity - prev[i].opacity) < opacityEps &&
-            Math.abs(n.translateY - prev[i].translateY) < 1.5
+            Math.abs(n.translateY - prev[i].translateY) < translateEps
         )
       ) {
         return prev;
@@ -903,7 +930,7 @@ void main() {
     });
   }, []);
 
-  const handleScroll = useCallback(() => {
+  const runScrollFrame = useCallback(() => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const heroHeight = containerRef.current.offsetHeight;
@@ -925,10 +952,37 @@ void main() {
     const progressScene =
       maxSceneScroll > 0 ? Math.min(1, sceneScroll / maxSceneScroll) : 1;
 
-    setScrollProgress(progress);
+    const CAM_PROGRESS_SMOOTH = 0.24;
+    let pCam = progress;
+    let pScene = progressScene;
+    if (narrowViewport) {
+      cameraProgressSmoothRef.current +=
+        (progress - cameraProgressSmoothRef.current) * CAM_PROGRESS_SMOOTH;
+      cameraProgressSceneSmoothRef.current +=
+        (progressScene - cameraProgressSceneSmoothRef.current) * CAM_PROGRESS_SMOOTH;
+      pCam = cameraProgressSmoothRef.current;
+      pScene = cameraProgressSceneSmoothRef.current;
+    } else {
+      cameraProgressSmoothRef.current = progress;
+      cameraProgressSceneSmoothRef.current = progressScene;
+    }
+
+    const coarseUi = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
+    const progressStep = coarseUi ? 0.012 : 0.004;
+    if (
+      lastScrollProgressUi.current < 0 ||
+      Math.abs(progress - lastScrollProgressUi.current) >= progressStep
+    ) {
+      lastScrollProgressUi.current = progress;
+      setScrollProgress(progress);
+    }
 
     const heroBottom = rect.bottom;
-    setHeroInView(heroBottom > 0);
+    const inView = heroBottom > 0;
+    if (inView !== lastHeroInViewUi.current) {
+      lastHeroInViewUi.current = inView;
+      setHeroInView(inView);
+    }
 
     if (!prefersReducedMotionRef.current) {
       updateBeatReveal();
@@ -938,12 +992,15 @@ void main() {
       SECTIONS.length - 1,
       Math.max(0, Math.floor(progress * SECTIONS.length))
     );
-    setCurrentSection(sectionIdx);
+    if (sectionIdx !== lastSectionUi.current) {
+      lastSectionUi.current = sectionIdx;
+      setCurrentSection(sectionIdx);
+    }
 
     const refs = threeRefs.current;
     if (!refs.renderer || iosStaticMode === "yes") return;
 
-    const camT = progress * (SECTIONS.length - 1);
+    const camT = pCam * (SECTIONS.length - 1);
     const camLow = Math.min(Math.floor(camT), SECTIONS.length - 2);
     const camFrac = camT - camLow;
 
@@ -955,10 +1012,10 @@ void main() {
     refs.targetCameraY = cur.y + (nxt.y - cur.y) * camFrac;
     refs.targetCameraZ = cur.z + (nxt.z - cur.z) * camFrac;
 
-    if (progressScene < 0.3) {
+    if (pScene < 0.3) {
       refs.mountainOpacity = 1;
-    } else if (progressScene < 0.55) {
-      refs.mountainOpacity = 1 - ((progressScene - 0.3) / 0.25);
+    } else if (pScene < 0.55) {
+      refs.mountainOpacity = 1 - ((pScene - 0.3) / 0.25);
     } else {
       refs.mountainOpacity = 0;
     }
@@ -966,29 +1023,41 @@ void main() {
     const baseNeb = refs.useBloom ? HERO_SCENE.baseNebulaOpacity : getRenderTuning(false).nebulaOpacity;
     const bloomStr = refs.useBloom ? HERO_SCENE.bloomStrength : 0;
 
-    if (progressScene < 0.5) {
+    if (pScene < 0.5) {
       refs.nebulaTargetOpacity = baseNeb;
       refs.bloomTarget = bloomStr;
     } else {
-      const deep = (progressScene - 0.5) / 0.5;
+      const deep = (pScene - 0.5) / 0.5;
       refs.nebulaTargetOpacity = baseNeb - deep * HERO_SCENE.nebulaFade;
       refs.bloomTarget = bloomStr - deep * HERO_SCENE.bloomFade;
     }
   }, [updateBeatReveal, iosStaticMode]);
 
+  const scheduleScrollFrame = useCallback(() => {
+    if (scrollRafRef.current != null) return;
+    scrollRafRef.current = requestAnimationFrame(() => {
+      scrollRafRef.current = null;
+      runScrollFrame();
+    });
+  }, [runScrollFrame]);
+
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", scheduleScrollFrame, { passive: true });
     const vv = window.visualViewport;
-    const onVv = () => handleScroll();
-    vv?.addEventListener("resize", onVv);
-    vv?.addEventListener("scroll", onVv);
-    handleScroll();
+    const onVv = () => scheduleScrollFrame();
+    vv?.addEventListener("resize", onVv, { passive: true } as AddEventListenerOptions);
+    vv?.addEventListener("scroll", onVv, { passive: true } as AddEventListenerOptions);
+    scheduleScrollFrame();
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", scheduleScrollFrame);
       vv?.removeEventListener("resize", onVv);
       vv?.removeEventListener("scroll", onVv);
+      if (scrollRafRef.current != null) {
+        cancelAnimationFrame(scrollRafRef.current);
+        scrollRafRef.current = null;
+      }
     };
-  }, [handleScroll]);
+  }, [scheduleScrollFrame]);
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -1008,7 +1077,7 @@ void main() {
       className="hero-container"
       style={{
         height: isMobileViewport
-          ? `${heroTotalVh + HERO_MOBILE_TAIL_DVH}dvh`
+          ? `${heroTotalVh + HERO_MOBILE_TAIL_DVH}svh`
           : `${heroTotalVh}vh`,
       }}
     >
@@ -1039,10 +1108,12 @@ void main() {
             ? {
                 opacity: beatReveal[i]?.opacity ?? 1,
                 transform: `translate3d(0, ${beatReveal[i]?.translateY ?? 0}px, 0)`,
-                willChange: "opacity, transform" as const,
+                ...(isMobileViewport
+                  ? {}
+                  : { willChange: "opacity, transform" as const }),
               }
             : undefined;
-          const sectionDim = isMobileViewport ? "100dvh" : "100vh";
+          const sectionDim = isMobileViewport ? "100svh" : "100vh";
           return (
             <section
               key={sec.title}

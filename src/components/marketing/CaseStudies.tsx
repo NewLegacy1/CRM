@@ -52,39 +52,44 @@ function CaseStudyCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={marketingWhileInView}
       transition={{ delay: delay / 1000, duration: 0.5 }}
-      className="flex flex-col rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 ring-1 ring-white/[0.04] backdrop-blur-sm"
+      className="flex h-full min-h-0 flex-col rounded-[1.5rem] border-galaxy-neon"
     >
-      {logoUrl ? (
-        <div className="mb-4 flex h-10 items-center md:h-11">
-          <Image
-            src={logoUrl}
-            alt={`${company} logo`}
-            width={200}
-            height={48}
-            className="h-8 w-auto max-w-[180px] object-contain object-left md:h-9"
-            sizes="180px"
-          />
-        </div>
-      ) : null}
-      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-400/90">{industry}</p>
-      <h3 className="mt-2 text-lg font-bold leading-tight">{company}</h3>
-
-      <dl className="mt-5 grid grid-cols-3 gap-2 text-center">
-        {metrics.map((m) => (
-          <div key={m.label} className="rounded-lg bg-white/[0.04] py-2.5">
-            <dt className="text-[10px] uppercase tracking-wide text-zinc-500">{m.label}</dt>
-            <dd className="mt-0.5 flex items-center justify-center gap-1 text-base font-bold">
-              <span className="text-violet-400/70">{m.icon}</span>
-              {m.value}
-            </dd>
+      <div className="flex min-h-0 flex-1 flex-col rounded-[calc(1.5rem-1px)] card-galaxy-glass p-6 ring-1 ring-white/[0.08] md:p-7">
+        {logoUrl ? (
+          <div className="mb-4 flex h-10 items-center md:h-11">
+            <Image
+              src={logoUrl}
+              alt={`${company} logo`}
+              width={200}
+              height={48}
+              className="h-8 w-auto max-w-[180px] object-contain object-left md:h-9"
+              sizes="180px"
+            />
           </div>
-        ))}
-      </dl>
+        ) : null}
+        <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-violet-400/90">{industry}</p>
+        <h3 className="font-heading mt-2 text-lg font-semibold leading-tight text-[#FAFAFA]">{company}</h3>
 
-      <blockquote className="mt-5 flex-1 border-l-2 border-violet-500/40 pl-4 text-sm italic leading-relaxed text-zinc-400">
-        &ldquo;{testimonial}&rdquo;
-      </blockquote>
-      {figcaption ? <p className="mt-2 pl-4 text-[11px] text-zinc-500">{figcaption}</p> : null}
+        <dl className="mt-5 grid grid-cols-3 gap-2 text-center">
+          {metrics.map((m) => (
+            <div
+              key={m.label}
+              className="rounded-xl border border-white/[0.06] bg-white/[0.04] py-2.5 ring-1 ring-white/[0.05]"
+            >
+              <dt className="text-[10px] uppercase tracking-wide text-white/45">{m.label}</dt>
+              <dd className="mt-0.5 flex items-center justify-center gap-1 text-base font-bold text-[#FAFAFA]">
+                <span className="text-violet-400/80">{m.icon}</span>
+                {m.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        <blockquote className="mt-5 flex-1 border-l-2 border-violet-500/40 pl-4 text-sm italic leading-relaxed text-white/70">
+          &ldquo;{testimonial}&rdquo;
+        </blockquote>
+        {figcaption ? <p className="mt-2 pl-4 text-[11px] text-white/45">{figcaption}</p> : null}
+      </div>
     </motion.article>
   );
 }
