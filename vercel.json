@@ -1,0 +1,16 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "crons": [
+    {
+      "path": "/api/generate-insights",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/calendly/refresh",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}
