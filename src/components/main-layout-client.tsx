@@ -21,13 +21,14 @@ export function MainLayoutClient({
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-zinc-950">
+    <div className="relative min-h-screen bg-zinc-950">
+      <div className="crm-app-atmosphere pointer-events-none" aria-hidden />
       <Sidebar
         role={role}
         open={sidebarOpen}
         onOpenChange={setSidebarOpen}
       />
-      <div className="lg:pl-56 min-h-screen">
+      <div className="relative z-10 lg:pl-56 min-h-screen">
         <Header
           userEmail={userEmail}
           displayName={displayName}

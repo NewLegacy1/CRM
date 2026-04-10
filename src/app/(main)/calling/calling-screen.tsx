@@ -247,7 +247,7 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
             setCurrentLead(null)
             setViewedLeadIds([])
           }}
-          className="mt-2 flex h-10 w-full max-w-md rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+          className="mt-2 flex h-10 w-full max-w-md rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
         >
           <option value="">Choose a list...</option>
           {leadLists.map((list) => (
@@ -274,7 +274,7 @@ export function CallingScreen({ leadLists, userId }: CallingScreenProps) {
         <>
           {loading ? (
             <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-12 text-center">
-              <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-amber-500 border-t-transparent" />
+              <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent" />
               <p className="mt-4 text-zinc-400">Loading next lead...</p>
             </div>
           ) : currentLead ? (

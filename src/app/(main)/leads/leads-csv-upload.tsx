@@ -120,7 +120,7 @@ export function LeadsCsvUpload({ leadLists: initialLeadLists }: LeadsCsvUploadPr
                 type="file"
                 accept=".csv"
                 onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-                className="mt-1 block w-full text-sm text-zinc-400 file:mr-4 file:rounded-lg file:border-0 file:bg-amber-600 file:px-4 file:py-2 file:text-white"
+                className="mt-1 block w-full text-sm text-zinc-400 file:mr-4 file:rounded-lg file:border-0 file:bg-gradient-to-br file:from-[var(--aurora-cyan)] file:to-[var(--aurora-violet)] file:px-4 file:py-2 file:font-semibold file:text-[#09090b]"
               />
               <p className="mt-1 text-xs text-zinc-500">
                 Headers like name, phone, email, niche are auto-detected. First row = headers.
@@ -130,7 +130,7 @@ export function LeadsCsvUpload({ leadLists: initialLeadLists }: LeadsCsvUploadPr
               <div className={`rounded-lg p-3 text-sm ${result.count > 0 ? 'bg-zinc-800 text-zinc-300' : 'bg-red-500/10 text-red-400'}`}>
                 {result.count > 0 ? (
                   <>
-                    <p className="font-medium text-amber-500">Imported {result.count} leads.</p>
+                    <p className="font-medium text-violet-400">Imported {result.count} leads.</p>
                     {result.columnMap && (
                       <p className="mt-1 text-zinc-500">
                         Mapped: name, phone{result.columnMap.email ? ', email' : ''}{result.columnMap.city ? ', city' : ''}{result.columnMap.website ? ', website' : ''}

@@ -105,7 +105,7 @@ export function InvoicesList({ initialInvoices, clients }: InvoicesListProps) {
     if (status === 'open') return 'bg-blue-500/10 text-blue-500'
     if (status === 'draft') return 'bg-zinc-500/10 text-zinc-500'
     if (status === 'void') return 'bg-red-500/10 text-red-500'
-    return 'bg-amber-500/10 text-amber-500'
+    return 'bg-violet-500/10 text-violet-400'
   }
 
   return (
@@ -268,7 +268,9 @@ export function InvoicesList({ initialInvoices, clients }: InvoicesListProps) {
                         : '—'}
                     </TableCell>
                     <TableCell>
-                      <span className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium bg-amber-500/10 text-amber-500 capitalize">
+                      <span
+                        className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium capitalize ${getStatusColor(inv.status, inv.status === 'paid')}`}
+                      >
                         {inv.status}
                       </span>
                     </TableCell>

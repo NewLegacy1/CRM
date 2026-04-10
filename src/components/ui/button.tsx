@@ -8,7 +8,8 @@ export interface ButtonProps
 }
 
 const variantClasses = {
-  default: 'bg-amber-600 text-white hover:bg-amber-500',
+  default:
+    'bg-gradient-to-br from-[var(--aurora-cyan)] to-[var(--aurora-violet)] text-[#09090b] font-semibold shadow-[0_4px_20px_rgba(167,139,250,0.2)] hover:brightness-105',
   outline:
     'border border-zinc-700 bg-transparent hover:bg-zinc-800 text-zinc-100',
   ghost: 'hover:bg-zinc-800 text-zinc-400 hover:text-zinc-100',
@@ -25,7 +26,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={cn(
-          'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 disabled:pointer-events-none disabled:opacity-50',
+          'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 disabled:pointer-events-none disabled:opacity-50',
           variantClasses[variant],
           sizeClasses[size],
           className

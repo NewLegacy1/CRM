@@ -181,7 +181,7 @@ export function FunnelsTable({ initialFunnels, clients }: FunnelsTableProps) {
                   setFormData((prev) => ({ ...prev, client_id: e.target.value }))
                 }
                 required
-                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
               >
                 <option value="">Select a client</option>
                 {clients.map((client) => (

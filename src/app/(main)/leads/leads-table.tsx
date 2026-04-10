@@ -279,7 +279,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
     const colors: Record<string, string> = {
       new: 'bg-blue-500/10 text-blue-500',
       called: 'bg-purple-500/10 text-purple-500',
-      no_answer: 'bg-amber-500/10 text-amber-500',
+      no_answer: 'bg-orange-500/10 text-orange-400',
       didnt_book: 'bg-red-500/10 text-red-500',
       booked: 'bg-green-500/10 text-green-500',
     }
@@ -305,7 +305,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
                 setSelectedListId(e.target.value)
                 setSelectedLeads(new Set()) // Clear selection when filter changes
               }}
-              className="flex h-9 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+              className="flex h-9 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
             >
               <option value="all">View All</option>
               {leadLists.map((list) => (
@@ -321,8 +321,8 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
             )}
           </div>
           {selectedCount > 0 && (
-            <div className="flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-500/20 bg-amber-500/10">
-              <span className="text-sm text-amber-400 font-medium">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-lg border border-violet-500/25 bg-violet-500/10">
+              <span className="text-sm text-violet-300 font-medium">
                 {selectedCount} selected
               </span>
               <div className="flex gap-1">
@@ -420,9 +420,9 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
                   title={allSelected ? 'Deselect all' : 'Select all'}
                 >
                   {allSelected ? (
-                    <CheckSquare className="h-4 w-4 text-amber-500" />
+                    <CheckSquare className="h-4 w-4 text-violet-400" />
                   ) : someSelected ? (
-                    <div className="h-4 w-4 border-2 border-amber-500 rounded bg-amber-500/20" />
+                    <div className="h-4 w-4 border-2 border-violet-400 rounded bg-violet-500/20" />
                   ) : (
                     <Square className="h-4 w-4 text-zinc-500" />
                   )}
@@ -451,7 +451,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
                 return (
                   <TableRow
                     key={lead.id}
-                    className={isSelected ? 'bg-amber-500/5' : ''}
+                    className={isSelected ? 'bg-violet-500/5' : ''}
                   >
                     <TableCell>
                       <button
@@ -460,7 +460,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
                         className="p-1 hover:bg-white/5 rounded"
                       >
                         {isSelected ? (
-                          <CheckSquare className="h-4 w-4 text-amber-500" />
+                          <CheckSquare className="h-4 w-4 text-violet-400" />
                         ) : (
                           <Square className="h-4 w-4 text-zinc-500" />
                         )}
@@ -480,7 +480,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
                           href={lead.website.startsWith('http') ? lead.website : `https://${lead.website}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-amber-500 hover:text-amber-400 underline block truncate"
+                          className="text-violet-400 hover:text-violet-300 underline block truncate"
                           title={lead.website}
                         >
                           {lead.website.replace(/^https?:\/\//, '')}
@@ -607,7 +607,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, list_id: e.target.value }))
                 }
-                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
               >
                 <option value="">No list</option>
                 {leadLists.map((list) => (
@@ -625,7 +625,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, status: e.target.value }))
                 }
-                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
               >
                 {LEAD_STATUSES.map((status) => (
                   <option key={status} value={status}>
@@ -669,7 +669,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
                   onChange={(e) =>
                     setBatchFormData((prev) => ({ ...prev, list_id: e.target.value }))
                   }
-                  className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                  className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
                 >
                   <option value="">No list</option>
                   {leadLists.map((list) => (
@@ -689,7 +689,7 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
                   onChange={(e) =>
                     setBatchFormData((prev) => ({ ...prev, status: e.target.value }))
                   }
-                  className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                  className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
                 >
                   {LEAD_STATUSES.map((status) => (
                     <option key={status} value={status}>

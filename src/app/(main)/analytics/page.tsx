@@ -42,7 +42,7 @@ export default async function AnalyticsPage() {
             className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6"
           >
             <p className="text-sm text-zinc-400">{stat.label}</p>
-            <p className="text-2xl font-bold text-amber-500 mt-2">{stat.value}</p>
+            <p className="text-2xl font-bold text-violet-400 mt-2">{stat.value}</p>
           </div>
         ))}
       </div>

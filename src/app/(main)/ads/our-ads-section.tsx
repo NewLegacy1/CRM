@@ -71,9 +71,9 @@ export function OurAdsSection({ initialAds }: OurAdsSectionProps) {
         <div>
           <h2 className="text-lg font-semibold text-zinc-100">Our ad performance</h2>
           <p className="text-sm text-zinc-500 mt-0.5">
-            Meta Ads data from your connected account. Add <code className="text-amber-500">META_ADS_ACCESS_TOKEN</code> in Settings, then refresh below.
+            Meta Ads data from your connected account. Add <code className="text-violet-400">META_ADS_ACCESS_TOKEN</code> in Settings, then refresh below.
           </p>
-          <p className="text-sm font-medium text-amber-500 mt-2">
+          <p className="text-sm font-medium text-violet-400 mt-2">
             Total leads from ads: <span className="font-bold">{totalLeads.toLocaleString()}</span>
           </p>
         </div>

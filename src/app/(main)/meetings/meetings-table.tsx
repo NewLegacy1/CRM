@@ -57,7 +57,7 @@ export function MeetingsTable({ initialMeetings }: MeetingsTableProps) {
                 <TableCell>{meeting.lead?.phone || '—'}</TableCell>
                 <TableCell>{formatDateTime(meeting.scheduled_at)}</TableCell>
                 <TableCell>
-                  <span className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium bg-amber-500/10 text-amber-500">
+                  <span className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium bg-violet-500/10 text-violet-400">
                     {meeting.source}
                   </span>
                 </TableCell>

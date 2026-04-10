@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
+import { BrandWordmark } from '@/components/brand-wordmark'
 
 interface LoginAnimationProps {
   onComplete: () => void
@@ -13,18 +13,15 @@ export function LoginAnimation({ onComplete }: LoginAnimationProps) {
 
   useEffect(() => {
     setMounted(true)
-    
-    // Phase 1: Golden glow appears (0-600ms)
+
     const glowTimer = setTimeout(() => {
       setPhase('rise')
     }, 600)
 
-    // Phase 2: Logo rises up (600-1600ms)
     const riseTimer = setTimeout(() => {
       setPhase('fade')
     }, 1600)
 
-    // Phase 3: Fade out and show login form (1600-2200ms)
     const fadeTimer = setTimeout(() => {
       onComplete()
     }, 2200)
@@ -40,70 +37,48 @@ export function LoginAnimation({ onComplete }: LoginAnimationProps) {
     return null
   }
 
+  const auroraBg =
+    phase === 'glow' || phase === 'rise'
+      ? 'radial-gradient(circle at 50% 45%, rgba(34, 211, 238, 0.22) 0%, rgba(167, 139, 250, 0.14) 35%, transparent 65%)'
+      : 'radial-gradient(circle at 50% 45%, rgba(34, 211, 238, 0.1) 0%, rgba(167, 139, 250, 0.06) 35%, transparent 65%)'
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950">
-      {/* Animated golden glow background */}
       <div
         className={`absolute inset-0 transition-all duration-700 ease-out ${
-          phase === 'glow'
-            ? 'bg-gradient-radial from-amber-500/30 via-amber-500/10 to-transparent opacity-100'
-            : phase === 'rise'
-            ? 'bg-gradient-radial from-amber-500/40 via-amber-500/15 to-transparent opacity-100'
-            : 'bg-gradient-radial from-amber-500/20 via-amber-500/5 to-transparent opacity-0'
+          phase === 'fade' ? 'opacity-0' : 'opacity-100'
         }`}
-        style={{
-          background: phase === 'glow' || phase === 'rise'
-            ? 'radial-gradient(circle at center, rgba(245, 158, 11, 0.3) 0%, rgba(245, 158, 11, 0.1) 40%, transparent 70%)'
-            : 'radial-gradient(circle at center, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.05) 40%, transparent 70%)',
-        }}
+        style={{ background: auroraBg }}
       />
 
-      {/* Logo container with smooth animations */}
       <div className="relative z-10">
         <div
           className={`transition-all duration-700 ease-out ${
             phase === 'glow'
               ? 'opacity-0 scale-75 translate-y-16 blur-sm'
               : phase === 'rise'
-              ? 'opacity-100 scale-100 translate-y-0 blur-0'
-              : 'opacity-0 scale-95 translate-y-[-8px] blur-0'
+                ? 'opacity-100 scale-100 translate-y-0 blur-0'
+                : 'opacity-0 scale-95 translate-y-[-8px] blur-0'
           }`}
         >
-          <div className="relative">
-            {/* Glowing ring around logo */}
+          <div className="relative flex flex-col items-center">
             <div
-              className={`absolute inset-0 rounded-full transition-all duration-700 ${
+              className={`pointer-events-none absolute left-1/2 top-1/2 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-700 ${
                 phase === 'rise'
-                  ? 'bg-amber-500/20 blur-2xl scale-150 animate-pulse'
-                  : 'opacity-0'
+                  ? 'bg-violet-500/15 blur-3xl scale-150'
+                  : 'opacity-0 scale-50'
               }`}
-              style={{
-                width: '200px',
-                height: '200px',
-                margin: '-100px',
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)',
-              }}
+              aria-hidden
             />
-            
-            {/* Logo image */}
-            <Image
-              src="/logo.png?v=2"
-              alt="New Legacy Logo"
-              width={160}
-              height={160}
-              className="relative z-10 object-contain drop-shadow-[0_0_30px_rgba(245,158,11,0.5)]"
-              priority
-              unoptimized
-            />
+            <div className="relative z-10 rounded-2xl px-8 py-6 text-center drop-shadow-[0_0_28px_rgba(167,139,250,0.25)]">
+              <BrandWordmark className="text-2xl tracking-[0.08em] md:text-3xl" />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Fade out overlay */}
       <div
-        className={`absolute inset-0 bg-zinc-950 transition-opacity duration-600 ease-in ${
+        className={`absolute inset-0 bg-zinc-950 transition-opacity duration-500 ease-in ${
           phase === 'fade' ? 'opacity-100' : 'opacity-0'
         }`}
       />

@@ -5,7 +5,12 @@
   --foreground: #fafafa;
   --glass-bg: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.06);
-  --glass-highlight: rgba(251, 191, 36, 0.12);
+  /* Align with marketing aurora — not legacy amber/gold */
+  --glass-highlight: rgba(167, 139, 250, 0.12);
+  /* Space Grotesk from layout; marketing.css .font-heading uses this */
+  --font-heading: var(--font-display, ui-sans-serif, system-ui, sans-serif);
+  --crm-accent: #a78bfa;
+  --crm-accent-cyan: #22d3ee;
 }
 
 @theme inline {

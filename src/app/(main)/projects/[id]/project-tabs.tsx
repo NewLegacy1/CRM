@@ -32,7 +32,7 @@ export function ProjectTabs({ projectId }: ProjectTabsProps) {
             className={cn(
               'px-4 py-2 text-sm font-medium rounded-t-lg transition-colors',
               isActive
-                ? 'bg-zinc-800 text-amber-500'
+                ? 'bg-zinc-800 text-violet-400'
                 : 'text-zinc-400 hover:text-zinc-100'
             )}
           >

@@ -232,7 +232,7 @@ export function ProjectOverviewClient({ project: initialProject, teamMembers, al
           <p className="text-sm text-zinc-400">Status</p>
           <p
             className={`text-lg font-medium mt-1 capitalize ${
-              project.status === 'completed' ? 'text-green-500' : 'text-amber-500'
+              project.status === 'completed' ? 'text-green-500' : 'text-violet-400'
             }`}
           >
             {project.status}
@@ -383,7 +383,7 @@ export function ProjectOverviewClient({ project: initialProject, teamMembers, al
                 className="border-b border-zinc-800 pb-3 last:border-0"
               >
                 <div className="flex items-start justify-between gap-4 mb-1">
-                  <span className="text-xs font-medium text-amber-500">{note.by_name}</span>
+                  <span className="text-xs font-medium text-violet-400">{note.by_name}</span>
                   <span className="text-xs text-zinc-500 shrink-0">
                     {new Date(note.at).toLocaleString('en-US', {
                       month: 'short',

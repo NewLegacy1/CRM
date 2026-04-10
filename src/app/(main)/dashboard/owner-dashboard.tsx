@@ -39,7 +39,7 @@ export async function OwnerDashboard() {
                   <p className="text-sm font-medium text-zinc-400">{stat.label}</p>
                   <p className="text-2xl font-bold tracking-tight text-zinc-100">{stat.value}</p>
                 </div>
-                <Icon className="h-8 w-8 text-amber-500/90" />
+                <Icon className="h-8 w-8 text-violet-400" />
               </div>
             </div>
           )

@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation'
 import { getNavItemsForRole } from '@/lib/nav-config'
 import type { UserRole } from '@/types/database'
 import { cn } from '@/lib/utils'
-import { Menu, X } from 'lucide-react'
-import Image from 'next/image'
+import { X } from 'lucide-react'
+import { BrandWordmarkLink } from '@/components/brand-wordmark'
 
 interface SidebarProps {
   role: UserRole
@@ -38,22 +38,12 @@ export function Sidebar({ role, open, onOpenChange }: SidebarProps) {
         )}
       >
         <div className="flex h-16 items-center justify-between border-b border-white/[0.06] px-4 lg:px-6">
-          <Link
+          <BrandWordmarkLink
             href="/dashboard"
-            className="flex items-center gap-2 font-semibold text-zinc-100 tracking-tight"
+            compact
+            className="text-zinc-100"
             onClick={() => onOpenChange(false)}
-          >
-            <Image
-              src="/logo.png?v=2"
-              alt="New Legacy Logo"
-              width={32}
-              height={32}
-              className="object-contain"
-              priority
-              unoptimized
-            />
-            New Legacy
-          </Link>
+          />
           <button
             type="button"
             className="lg:hidden rounded-lg p-2 text-zinc-400 hover:bg-white/5 hover:text-zinc-100 transition-colors"
@@ -75,7 +65,7 @@ export function Sidebar({ role, open, onOpenChange }: SidebarProps) {
                 className={cn(
                   'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
                   isActive
-                    ? 'bg-amber-500/15 text-amber-400 shadow-[inset_0_0_0_1px_rgba(251,191,36,0.2)]'
+                    ? 'bg-violet-500/15 text-violet-300 shadow-[inset_0_0_0_1px_rgba(167,139,250,0.25)]'
                     : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-100'
                 )}
               >

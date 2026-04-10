@@ -126,7 +126,7 @@ export function SitesTable({ initialSites, clients }: SitesTableProps) {
                       href={site.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-amber-500 hover:text-amber-400"
+                      className="flex items-center gap-1 text-violet-400 hover:text-violet-300"
                     >
                       {site.url}
                       <ExternalLink className="h-3 w-3" />
@@ -183,7 +183,7 @@ export function SitesTable({ initialSites, clients }: SitesTableProps) {
                   setFormData((prev) => ({ ...prev, client_id: e.target.value }))
                 }
                 required
-                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
               >
                 <option value="">Select a client</option>
                 {clients.map((client) => (

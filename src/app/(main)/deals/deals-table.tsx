@@ -150,7 +150,7 @@ export function DealsTable({ initialDeals, clients }: DealsTableProps) {
     const colors: Record<string, string> = {
       qualification: 'bg-blue-500/10 text-blue-500',
       proposal: 'bg-purple-500/10 text-purple-500',
-      negotiation: 'bg-amber-500/10 text-amber-500',
+      negotiation: 'bg-violet-500/10 text-violet-400',
       closed_won: 'bg-green-500/10 text-green-500',
       closed_lost: 'bg-red-500/10 text-red-500',
     }
@@ -206,7 +206,7 @@ export function DealsTable({ initialDeals, clients }: DealsTableProps) {
                         e.preventDefault()
                         handleStageChange(deal.id, e.target.value)
                       }}
-                      className={`inline-flex items-center rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium cursor-pointer focus:outline-none focus:ring-1 focus:ring-amber-500 ${getStageColor(
+                      className={`inline-flex items-center rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium cursor-pointer focus:outline-none focus:ring-1 focus:ring-violet-500 ${getStageColor(
                         deal.stage
                       )}`}
                     >
@@ -271,7 +271,7 @@ export function DealsTable({ initialDeals, clients }: DealsTableProps) {
                   setFormData((prev) => ({ ...prev, client_id: e.target.value }))
                 }
                 required
-                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
               >
                 <option value="">Select a client</option>
                 {clients.map((client) => (
@@ -330,7 +330,7 @@ export function DealsTable({ initialDeals, clients }: DealsTableProps) {
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, stage: e.target.value }))
                 }
-                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
               >
                 {DEAL_STAGES.map((stage) => (
                   <option key={stage} value={stage}>

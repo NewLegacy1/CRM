@@ -164,7 +164,7 @@ export function ProjectsTable({ initialProjects, clients }: ProjectsTableProps) 
                     <TableCell className="font-medium">
                       <Link 
                         href={`/projects/${project.id}`}
-                        className="hover:text-amber-500 transition-colors flex items-center gap-2"
+                        className="hover:text-violet-400 transition-colors flex items-center gap-2"
                       >
                         {project.name}
                         <ArrowRight className="h-4 w-4" />
@@ -207,7 +207,7 @@ export function ProjectsTable({ initialProjects, clients }: ProjectsTableProps) 
                         className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
                           project.status === 'completed'
                             ? 'bg-green-500/10 text-green-500'
-                            : 'bg-amber-500/10 text-amber-500'
+                            : 'bg-violet-500/10 text-violet-400'
                         }`}
                       >
                         {project.status}
@@ -274,7 +274,7 @@ export function ProjectsTable({ initialProjects, clients }: ProjectsTableProps) 
                   setFormData((prev) => ({ ...prev, client_id: e.target.value }))
                 }
                 required
-                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
               >
                 <option value="">Select a client</option>
                 {clients.map((client) => (
@@ -292,7 +292,7 @@ export function ProjectsTable({ initialProjects, clients }: ProjectsTableProps) 
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, type: e.target.value }))
                 }
-                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
               >
                 {PROJECT_TYPES.map((t) => (
                   <option key={t} value={t}>{t.replace('_', ' ')}</option>
@@ -333,7 +333,7 @@ export function ProjectsTable({ initialProjects, clients }: ProjectsTableProps) 
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, status: e.target.value }))
                 }
-                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
               >
                 <option value="active">Active</option>
                 <option value="on_hold">On Hold</option>

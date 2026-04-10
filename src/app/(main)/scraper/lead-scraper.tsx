@@ -342,11 +342,7 @@ export function LeadScraper() {
         </div>
       </div>
 
-      <Button
-        onClick={runScraper}
-        disabled={status === 'running' || !listId}
-        className="bg-amber-600 text-white hover:bg-amber-500"
-      >
+      <Button onClick={runScraper} disabled={status === 'running' || !listId}>
         {status === 'running' ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -361,7 +357,7 @@ export function LeadScraper() {
       </Button>
 
       {status === 'running' && (
-        <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+        <div className="rounded-lg border border-violet-500/30 bg-violet-500/10 px-4 py-3 text-sm text-violet-200">
           Running Apify scraper for &quot;{searchTerm} {city}&quot;… This takes
           2–5 minutes. Do not close this tab.
         </div>
@@ -379,9 +375,9 @@ export function LeadScraper() {
               {stats.withWebsite}
             </p>
           </div>
-          <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3">
-            <span className="text-amber-200/80">Have email</span>
-            <p className="text-lg font-medium text-amber-200">{stats.withEmail}</p>
+          <div className="rounded-lg border border-cyan-500/25 bg-cyan-500/5 px-4 py-3">
+            <span className="text-cyan-200/80">Have email</span>
+            <p className="text-lg font-medium text-cyan-200">{stats.withEmail}</p>
           </div>
         </div>
       )}
@@ -398,11 +394,7 @@ export function LeadScraper() {
               {selectAllChecked ? 'Deselect all' : 'Select all'} ({results.length}
               )
             </Button>
-            <Button
-              onClick={addToLeads}
-              disabled={!someSelected || addLoading}
-              className="bg-amber-600 text-white hover:bg-amber-500"
-            >
+            <Button onClick={addToLeads} disabled={!someSelected || addLoading}>
               {addLoading ? 'Adding...' : `Add ${selected.size} to leads`}
             </Button>
           </div>
@@ -423,7 +415,7 @@ export function LeadScraper() {
                 {results.map((lead) => (
                   <TableRow
                     key={lead.businessName + lead.phone}
-                    className={lead.email ? 'bg-amber-500/5' : ''}
+                    className={lead.email ? 'bg-cyan-500/5' : ''}
                   >
                     <TableCell>
                       <input
@@ -438,7 +430,7 @@ export function LeadScraper() {
                     </TableCell>
                     <TableCell>{lead.phone || '—'}</TableCell>
                     <TableCell
-                      className={lead.email ? 'text-amber-400' : 'text-zinc-500'}
+                      className={lead.email ? 'text-cyan-300' : 'text-zinc-500'}
                     >
                       {lead.email || '—'}
                     </TableCell>
@@ -448,7 +440,7 @@ export function LeadScraper() {
                           href={lead.website}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-amber-400 hover:underline"
+                          className="text-violet-400 hover:text-violet-300 hover:underline"
                         >
                           Visit
                         </a>

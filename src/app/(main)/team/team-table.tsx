@@ -82,7 +82,7 @@ export function TeamTable({ initialProfiles }: TeamTableProps) {
                     {profile.display_name || 'Unnamed User'}
                   </TableCell>
                   <TableCell>
-                    <span className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium bg-amber-500/10 text-amber-500">
+                    <span className="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium bg-violet-500/10 text-violet-400">
                       {profile.role.replace('_', ' ')}
                     </span>
                   </TableCell>
@@ -127,7 +127,7 @@ export function TeamTable({ initialProfiles }: TeamTableProps) {
                 id="role"
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
-                className="mt-2 flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                className="mt-2 flex h-10 w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
               >
                 {ROLES.map((role) => (
                   <option key={role.value} value={role.value}>

@@ -26,7 +26,7 @@ export default async function MeetingsPage() {
         <CalendlyCalendarView />
       ) : (
         <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 text-center text-zinc-400">
-          <p>Configure <code className="text-amber-500">CALENDLY_API_TOKEN</code> in environment variables to view your calendar events here.</p>
+          <p>Configure <code className="text-violet-400">CALENDLY_API_TOKEN</code> in environment variables to view your calendar events here.</p>
         </div>
       )}
     </div>

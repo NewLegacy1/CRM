@@ -13,7 +13,7 @@ export default async function InsightsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <Sparkles className="h-8 w-8 text-amber-500" />
+        <Sparkles className="h-8 w-8 text-violet-400" />
         <h1 className="text-2xl font-bold text-zinc-100">AI Insights</h1>
       </div>
 
@@ -37,7 +37,7 @@ export default async function InsightsPage() {
               <p className="text-zinc-300 whitespace-pre-wrap">{insight.summary}</p>
               {insight.actionable_items && (
                 <div className="mt-4 pt-4 border-t border-zinc-800">
-                  <p className="text-sm font-medium text-amber-500 mb-2">
+                  <p className="text-sm font-medium text-violet-400 mb-2">
                     Actionable Items:
                   </p>
                   <ul className="list-disc list-inside space-y-1 text-sm text-zinc-400">

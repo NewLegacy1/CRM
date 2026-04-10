@@ -21,8 +21,8 @@ export default async function DashboardPage() {
   if (role === 'pending') {
     return (
       <div className="space-y-6">
-        <div className="rounded-2xl border border-amber-500/20 bg-amber-500/10 p-8 text-center">
-          <h2 className="text-xl font-bold text-amber-400 mb-2">Account Pending Approval</h2>
+        <div className="rounded-2xl border border-violet-500/25 bg-violet-500/10 p-8 text-center">
+          <h2 className="text-xl font-bold text-violet-300 mb-2">Account Pending Approval</h2>
           <p className="text-zinc-400">
             Your account is waiting for approval. Once an administrator assigns you a role, you'll be able to access the CRM.
           </p>

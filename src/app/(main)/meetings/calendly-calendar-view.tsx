@@ -82,7 +82,7 @@ export function CalendlyCalendarView() {
   if (loading) {
     return (
       <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-12 text-center">
-        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-amber-500 border-t-transparent" />
+        <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-violet-500 border-t-transparent" />
         <p className="mt-4 text-zinc-400">Loading calendar events...</p>
       </div>
     )
