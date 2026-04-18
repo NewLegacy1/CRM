@@ -35,7 +35,7 @@ export const navItems: NavItem[] = [
   { label: 'Leads', href: '/leads', icon: UserPlus, roles: ['owner', 'closer', 'cold_caller', 'demo'] },
   { label: 'Lead Scraper', href: '/scraper', icon: Search, roles: ['owner', 'closer', 'cold_caller', 'demo'] },
   { label: 'Ads', href: '/ads', icon: Megaphone, roles: ['owner', 'media_buyer', 'demo'] },
-  { label: 'Cold Calling', href: '/calling', icon: Phone, roles: ['owner', 'cold_caller', 'demo'] },
+  { label: 'Cold Calling', href: '/calling', icon: Phone, roles: ['owner', 'closer', 'cold_caller', 'demo'] },
   { label: 'Meetings', href: '/meetings', icon: Calendar, roles: ['owner', 'closer', 'cold_caller', 'demo'] },
   { label: 'Analytics', href: '/analytics', icon: BarChart3, roles: ['owner', 'media_buyer', 'demo'] },
   { label: 'AI Insights', href: '/insights', icon: Sparkles, roles: ['owner', 'demo'] },
