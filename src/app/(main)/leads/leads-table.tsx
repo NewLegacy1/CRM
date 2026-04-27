@@ -28,13 +28,25 @@ interface LeadsTableProps {
   leadLists: { id: string; name: string }[]
 }
 
-const LEAD_STATUSES = ['new', 'called', 'no_answer', 'didnt_book', 'booked']
+const LEAD_STATUSES = [
+  'new',
+  'called',
+  'no_answer',
+  'call_back',
+  'no_price',
+  'no_dont_want',
+  'didnt_book',
+  'booked',
+]
 
 function getStatusLabel(status: string) {
   const labels: Record<string, string> = {
     new: 'new',
     called: 'called',
     no_answer: 'no answer',
+    call_back: 'call back',
+    no_price: 'no (price)',
+    no_dont_want: 'no (dont want)',
     didnt_book: "didn't book",
     booked: 'booked',
   }
@@ -279,7 +291,10 @@ export function LeadsTable({ initialLeads, leadLists: initialLeadLists }: LeadsT
     const colors: Record<string, string> = {
       new: 'bg-blue-500/10 text-blue-500',
       called: 'bg-purple-500/10 text-purple-500',
-      no_answer: 'bg-orange-500/10 text-orange-400',
+      no_answer: 'bg-green-500/10 text-green-400',
+      call_back: 'bg-amber-500/10 text-amber-400',
+      no_price: 'bg-red-500/10 text-red-400',
+      no_dont_want: 'bg-red-500/10 text-red-500',
       didnt_book: 'bg-red-500/10 text-red-500',
       booked: 'bg-green-500/10 text-green-500',
     }

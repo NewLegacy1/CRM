@@ -55,12 +55,18 @@ export async function POST(request: NextRequest) {
       booked: leads?.filter((l: { status: string }) => l.status === 'booked').length || 0,
       no_answer: leads?.filter((l: { status: string }) => l.status === 'no_answer').length || 0,
       didnt_book: leads?.filter((l: { status: string }) => l.status === 'didnt_book').length || 0,
+      call_back: leads?.filter((l: { status: string }) => l.status === 'call_back').length || 0,
+      no_price: leads?.filter((l: { status: string }) => l.status === 'no_price').length || 0,
+      no_dont_want: leads?.filter((l: { status: string }) => l.status === 'no_dont_want').length || 0,
     }
     const upcomingMeetings = meetings?.filter((m: { scheduled_at: string }) => new Date(m.scheduled_at) > new Date()).length || 0
     const callOutcomes = {
       no_answer: callLogs?.filter((c: { outcome: string }) => c.outcome === 'no_answer').length || 0,
       didnt_book: callLogs?.filter((c: { outcome: string }) => c.outcome === 'didnt_book').length || 0,
       booked: callLogs?.filter((c: { outcome: string }) => c.outcome === 'booked').length || 0,
+      call_back: callLogs?.filter((c: { outcome: string }) => c.outcome === 'call_back').length || 0,
+      no_price: callLogs?.filter((c: { outcome: string }) => c.outcome === 'no_price').length || 0,
+      no_dont_want: callLogs?.filter((c: { outcome: string }) => c.outcome === 'no_dont_want').length || 0,
     }
     const agencySpend = agencyAds?.reduce((sum: number, a: { spend?: number }) => sum + (a.spend || 0), 0) || 0
     const activeProjects = projects?.filter((p: { status: string }) => p.status === 'active').length || 0

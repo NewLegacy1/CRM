@@ -40,7 +40,7 @@ export interface Lead {
   city: string | null
   website: string | null
   list_id: string | null
-  status: 'new' | 'called' | 'no_answer' | 'didnt_book' | 'booked' | 'called_no_answer' | 'answered_declined_demo' | 'answered_accepted_demo'
+  status: 'new' | 'called' | 'no_answer' | 'didnt_book' | 'booked' | 'called_no_answer' | 'answered_declined_demo' | 'answered_accepted_demo' | 'call_back' | 'no_price' | 'no_dont_want'
   cold_caller_id: string | null
   source: string | null
   created_at: string
