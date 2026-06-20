@@ -19,9 +19,8 @@ export default async function ProjectContractsPage({
   if (!project) notFound()
 
   const links = await fetchProjectOnboardingLinks(supabase, id)
-  const client = project.client as
-    | { id: string; name: string | null; email: string | null; company: string | null }
-    | null
+  const rawClient = project.client
+  const client = Array.isArray(rawClient) ? rawClient[0] : rawClient
 
   return (
     <div className="space-y-6">
