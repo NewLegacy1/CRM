@@ -64,26 +64,4 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('intake-uploads', 'intake-uploads', true)
 ON CONFLICT (id) DO NOTHING;
 
--- Napshine Cleaning Solutions — post-demo onboarding link
-INSERT INTO public.client_onboarding_links (
-  token,
-  business_name,
-  contact_name,
-  email,
-  line_items,
-  currency,
-  agreement_version,
-  status
-) VALUES (
-  'napshine-mkp2026',
-  'Napshine Cleaning Solutions',
-  NULL,
-  'sales@napshine.ca',
-  '[
-    {"description": "Custom landing page website", "quantity": 1, "unit_amount": 1200},
-    {"description": "Google Business Profile setup", "quantity": 1, "unit_amount": 500}
-  ]'::jsonb,
-  'cad',
-  '1',
-  'pending'
-) ON CONFLICT (token) DO NOTHING;
+-- Client onboarding links are created in the CRM (/onboarding), not seeded in migrations.
