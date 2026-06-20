@@ -1,27 +1,137 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from '@/components/ui/dialog'
 import {
   formatOnboardingTotal,
   isPendingContractReview,
   type ProjectOnboardingLink,
 } from '@/lib/onboarding/project-onboarding'
-import { Copy, ExternalLink, FileText, Loader2, Send } from 'lucide-react'
+import { Copy, ExternalLink, FileText, Loader2, Plus, RefreshCw, Send } from 'lucide-react'
 
 type Props = {
   projectId: string
+  projectName: string
+  clientId?: string | null
+  clientName?: string | null
+  clientEmail?: string | null
+  clientCompany?: string | null
   initialLinks: ProjectOnboardingLink[]
 }
 
-export function ProjectContractsPanel({ projectId, initialLinks }: Props) {
+function buildDefaultCreateForm(props: Pick<Props, 'projectName' | 'clientName' | 'clientEmail' | 'clientCompany'>) {
+  return {
+    businessName: props.clientCompany?.trim() || props.projectName.trim(),
+    contactName: props.clientName?.trim() || '',
+    email: props.clientEmail?.trim() || '',
+    websiteAmount: '1200',
+    gmbAmount: '500',
+  }
+}
+
+function linksSnapshot(links: ProjectOnboardingLink[]): string {
+  return JSON.stringify(
+    links.map((l) => ({
+      id: l.id,
+      status: l.status,
+      token: l.token,
+      subId: l.submission?.id ?? null,
+      invoiceId: l.submission?.invoice_id ?? null,
+      submittedAt: l.submission?.submitted_at ?? null,
+    }))
+  )
+}
+
+const POLL_MS = 5000
+
+export function ProjectContractsPanel({
+  projectId,
+  projectName,
+  clientId,
+  clientName,
+  clientEmail,
+  clientCompany,
+  initialLinks,
+}: Props) {
+  const router = useRouter()
   const [links, setLinks] = useState(initialLinks)
+  const linksRef = useRef(links)
   const [sendingId, setSendingId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [copiedToken, setCopiedToken] = useState<string | null>(null)
+  const [refreshing, setRefreshing] = useState(false)
+  const [createOpen, setCreateOpen] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [createForm, setCreateForm] = useState(() =>
+    buildDefaultCreateForm({ projectName, clientName, clientEmail, clientCompany })
+  )
+
+  useEffect(() => {
+    setLinks(initialLinks)
+  }, [initialLinks])
+
+  useEffect(() => {
+    linksRef.current = links
+  }, [links])
+
+  const pollLinks = useCallback(async () => {
+    if (document.hidden) return
+    try {
+      const res = await fetch(`/api/projects/${projectId}/onboarding-links`, {
+        cache: 'no-store',
+      })
+      if (!res.ok) return
+      const data = (await res.json()) as { links?: ProjectOnboardingLink[] }
+      const next = data.links ?? []
+      if (linksSnapshot(next) === linksSnapshot(linksRef.current)) return
+      setLinks(next)
+      router.refresh()
+    } catch {
+      /* ignore transient network errors */
+    }
+  }, [projectId, router])
+
+  useEffect(() => {
+    void pollLinks()
+    const interval = window.setInterval(() => void pollLinks(), POLL_MS)
+    const onVisible = () => {
+      if (!document.hidden) void pollLinks()
+    }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => {
+      window.clearInterval(interval)
+      document.removeEventListener('visibilitychange', onVisible)
+    }
+  }, [pollLinks])
+
+  useEffect(() => {
+    if (createOpen) {
+      setCreateForm(buildDefaultCreateForm({ projectName, clientName, clientEmail, clientCompany }))
+    }
+  }, [createOpen, projectName, clientName, clientEmail, clientCompany])
 
   const pending = links.filter(isPendingContractReview)
+
+  async function refreshLinks() {
+    setRefreshing(true)
+    setError(null)
+    try {
+      await pollLinks()
+      router.refresh()
+    } finally {
+      setRefreshing(false)
+    }
+  }
 
   async function copyLink(token: string) {
     const url = `${window.location.origin}/start/${token}`
@@ -71,6 +181,7 @@ export function ProjectContractsPanel({ projectId, initialLinks }: Props) {
             : l
         )
       )
+      router.refresh()
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Failed to send invoice')
     } finally {
@@ -78,8 +189,93 @@ export function ProjectContractsPanel({ projectId, initialLinks }: Props) {
     }
   }
 
+  async function handleCreate(e: React.FormEvent) {
+    e.preventDefault()
+    setCreating(true)
+    setError(null)
+    try {
+      const res = await fetch('/api/onboarding/links', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          businessName: createForm.businessName.trim(),
+          contactName: createForm.contactName.trim() || undefined,
+          email: createForm.email.trim(),
+          projectId,
+          clientId: clientId ?? undefined,
+          currency: 'cad',
+          lineItems: [
+            {
+              description: 'Custom landing page website',
+              quantity: 1,
+              unit_amount: Number(createForm.websiteAmount) || 0,
+            },
+            {
+              description: 'Google Business Profile setup',
+              quantity: 1,
+              unit_amount: Number(createForm.gmbAmount) || 0,
+            },
+          ],
+        }),
+      })
+      const data = (await res.json()) as {
+        error?: string
+        link?: {
+          id: string
+          token: string
+          business_name: string
+          email: string
+          status: string
+          created_at: string
+        }
+      }
+      if (!res.ok) throw new Error(data.error ?? 'Failed to create link')
+
+      setCreateOpen(false)
+      router.refresh()
+
+      if (data.link?.token) {
+        await copyLink(data.link.token)
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to create link')
+    } finally {
+      setCreating(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1">
+          <p className="text-sm text-zinc-500">
+            Links created here are tied to this project. When the client submits, it appears on the
+            same card below with a &ldquo;New submission&rdquo; badge.
+          </p>
+          <p className="flex items-center gap-2 text-xs text-zinc-600">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+            </span>
+            Auto-updating every few seconds — no need to refresh manually
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" onClick={() => void refreshLinks()} disabled={refreshing}>
+            {refreshing ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <RefreshCw className="mr-2 h-4 w-4" />
+            )}
+            Refresh
+          </Button>
+          <Button size="sm" onClick={() => setCreateOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            New onboarding link
+          </Button>
+        </div>
+      </div>
+
       {pending.length > 0 && (
         <div className="rounded-xl border border-violet-500/30 bg-violet-500/10 px-4 py-4">
           <p className="font-medium text-violet-200">
@@ -102,20 +298,18 @@ export function ProjectContractsPanel({ projectId, initialLinks }: Props) {
         <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-8 text-center text-zinc-500">
           <FileText className="mx-auto mb-3 h-8 w-8 text-zinc-600" />
           <p>No onboarding links for this project yet.</p>
-          <p className="mt-2 text-sm">
-            Create one from{' '}
-            <Link href="/onboarding" className="text-violet-400 hover:text-violet-300">
-              Client onboarding
-            </Link>{' '}
-            and attach this project.
-          </p>
+          <p className="mt-2 text-sm">Create one to send the client their intake form.</p>
+          <Button className="mt-4" size="sm" onClick={() => setCreateOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            New onboarding link
+          </Button>
         </div>
       ) : (
         <div className="space-y-4">
           {links.map((link) => {
             const sub = link.submission
             const needsInvoice = isPendingContractReview(link)
-            const path = `/start/${link.token}`
+            const clientPath = `/start/${link.token}`
 
             return (
               <div
@@ -158,7 +352,7 @@ export function ProjectContractsPanel({ projectId, initialLinks }: Props) {
                       {copiedToken === link.token ? 'Copied!' : 'Copy link'}
                     </Button>
                     <a
-                      href={path}
+                      href={`/start/${link.token}`}
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex h-8 items-center justify-center rounded-lg border border-zinc-700 bg-transparent px-3 text-sm text-zinc-100 hover:bg-zinc-800"
@@ -239,16 +433,102 @@ export function ProjectContractsPanel({ projectId, initialLinks }: Props) {
                     ) : null}
                   </div>
                 ) : (
-                  <p className="text-sm text-zinc-500">
-                    Waiting for client to complete onboarding at{' '}
-                    <code className="text-violet-400">{path}</code>
-                  </p>
+                  <div className="rounded-lg border border-zinc-800 bg-zinc-950/40 px-4 py-3 text-sm text-zinc-500">
+                    <p>
+                      Waiting for client to complete onboarding. Their answers will show up here on
+                      this same card once submitted.
+                    </p>
+                    <p className="mt-2 break-all">
+                      Client link:{' '}
+                      <code className="text-violet-400">{clientPath}</code>
+                      <span className="text-zinc-600"> (use Copy link for full URL)</span>
+                    </p>
+                  </div>
                 )}
               </div>
             )
           })}
         </div>
       )}
+
+      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+        <DialogContent className="max-w-md">
+          <DialogClose onClick={() => setCreateOpen(false)} />
+          <DialogHeader>
+            <DialogTitle>New onboarding link for {projectName}</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-zinc-500">
+            This link will appear on this project&apos;s Contracts tab automatically.
+          </p>
+          <form onSubmit={(e) => void handleCreate(e)} className="space-y-4">
+            <div>
+              <Label htmlFor="pc-biz">Business name</Label>
+              <Input
+                id="pc-biz"
+                required
+                value={createForm.businessName}
+                onChange={(e) =>
+                  setCreateForm((f) => ({ ...f, businessName: e.target.value }))
+                }
+              />
+            </div>
+            <div>
+              <Label htmlFor="pc-contact">Contact name (optional)</Label>
+              <Input
+                id="pc-contact"
+                value={createForm.contactName}
+                onChange={(e) =>
+                  setCreateForm((f) => ({ ...f, contactName: e.target.value }))
+                }
+              />
+            </div>
+            <div>
+              <Label htmlFor="pc-email">Invoice email</Label>
+              <Input
+                id="pc-email"
+                type="email"
+                required
+                value={createForm.email}
+                onChange={(e) => setCreateForm((f) => ({ ...f, email: e.target.value }))}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label htmlFor="pc-web">Website (CAD)</Label>
+                <Input
+                  id="pc-web"
+                  type="number"
+                  min={0}
+                  value={createForm.websiteAmount}
+                  onChange={(e) =>
+                    setCreateForm((f) => ({ ...f, websiteAmount: e.target.value }))
+                  }
+                />
+              </div>
+              <div>
+                <Label htmlFor="pc-gmb">GMB setup (CAD)</Label>
+                <Input
+                  id="pc-gmb"
+                  type="number"
+                  min={0}
+                  value={createForm.gmbAmount}
+                  onChange={(e) =>
+                    setCreateForm((f) => ({ ...f, gmbAmount: e.target.value }))
+                  }
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button type="button" variant="outline" onClick={() => setCreateOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={creating}>
+                {creating ? 'Creating…' : 'Create & copy link'}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
