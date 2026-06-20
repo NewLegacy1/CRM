@@ -1,6 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import {
+  countPendingForProject,
+  fetchProjectOnboardingLinks,
+} from '@/lib/onboarding/project-onboarding'
 import { ProjectTabs } from './project-tabs'
 
 export default async function ProjectLayout({
@@ -20,9 +24,12 @@ export default async function ProjectLayout({
 
   if (!project) notFound()
 
+  const onboardingLinks = await fetchProjectOnboardingLinks(supabase, id)
+  const pendingContractsCount = countPendingForProject(onboardingLinks)
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         <Link
           href="/projects"
           className="text-sm text-zinc-400 hover:text-zinc-100"
@@ -32,8 +39,14 @@ export default async function ProjectLayout({
         <h1 className="text-2xl font-bold text-zinc-100">{project.name}</h1>
         <span className="text-zinc-500">·</span>
         <span className="text-zinc-400">{project.client?.name}</span>
+        {pendingContractsCount > 0 ? (
+          <span className="inline-flex items-center rounded-full bg-violet-500/20 px-2.5 py-1 text-xs font-medium text-violet-300">
+            {pendingContractsCount} new contract submission
+            {pendingContractsCount > 1 ? 's' : ''}
+          </span>
+        ) : null}
       </div>
-      <ProjectTabs projectId={id} />
+      <ProjectTabs projectId={id} pendingContractsCount={pendingContractsCount} />
       {children}
     </div>
   )

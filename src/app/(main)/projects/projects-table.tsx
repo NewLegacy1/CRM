@@ -27,9 +27,14 @@ const PROJECT_TYPES = ['website', 'funnel', 'ads', 'landing_page', 'other']
 interface ProjectsTableProps {
   initialProjects: Project[]
   clients: { id: string; name: string }[]
+  pendingContractCounts?: Record<string, number>
 }
 
-export function ProjectsTable({ initialProjects, clients }: ProjectsTableProps) {
+export function ProjectsTable({
+  initialProjects,
+  clients,
+  pendingContractCounts = {},
+}: ProjectsTableProps) {
   const [projects, setProjects] = useState<Project[]>(initialProjects)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [editingProject, setEditingProject] = useState<Project | null>(null)
@@ -159,14 +164,20 @@ export function ProjectsTable({ initialProjects, clients }: ProjectsTableProps) 
                 const progress = project.progress ?? 0
                 const isCompleted = project.status === 'completed'
                 const ringColor = isCompleted ? 'rgb(34 197 94)' : 'rgb(249 115 22)'
+                const pendingContracts = pendingContractCounts[project.id] ?? 0
                 return (
                   <TableRow key={project.id}>
                     <TableCell className="font-medium">
                       <Link 
-                        href={`/projects/${project.id}`}
+                        href={`/projects/${project.id}/contracts`}
                         className="hover:text-violet-400 transition-colors flex items-center gap-2"
                       >
                         {project.name}
+                        {pendingContracts > 0 ? (
+                          <span className="inline-flex min-w-[1.25rem] items-center justify-center rounded-full bg-violet-500 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                            {pendingContracts}
+                          </span>
+                        ) : null}
                         <ArrowRight className="h-4 w-4" />
                       </Link>
                     </TableCell>
