@@ -9,6 +9,7 @@ interface MainLayoutClientProps {
   role: UserRole
   userEmail?: string | null
   displayName?: string | null
+  navBadges?: Record<string, number>
   children: React.ReactNode
 }
 
@@ -16,6 +17,7 @@ export function MainLayoutClient({
   role,
   userEmail,
   displayName,
+  navBadges,
   children,
 }: MainLayoutClientProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -27,6 +29,7 @@ export function MainLayoutClient({
         role={role}
         open={sidebarOpen}
         onOpenChange={setSidebarOpen}
+        navBadges={navBadges}
       />
       <div className="relative z-10 lg:pl-56 min-h-screen">
         <Header

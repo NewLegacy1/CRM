@@ -18,6 +18,7 @@ import {
   Activity,
   Search,
   ClipboardCheck,
+  Layers,
 } from 'lucide-react'
 
 export interface NavItem {
@@ -32,6 +33,7 @@ export const navItems: NavItem[] = [
   { label: 'Clients', href: '/clients', icon: Users, roles: ['owner', 'closer', 'media_buyer', 'demo'] },
   { label: 'Projects', href: '/projects', icon: FolderKanban, roles: ['owner', 'closer', 'media_buyer', 'demo'] },
   { label: 'Deals', href: '/deals', icon: HandCoins, roles: ['owner', 'closer', 'demo'] },
+  { label: 'Products', href: '/products', icon: Layers, roles: ['owner'] },
   { label: 'Invoices', href: '/invoices', icon: FileText, roles: ['owner', 'account_manager', 'demo'] },
   { label: 'Client onboarding', href: '/onboarding', icon: ClipboardCheck, roles: ['owner', 'account_manager', 'closer', 'demo'] },
   { label: 'Leads', href: '/leads', icon: UserPlus, roles: ['owner', 'closer', 'cold_caller', 'demo'] },

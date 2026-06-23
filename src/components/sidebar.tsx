@@ -12,9 +12,10 @@ interface SidebarProps {
   role: UserRole
   open: boolean
   onOpenChange: (open: boolean) => void
+  navBadges?: Record<string, number>
 }
 
-export function Sidebar({ role, open, onOpenChange }: SidebarProps) {
+export function Sidebar({ role, open, onOpenChange, navBadges }: SidebarProps) {
   const pathname = usePathname()
   const items = getNavItemsForRole(role)
 
@@ -57,6 +58,11 @@ export function Sidebar({ role, open, onOpenChange }: SidebarProps) {
             const Icon = item.icon
             const isActive =
               pathname === item.href || pathname.startsWith(item.href + '/')
+            const onProductsSection = pathname.startsWith('/products')
+            const badgeCount =
+              !onProductsSection && navBadges?.[item.href]
+                ? navBadges[item.href]
+                : 0
             return (
               <Link
                 key={item.href}
@@ -69,7 +75,14 @@ export function Sidebar({ role, open, onOpenChange }: SidebarProps) {
                     : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-100'
                 )}
               >
-                <Icon className="h-4 w-4 shrink-0" />
+                <span className="relative shrink-0">
+                  <Icon className="h-4 w-4" />
+                  {badgeCount > 0 ? (
+                    <span className="absolute -right-1.5 -top-1.5 inline-flex min-h-[1rem] min-w-[1rem] items-center justify-center rounded-full bg-violet-500 px-1 text-[10px] font-bold leading-none text-white ring-2 ring-zinc-950">
+                      {badgeCount > 9 ? '9+' : badgeCount}
+                    </span>
+                  ) : null}
+                </span>
                 {item.label}
               </Link>
             )

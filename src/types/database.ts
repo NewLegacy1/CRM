@@ -5,6 +5,7 @@ export interface Profile {
   role: UserRole
   display_name: string | null
   avatar_url: string | null
+  products_last_seen_at: string | null
   created_at: string
   updated_at: string
 }

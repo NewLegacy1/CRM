@@ -24,6 +24,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 ```
 OPENAI_API_KEY=your-openai-api-key
 STRIPE_SECRET_KEY=your-stripe-secret-key
+STRIPE_WEBHOOK_SECRET=your-stripe-webhook-signing-secret
 CALENDLY_API_TOKEN=your-calendly-api-token
 ```
 
