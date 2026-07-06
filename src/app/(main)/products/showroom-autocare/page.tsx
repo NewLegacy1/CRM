@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -51,9 +50,10 @@ export default async function ShowroomAutoCarePage({
   const allEvents: FunnelEventRow[] = events ?? [];
   const experimentList: Experiment[] = experiments ?? [];
   const selectedExperiment = experimentList.find((exp) => exp.id === experimentId) ?? null;
+  const lastUpdated = allEvents.length > 0 ? allEvents[allEvents.length - 1].created_at : null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <Link
         href="/products"
         className="inline-flex items-center gap-2 text-sm text-zinc-500 transition hover:text-violet-300"
@@ -62,64 +62,45 @@ export default async function ShowroomAutoCarePage({
         Products
       </Link>
 
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 ring-1 ring-white/10">
-            <Image
-              src="https://www.showroomautocare.ca/logo.png"
-              alt="Showroom AutoCare logo"
-              width={48}
-              height={48}
-              className="h-10 w-10 object-contain"
-            />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-zinc-100">Showroom AutoCare</h1>
-            <p className="mt-1 text-sm text-zinc-400">
-              Conversion journey from site visit to confirmed booking.
-            </p>
-          </div>
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/[0.07] bg-zinc-900/40 px-4 py-3 backdrop-blur-sm">
+        <div className="min-w-0 flex-1">
+          <ExperimentSelector experiments={experimentList} selectedId={experimentId ?? null} />
+          {selectedExperiment?.description && (
+            <p className="mt-2 text-xs text-zinc-500">{selectedExperiment.description}</p>
+          )}
         </div>
         <LogExperimentDialog />
       </div>
 
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
-        <Label>Split by experiment</Label>
-        <div className="mt-2">
-          <ExperimentSelector experiments={experimentList} selectedId={experimentId ?? null} />
-        </div>
-        {selectedExperiment?.description && (
-          <p className="mt-3 text-sm text-zinc-400">{selectedExperiment.description}</p>
-        )}
-      </div>
-
       {selectedExperiment ? (
-        <ExperimentComparison experiment={selectedExperiment} events={allEvents} />
+        <ExperimentComparison
+          experiment={selectedExperiment}
+          events={allEvents}
+          lastUpdated={lastUpdated}
+        />
       ) : (
-        <OverallFunnel events={allEvents} />
+        <OverallFunnel events={allEvents} lastUpdated={lastUpdated} />
       )}
     </div>
   );
 }
 
-function Label({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-      {children}
-    </span>
-  );
-}
-
-function OverallFunnel({ events }: { events: FunnelEventRow[] }) {
+function OverallFunnel({
+  events,
+  lastUpdated,
+}: {
+  events: FunnelEventRow[];
+  lastUpdated: string | null;
+}) {
   const stats = computeFunnelStats(events);
   const biggestDrop = findBiggestDrop(stats);
 
   return (
     <JourneyMap
-      title="All-time journey"
-      subtitle="Every recorded session, no experiment split applied."
       stats={stats}
       biggestDrop={biggestDrop}
+      dateRangeLabel="All time"
+      lastUpdated={lastUpdated}
     />
   );
 }
@@ -127,9 +108,11 @@ function OverallFunnel({ events }: { events: FunnelEventRow[] }) {
 function ExperimentComparison({
   experiment,
   events,
+  lastUpdated,
 }: {
   experiment: Experiment;
   events: FunnelEventRow[];
+  lastUpdated: string | null;
 }) {
   const startedAt = new Date(experiment.started_at).getTime();
   const endedAt = experiment.ended_at ? new Date(experiment.ended_at).getTime() : null;
@@ -143,21 +126,27 @@ function ExperimentComparison({
   const beforeStats = computeFunnelStats(beforeEvents);
   const afterStats = computeFunnelStats(afterEvents);
 
+  const rangeEnd = experiment.ended_at
+    ? new Date(experiment.ended_at).toLocaleDateString()
+    : "present";
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <JourneyMap
-        title={`Before: ${experiment.name}`}
-        subtitle={`Sessions before ${new Date(experiment.started_at).toLocaleString()}`}
+        title="Before"
+        subtitle={`Sessions recorded before ${new Date(experiment.started_at).toLocaleString()}`}
+        dateRangeLabel={`Before · ${experiment.name}`}
         stats={beforeStats}
         biggestDrop={findBiggestDrop(beforeStats)}
+        lastUpdated={lastUpdated}
       />
       <JourneyMap
-        title={`After: ${experiment.name}`}
-        subtitle={`Sessions from ${new Date(experiment.started_at).toLocaleString()}${
-          experiment.ended_at ? ` to ${new Date(experiment.ended_at).toLocaleString()}` : " onward"
-        }`}
+        title="After"
+        subtitle={`Sessions from ${new Date(experiment.started_at).toLocaleString()} through ${rangeEnd}`}
+        dateRangeLabel={`After · ${experiment.name}`}
         stats={afterStats}
         biggestDrop={findBiggestDrop(afterStats)}
+        lastUpdated={lastUpdated}
       />
     </div>
   );
