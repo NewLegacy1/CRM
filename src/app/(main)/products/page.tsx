@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { APP_PRODUCTS } from "@/lib/stripe/apps";
-import { ArrowRight, ExternalLink, Gauge, Layers } from "lucide-react";
+import { ArrowRight, ExternalLink, Layers } from "lucide-react";
 
 interface PortfolioBrand {
   slug: string;
@@ -10,6 +10,7 @@ interface PortfolioBrand {
   tagline: string;
   description: string;
   href: string;
+  logoUrl: string;
 }
 
 // Brands you operate the marketing/backend for, tracked by conversion funnel
@@ -22,6 +23,7 @@ const PORTFOLIO_BRANDS: PortfolioBrand[] = [
     description:
       "Conversion funnel from showroomautocare.ca visits through a confirmed DetailOps booking, with before/after experiment comparisons.",
     href: "/products/showroom-autocare",
+    logoUrl: "https://www.showroomautocare.ca/logo.png",
   },
 ];
 
@@ -178,8 +180,14 @@ export default async function ProductsPage() {
           >
             <div className="border-b border-white/[0.06] bg-gradient-to-r from-zinc-900/80 to-violet-950/20 px-6 py-5">
               <div className="flex items-center gap-4">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-500/15 ring-1 ring-violet-400/20">
-                  <Gauge className="h-6 w-6 text-violet-300" />
+                <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 ring-1 ring-white/10">
+                  <Image
+                    src={brand.logoUrl}
+                    alt={`${brand.name} logo`}
+                    width={48}
+                    height={48}
+                    className="h-10 w-10 object-contain"
+                  />
                 </div>
                 <div>
                   <h2 className="text-lg font-semibold text-zinc-100">{brand.name}</h2>

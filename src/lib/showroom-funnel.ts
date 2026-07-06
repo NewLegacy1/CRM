@@ -62,9 +62,12 @@ export function computeFunnelStats(events: FunnelEventRow[]): FunnelStageResult[
 }
 
 export interface BiggestDrop {
+  fromKey: string;
+  toKey: string;
   fromLabel: string;
   toLabel: string;
   dropRate: number;
+  sessionsLost: number;
 }
 
 /** Finds the stage-to-stage transition with the largest percentage drop-off. */
@@ -78,7 +81,14 @@ export function findBiggestDrop(stats: FunnelStageResult[]): BiggestDrop | null 
 
     const dropRate = 1 - curr.sessions / prev.sessions;
     if (!biggest || dropRate > biggest.dropRate) {
-      biggest = { fromLabel: prev.label, toLabel: curr.label, dropRate };
+      biggest = {
+        fromKey: prev.key,
+        toKey: curr.key,
+        fromLabel: prev.label,
+        toLabel: curr.label,
+        dropRate,
+        sessionsLost: prev.sessions - curr.sessions,
+      };
     }
   }
 

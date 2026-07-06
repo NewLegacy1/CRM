@@ -1,10 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import type { UserRole } from "@/types/database";
 import { computeFunnelStats, findBiggestDrop, type FunnelEventRow } from "@/lib/showroom-funnel";
-import { FunnelStageTable } from "./funnel-stage-table";
+import { JourneyMap } from "./journey-map";
 import { ExperimentSelector } from "./experiment-selector";
 import { LogExperimentDialog } from "./log-experiment-dialog";
 
@@ -62,11 +63,22 @@ export default async function ShowroomAutoCarePage({
       </Link>
 
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-zinc-100">Showroom AutoCare Funnel</h1>
-          <p className="mt-1 text-sm text-zinc-400">
-            Visitors to showroomautocare.ca through to a confirmed DetailOps booking.
-          </p>
+        <div className="flex items-center gap-4">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white p-2 ring-1 ring-white/10">
+            <Image
+              src="https://www.showroomautocare.ca/logo.png"
+              alt="Showroom AutoCare logo"
+              width={48}
+              height={48}
+              className="h-10 w-10 object-contain"
+            />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-zinc-100">Showroom AutoCare</h1>
+            <p className="mt-1 text-sm text-zinc-400">
+              Conversion journey from site visit to confirmed booking.
+            </p>
+          </div>
         </div>
         <LogExperimentDialog />
       </div>
@@ -103,8 +115,8 @@ function OverallFunnel({ events }: { events: FunnelEventRow[] }) {
   const biggestDrop = findBiggestDrop(stats);
 
   return (
-    <FunnelStageTable
-      title="All-time funnel"
+    <JourneyMap
+      title="All-time journey"
       subtitle="Every recorded session, no experiment split applied."
       stats={stats}
       biggestDrop={biggestDrop}
@@ -132,14 +144,14 @@ function ExperimentComparison({
   const afterStats = computeFunnelStats(afterEvents);
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <FunnelStageTable
+    <div className="space-y-6">
+      <JourneyMap
         title={`Before: ${experiment.name}`}
         subtitle={`Sessions before ${new Date(experiment.started_at).toLocaleString()}`}
         stats={beforeStats}
         biggestDrop={findBiggestDrop(beforeStats)}
       />
-      <FunnelStageTable
+      <JourneyMap
         title={`After: ${experiment.name}`}
         subtitle={`Sessions from ${new Date(experiment.started_at).toLocaleString()}${
           experiment.ended_at ? ` to ${new Date(experiment.ended_at).toLocaleString()}` : " onward"
