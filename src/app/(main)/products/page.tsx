@@ -170,48 +170,41 @@ export default async function ProductsPage() {
             </article>
           );
         })}
-      </div>
 
-      <div>
-        <h2 className="text-lg font-semibold text-zinc-100">Brands</h2>
-        <p className="mt-1 text-sm text-zinc-400">
-          Companies you run the marketing and backend for, tracked by conversion
-          funnel rather than Stripe MRR.
-        </p>
-
-        <div className="mt-5 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {PORTFOLIO_BRANDS.map((brand) => (
-            <Link
-              key={brand.slug}
-              href={brand.href}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-zinc-900/50 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl transition hover:border-violet-400/20 hover:bg-zinc-900/70"
-            >
-              <div className="border-b border-white/[0.06] bg-gradient-to-r from-zinc-900/80 to-violet-950/20 px-6 py-5">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-500/15 ring-1 ring-violet-400/20">
-                    <Gauge className="h-6 w-6 text-violet-300" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-zinc-100">{brand.name}</h3>
-                    <p className="mt-0.5 text-xs font-medium uppercase tracking-wide text-violet-300/80">
-                      {brand.tagline}
-                    </p>
-                  </div>
+        {PORTFOLIO_BRANDS.map((brand) => (
+          <article
+            key={brand.slug}
+            className="group flex flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-zinc-900/50 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.8)] backdrop-blur-xl transition hover:border-violet-400/20 hover:bg-zinc-900/70"
+          >
+            <div className="border-b border-white/[0.06] bg-gradient-to-r from-zinc-900/80 to-violet-950/20 px-6 py-5">
+              <div className="flex items-center gap-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-500/15 ring-1 ring-violet-400/20">
+                  <Gauge className="h-6 w-6 text-violet-300" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-zinc-100">{brand.name}</h2>
+                  <p className="mt-0.5 text-xs font-medium uppercase tracking-wide text-violet-300/80">
+                    {brand.tagline}
+                  </p>
                 </div>
               </div>
+            </div>
 
-              <div className="flex flex-1 flex-col justify-between px-6 py-5">
-                <p className="text-sm leading-relaxed text-zinc-400">
-                  {brand.description}
-                </p>
-                <div className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-violet-500/15 px-4 py-2.5 text-sm font-medium text-violet-200 ring-1 ring-violet-400/20 transition group-hover:bg-violet-500/25">
-                  Open dashboard
-                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+            <div className="flex flex-1 flex-col px-6 py-5">
+              <p className="text-sm leading-relaxed text-zinc-400">
+                {brand.description}
+              </p>
+
+              <Link
+                href={brand.href}
+                className="mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-violet-500/15 px-4 py-2.5 text-sm font-medium text-violet-200 ring-1 ring-violet-400/20 transition group-hover:bg-violet-500/25"
+              >
+                Open dashboard
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+          </article>
+        ))}
       </div>
     </div>
   );
