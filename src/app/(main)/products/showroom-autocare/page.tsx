@@ -1,12 +1,12 @@
+import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import type { UserRole } from "@/types/database";
 import { computeFunnelStats, findBiggestDrop, type FunnelEventRow } from "@/lib/showroom-funnel";
 import { JourneyMap } from "./journey-map";
-import { ExperimentSelector } from "./experiment-selector";
-import { LogExperimentDialog } from "./log-experiment-dialog";
+import { ExperimentControls } from "./experiment-controls";
 
 interface Experiment {
   id: string;
@@ -62,14 +62,29 @@ export default async function ShowroomAutoCarePage({
         Products
       </Link>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/[0.07] bg-zinc-900/40 px-4 py-3 backdrop-blur-sm">
-        <div className="min-w-0 flex-1">
-          <ExperimentSelector experiments={experimentList} selectedId={experimentId ?? null} />
-          {selectedExperiment?.description && (
-            <p className="mt-2 text-xs text-zinc-500">{selectedExperiment.description}</p>
-          )}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <Image
+            src="https://www.showroomautocare.ca/logo.png"
+            alt="Showroom AutoCare logo"
+            width={52}
+            height={52}
+            className="h-12 w-12 object-contain"
+          />
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-zinc-100">Showroom AutoCare</h1>
+            <p className="mt-0.5 text-sm text-zinc-500">Conversion journey · showroomautocare.ca</p>
+          </div>
         </div>
-        <LogExperimentDialog />
+        <a
+          href="https://www.showroomautocare.ca"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-zinc-300 transition hover:border-violet-400/30 hover:text-violet-200"
+        >
+          Visit site
+          <ExternalLink className="h-3.5 w-3.5" />
+        </a>
       </div>
 
       {selectedExperiment ? (
@@ -77,9 +92,18 @@ export default async function ShowroomAutoCarePage({
           experiment={selectedExperiment}
           events={allEvents}
           lastUpdated={lastUpdated}
+          experiments={experimentList}
+          experimentId={experimentId ?? null}
         />
       ) : (
-        <OverallFunnel events={allEvents} lastUpdated={lastUpdated} />
+        <>
+          <OverallFunnel events={allEvents} lastUpdated={lastUpdated} />
+          <ExperimentControls
+            experiments={experimentList}
+            selectedId={experimentId ?? null}
+            description={null}
+          />
+        </>
       )}
     </div>
   );
@@ -109,10 +133,14 @@ function ExperimentComparison({
   experiment,
   events,
   lastUpdated,
+  experiments,
+  experimentId,
 }: {
   experiment: Experiment;
   events: FunnelEventRow[];
   lastUpdated: string | null;
+  experiments: Experiment[];
+  experimentId: string | null;
 }) {
   const startedAt = new Date(experiment.started_at).getTime();
   const endedAt = experiment.ended_at ? new Date(experiment.ended_at).getTime() : null;
@@ -131,7 +159,7 @@ function ExperimentComparison({
     : "present";
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5">
       <JourneyMap
         title="Before"
         subtitle={`Sessions recorded before ${new Date(experiment.started_at).toLocaleString()}`}
@@ -147,6 +175,11 @@ function ExperimentComparison({
         stats={afterStats}
         biggestDrop={findBiggestDrop(afterStats)}
         lastUpdated={lastUpdated}
+      />
+      <ExperimentControls
+        experiments={experiments}
+        selectedId={experimentId}
+        description={experiment.description}
       />
     </div>
   );
