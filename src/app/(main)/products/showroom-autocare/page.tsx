@@ -16,7 +16,7 @@ interface Experiment {
   ended_at: string | null;
 }
 
-export default async function ShowroomFunnelPage({
+export default async function ShowroomAutoCarePage({
   searchParams,
 }: {
   searchParams: Promise<{ experiment?: string }>;
@@ -34,7 +34,7 @@ export default async function ShowroomFunnelPage({
     .single();
 
   const role = (profile?.role as UserRole) ?? "pending";
-  if (role !== "owner") redirect("/analytics");
+  if (role !== "owner") redirect("/products");
 
   const [{ data: experiments }, { data: events }] = await Promise.all([
     supabase
@@ -54,11 +54,11 @@ export default async function ShowroomFunnelPage({
   return (
     <div className="space-y-6">
       <Link
-        href="/analytics"
+        href="/products"
         className="inline-flex items-center gap-2 text-sm text-zinc-500 transition hover:text-violet-300"
       >
         <ArrowLeft className="h-4 w-4" />
-        Analytics
+        Products
       </Link>
 
       <div className="flex flex-wrap items-start justify-between gap-4">

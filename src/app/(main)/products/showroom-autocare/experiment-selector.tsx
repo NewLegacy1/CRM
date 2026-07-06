@@ -21,7 +21,11 @@ export function ExperimentSelector({ experiments, selectedId }: ExperimentSelect
       value={selectedId ?? ""}
       onChange={(e) => {
         const value = e.target.value;
-        router.push(value ? `/analytics/showroom?experiment=${value}` : "/analytics/showroom");
+        router.push(
+          value
+            ? `/products/showroom-autocare?experiment=${value}`
+            : "/products/showroom-autocare"
+        );
       }}
       className="flex h-10 w-full max-w-sm rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
     >
