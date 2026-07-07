@@ -4,9 +4,9 @@ import { redirect } from "next/navigation";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import type { UserRole } from "@/types/database";
-import { computeFunnelStats, findBiggestDrop, type FunnelEventRow } from "@/lib/showroom-funnel";
-import { JourneyMap } from "./journey-map";
-import { ExperimentControls } from "./experiment-controls";
+import type { FunnelEventRow } from "@/lib/showroom-funnel";
+import { dateRangeFromSearchParams } from "@/lib/showroom-date-range";
+import { FunnelDashboard } from "./funnel-dashboard";
 
 interface Experiment {
   id: string;
@@ -19,9 +19,9 @@ interface Experiment {
 export default async function ShowroomAutoCarePage({
   searchParams,
 }: {
-  searchParams: Promise<{ experiment?: string }>;
+  searchParams: Promise<{ experiment?: string; range?: string; from?: string; to?: string }>;
 }) {
-  const { experiment: experimentId } = await searchParams;
+  const { experiment: experimentId, range, from, to } = await searchParams;
   const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
@@ -49,138 +49,60 @@ export default async function ShowroomAutoCarePage({
 
   const allEvents: FunnelEventRow[] = events ?? [];
   const experimentList: Experiment[] = experiments ?? [];
-  const selectedExperiment = experimentList.find((exp) => exp.id === experimentId) ?? null;
-  const lastUpdated = allEvents.length > 0 ? allEvents[allEvents.length - 1].created_at : null;
+  const dateRange = dateRangeFromSearchParams({ range, from, to });
 
   return (
-    <div className="space-y-5">
-      <Link
-        href="/products"
-        className="inline-flex items-center gap-2 text-sm text-zinc-500 transition hover:text-violet-300"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Products
-      </Link>
+    <div className="relative -mx-4 -mt-4 -mb-6 min-h-[calc(100dvh-4rem)] lg:-mx-6 lg:-mt-6">
+      <div className="pointer-events-none absolute inset-0 bg-[#07070c]" />
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 85% 55% at 50% -8%, rgba(139,92,246,0.22), transparent 58%), radial-gradient(ellipse 50% 40% at 92% 88%, rgba(6,182,212,0.14), transparent 52%)",
+        }}
+      />
 
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <Image
-            src="https://www.showroomautocare.ca/logo.png"
-            alt="Showroom AutoCare logo"
-            width={52}
-            height={52}
-            className="h-12 w-12 object-contain"
-          />
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-zinc-100">Showroom AutoCare</h1>
-            <p className="mt-0.5 text-sm text-zinc-500">Conversion journey · showroomautocare.ca</p>
-          </div>
-        </div>
-        <a
-          href="https://www.showroomautocare.ca"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-zinc-300 transition hover:border-violet-400/30 hover:text-violet-200"
+      <div className="relative space-y-6 px-4 py-5 lg:px-6 lg:py-6">
+        <Link
+          href="/products"
+          className="inline-flex items-center gap-2 text-sm text-zinc-500 transition hover:text-violet-300"
         >
-          Visit site
-          <ExternalLink className="h-3.5 w-3.5" />
-        </a>
-      </div>
+          <ArrowLeft className="h-4 w-4" />
+          Products
+        </Link>
 
-      {selectedExperiment ? (
-        <ExperimentComparison
-          experiment={selectedExperiment}
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Image
+              src="https://www.showroomautocare.ca/logo.png"
+              alt="Showroom AutoCare logo"
+              width={56}
+              height={56}
+              className="h-14 w-14 object-contain"
+            />
+            <div>
+              <h1 className="text-2xl font-bold normal-case tracking-tight text-zinc-100">Showroom AutoCare</h1>
+              <p className="mt-0.5 text-sm text-zinc-500">Conversion journey · showroomautocare.ca</p>
+            </div>
+          </div>
+          <a
+            href="https://www.showroomautocare.ca"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 px-3 py-2 text-xs font-medium text-zinc-300 transition hover:border-violet-400/30 hover:text-violet-200"
+          >
+            Visit site
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
+        </div>
+
+        <FunnelDashboard
           events={allEvents}
-          lastUpdated={lastUpdated}
           experiments={experimentList}
-          experimentId={experimentId ?? null}
+          selectedExperimentId={experimentId ?? null}
+          dateRange={dateRange}
         />
-      ) : (
-        <>
-          <OverallFunnel events={allEvents} lastUpdated={lastUpdated} />
-          <ExperimentControls
-            experiments={experimentList}
-            selectedId={experimentId ?? null}
-            description={null}
-          />
-        </>
-      )}
-    </div>
-  );
-}
-
-function OverallFunnel({
-  events,
-  lastUpdated,
-}: {
-  events: FunnelEventRow[];
-  lastUpdated: string | null;
-}) {
-  const stats = computeFunnelStats(events);
-  const biggestDrop = findBiggestDrop(stats);
-
-  return (
-    <JourneyMap
-      stats={stats}
-      biggestDrop={biggestDrop}
-      dateRangeLabel="All time"
-      lastUpdated={lastUpdated}
-    />
-  );
-}
-
-function ExperimentComparison({
-  experiment,
-  events,
-  lastUpdated,
-  experiments,
-  experimentId,
-}: {
-  experiment: Experiment;
-  events: FunnelEventRow[];
-  lastUpdated: string | null;
-  experiments: Experiment[];
-  experimentId: string | null;
-}) {
-  const startedAt = new Date(experiment.started_at).getTime();
-  const endedAt = experiment.ended_at ? new Date(experiment.ended_at).getTime() : null;
-
-  const beforeEvents = events.filter((e) => new Date(e.created_at).getTime() < startedAt);
-  const afterEvents = events.filter((e) => {
-    const t = new Date(e.created_at).getTime();
-    return t >= startedAt && (endedAt === null || t < endedAt);
-  });
-
-  const beforeStats = computeFunnelStats(beforeEvents);
-  const afterStats = computeFunnelStats(afterEvents);
-
-  const rangeEnd = experiment.ended_at
-    ? new Date(experiment.ended_at).toLocaleDateString()
-    : "present";
-
-  return (
-    <div className="space-y-5">
-      <JourneyMap
-        title="Before"
-        subtitle={`Sessions recorded before ${new Date(experiment.started_at).toLocaleString()}`}
-        dateRangeLabel={`Before · ${experiment.name}`}
-        stats={beforeStats}
-        biggestDrop={findBiggestDrop(beforeStats)}
-        lastUpdated={lastUpdated}
-      />
-      <JourneyMap
-        title="After"
-        subtitle={`Sessions from ${new Date(experiment.started_at).toLocaleString()} through ${rangeEnd}`}
-        dateRangeLabel={`After · ${experiment.name}`}
-        stats={afterStats}
-        biggestDrop={findBiggestDrop(afterStats)}
-        lastUpdated={lastUpdated}
-      />
-      <ExperimentControls
-        experiments={experiments}
-        selectedId={experimentId}
-        description={experiment.description}
-      />
+      </div>
     </div>
   );
 }

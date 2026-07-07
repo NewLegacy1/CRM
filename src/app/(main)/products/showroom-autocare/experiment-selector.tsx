@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface ExperimentOption {
   id: string;
@@ -15,17 +15,21 @@ interface ExperimentSelectorProps {
 
 export function ExperimentSelector({ experiments, selectedId }: ExperimentSelectorProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   return (
     <select
       value={selectedId ?? ""}
       onChange={(e) => {
         const value = e.target.value;
-        router.push(
-          value
-            ? `/products/showroom-autocare?experiment=${value}`
-            : "/products/showroom-autocare"
-        );
+        const params = new URLSearchParams(searchParams.toString());
+        if (value) {
+          params.set("experiment", value);
+        } else {
+          params.delete("experiment");
+        }
+        const qs = params.toString();
+        router.push(qs ? `/products/showroom-autocare?${qs}` : "/products/showroom-autocare");
       }}
       className="flex h-10 w-full max-w-sm rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500"
     >

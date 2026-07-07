@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { ExperimentSelector } from "./experiment-selector";
 import { LogExperimentDialog } from "./log-experiment-dialog";
 
@@ -26,7 +27,9 @@ export function ExperimentControls({
         <p className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
           Split by experiment
         </p>
-        <ExperimentSelector experiments={experiments} selectedId={selectedId} />
+        <Suspense fallback={<div className="h-10 max-w-sm animate-pulse rounded-lg bg-zinc-800" />}>
+          <ExperimentSelector experiments={experiments} selectedId={selectedId} />
+        </Suspense>
         {description && <p className="mt-2 text-xs text-zinc-500">{description}</p>}
       </div>
       <LogExperimentDialog />
