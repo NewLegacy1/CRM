@@ -302,7 +302,7 @@ export function InvoicesList({ initialInvoices, clients }: InvoicesListProps) {
       )}
 
       <Dialog open={sendOpen} onOpenChange={setSendOpen}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-xl">
           <DialogClose onClick={() => setSendOpen(false)} />
           <DialogHeader>
             <DialogTitle>Send invoice</DialogTitle>

@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Plus, Trash2, Calendar } from 'lucide-react'
+import { InvoiceTaxFields } from '@/components/invoices/invoice-tax-fields'
+import { DEFAULT_TAX_REGION } from '@/lib/invoices/tax-regions'
 
 interface LineItem {
   description: string
@@ -30,6 +32,8 @@ export function SendInvoiceForm({ clients, onSuccess, onCancel }: SendInvoiceFor
   const [lineItems, setLineItems] = useState<LineItem[]>([
     { description: '', quantity: 1, unit_amount: 0, amount: 0, isMonthly: false },
   ])
+  const [taxEnabled, setTaxEnabled] = useState(false)
+  const [taxRegion, setTaxRegion] = useState(DEFAULT_TAX_REGION)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -52,8 +56,6 @@ export function SendInvoiceForm({ clients, onSuccess, onCancel }: SendInvoiceFor
   function removeLine(index: number) {
     setLineItems((prev) => prev.filter((_, i) => i !== index))
   }
-
-  const total = lineItems.reduce((sum, item) => sum + (item.quantity * item.unit_amount), 0)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -80,6 +82,8 @@ export function SendInvoiceForm({ clients, onSuccess, onCancel }: SendInvoiceFor
         amount: row.quantity * row.unit_amount,
         isMonthly: row.isMonthly || false,
       })),
+      taxEnabled,
+      taxRegion,
     }
     setLoading(true)
     try {
@@ -174,11 +178,6 @@ export function SendInvoiceForm({ clients, onSuccess, onCancel }: SendInvoiceFor
         </div>
       </div>
 
-      <div className="flex justify-between text-sm font-medium text-zinc-300">
-        <span>Total</span>
-        <span>{currency.toUpperCase()} {total.toFixed(2)}</span>
-      </div>
-
       <div className="grid grid-cols-2 gap-4">
         <div>
           <Label htmlFor="currency">Currency</Label>
@@ -205,6 +204,15 @@ export function SendInvoiceForm({ clients, onSuccess, onCancel }: SendInvoiceFor
           />
         </div>
       </div>
+
+      <InvoiceTaxFields
+        taxEnabled={taxEnabled}
+        regionCode={taxRegion}
+        currency={currency}
+        lineItems={lineItems}
+        onTaxEnabledChange={setTaxEnabled}
+        onRegionChange={setTaxRegion}
+      />
 
       <div>
         <Label htmlFor="memo">Memo (customer-facing)</Label>

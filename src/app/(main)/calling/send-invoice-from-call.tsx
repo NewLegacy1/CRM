@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog'
 import { Plus, Trash2, Calendar, ChevronRight } from 'lucide-react'
+import { InvoiceTaxFields } from '@/components/invoices/invoice-tax-fields'
+import { DEFAULT_TAX_REGION } from '@/lib/invoices/tax-regions'
 
 interface LineItem {
   description: string
@@ -48,6 +50,8 @@ export function SendInvoiceFromCall({ lead, onSuccess, onCancel }: SendInvoiceFr
   const [lineItems, setLineItems] = useState<LineItem[]>([
     { description: '', quantity: 1, unit_amount: 0, amount: 0, isMonthly: false },
   ])
+  const [taxEnabled, setTaxEnabled] = useState(false)
+  const [taxRegion, setTaxRegion] = useState(DEFAULT_TAX_REGION)
   const [sendingInvoice, setSendingInvoice] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -81,8 +85,6 @@ export function SendInvoiceFromCall({ lead, onSuccess, onCancel }: SendInvoiceFr
   function removeLine(index: number) {
     setLineItems((prev) => prev.filter((_, i) => i !== index))
   }
-
-  const total = lineItems.reduce((sum, item) => sum + (item.quantity * item.unit_amount), 0)
 
   async function handleCreateClient(e: React.FormEvent) {
     e.preventDefault()
@@ -146,6 +148,8 @@ export function SendInvoiceFromCall({ lead, onSuccess, onCancel }: SendInvoiceFr
         amount: row.quantity * row.unit_amount,
         isMonthly: row.isMonthly || false,
       })),
+      taxEnabled,
+      taxRegion,
     }
     try {
       const res = await fetch('/api/invoices/send', {
@@ -367,11 +371,6 @@ export function SendInvoiceFromCall({ lead, onSuccess, onCancel }: SendInvoiceFr
               </div>
             </div>
 
-            <div className="flex justify-between text-sm font-medium text-zinc-300">
-              <span>Total</span>
-              <span>{currency.toUpperCase()} {total.toFixed(2)}</span>
-            </div>
-
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="currency">Currency</Label>
@@ -398,6 +397,15 @@ export function SendInvoiceFromCall({ lead, onSuccess, onCancel }: SendInvoiceFr
                 />
               </div>
             </div>
+
+            <InvoiceTaxFields
+              taxEnabled={taxEnabled}
+              regionCode={taxRegion}
+              currency={currency}
+              lineItems={lineItems}
+              onTaxEnabledChange={setTaxEnabled}
+              onRegionChange={setTaxRegion}
+            />
 
             <div>
               <Label htmlFor="memo">Memo (customer-facing)</Label>
