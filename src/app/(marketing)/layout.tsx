@@ -3,11 +3,11 @@ import { MarketingShell } from "@/components/marketing/MarketingShell";
 
 export const metadata: Metadata = {
   title: {
-    default: "New Legacy AI | Custom AI Agents for Business Automation",
+    default: "New Legacy AI | Websites, Google & Custom Software That Win You Business",
     template: "%s | New Legacy AI",
   },
   description:
-    "Custom websites, CRMs + automations, and growth operations — built to keep your business scalable and easy to run.",
+    "Remote across Canada & the US. Local growth systems — Google Business Profile, websites, lead capture — for owner-operators, and custom software for growing firms.",
 };
 
 export default function MarketingLayout({

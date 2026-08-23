@@ -12,6 +12,10 @@ import {
   DialogClose,
 } from '@/components/ui/dialog'
 import { Copy, ExternalLink, FileText, Loader2, Plus, Send } from 'lucide-react'
+import {
+  BOOKED_JOBS_LAUNCH_AMOUNT,
+  BOOKED_JOBS_LAUNCH_DESCRIPTION,
+} from '@/lib/booked-jobs-offer'
 
 type LineItem = { description: string; quantity: number; unit_amount: number }
 
@@ -62,8 +66,8 @@ export function OnboardingAdmin() {
     businessName: '',
     contactName: '',
     email: '',
-    websiteAmount: '1200',
-    gmbAmount: '500',
+    websiteAmount: String(BOOKED_JOBS_LAUNCH_AMOUNT),
+    gmbAmount: '0',
   })
   const [creating, setCreating] = useState(false)
 
@@ -126,15 +130,19 @@ export function OnboardingAdmin() {
           currency: 'cad',
           lineItems: [
             {
-              description: 'Custom landing page website',
+              description: BOOKED_JOBS_LAUNCH_DESCRIPTION,
               quantity: 1,
               unit_amount: Number(createForm.websiteAmount) || 0,
             },
-            {
-              description: 'Google Business Profile setup',
-              quantity: 1,
-              unit_amount: Number(createForm.gmbAmount) || 0,
-            },
+            ...(Number(createForm.gmbAmount) > 0
+              ? [
+                  {
+                    description: 'Add-on',
+                    quantity: 1,
+                    unit_amount: Number(createForm.gmbAmount),
+                  },
+                ]
+              : []),
           ],
         }),
       })
@@ -145,8 +153,8 @@ export function OnboardingAdmin() {
         businessName: '',
         contactName: '',
         email: '',
-        websiteAmount: '1200',
-        gmbAmount: '500',
+        websiteAmount: String(BOOKED_JOBS_LAUNCH_AMOUNT),
+        gmbAmount: '0',
       })
       await loadLinks()
       if (data.link?.token) await copyLink(data.link.token)
@@ -334,7 +342,7 @@ export function OnboardingAdmin() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label htmlFor="ob-web">Website (CAD)</Label>
+                <Label htmlFor="ob-web">Launch (CAD)</Label>
                 <Input
                   id="ob-web"
                   type="number"
@@ -346,7 +354,7 @@ export function OnboardingAdmin() {
                 />
               </div>
               <div>
-                <Label htmlFor="ob-gmb">GMB setup (CAD)</Label>
+                <Label htmlFor="ob-gmb">Add-on (CAD)</Label>
                 <Input
                   id="ob-gmb"
                   type="number"

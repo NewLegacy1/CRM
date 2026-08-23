@@ -1,0 +1,142 @@
+/* Ads LP motion only. Colors and type stay on the main marketing system. */
+
+.bj-phone {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.75rem;
+  background: rgba(9, 9, 11, 0.72);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 24px 80px rgba(0, 0, 0, 0.45),
+    0 0 60px rgba(167, 139, 250, 0.12);
+}
+
+.bj-phone::before {
+  content: "";
+  position: absolute;
+  inset: -40% -20% auto;
+  height: 70%;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(34, 211, 238, 0.22),
+    transparent 62%
+  );
+  pointer-events: none;
+}
+
+.bj-search {
+  animation: bj-search-in 700ms ease-out both;
+}
+
+.bj-listing {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: bj-listing-in 560ms ease-out forwards;
+}
+
+.bj-listing-1 {
+  animation-delay: 0.55s;
+}
+.bj-listing-2 {
+  animation-delay: 1.05s;
+}
+.bj-listing-3 {
+  animation-delay: 1.55s;
+}
+
+.bj-ring {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #34d399;
+  box-shadow: 0 0 12px #34d399;
+  animation: bj-pulse 1.4s ease-in-out infinite;
+}
+
+.bj-mute {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #fb7185;
+  box-shadow: 0 0 12px #fb7185;
+  animation: bj-pulse 1.4s ease-in-out infinite 0.4s;
+}
+
+.bj-cash {
+  position: absolute;
+  right: 1.1rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #67e8f9;
+  opacity: 0;
+  animation: bj-cash-fly 3.2s ease-in-out infinite;
+}
+
+.bj-cash-a {
+  top: 46%;
+  animation-delay: 1.8s;
+}
+.bj-cash-b {
+  top: 58%;
+  animation-delay: 2.4s;
+}
+
+@keyframes bj-search-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bj-listing-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bj-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.55;
+  }
+}
+
+@keyframes bj-cash-fly {
+  0% {
+    opacity: 0;
+    transform: translate(0, 28px);
+  }
+  18% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.9;
+    transform: translate(-18px, -56px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-28px, -84px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bj-listing,
+  .bj-search,
+  .bj-cash,
+  .bj-ring,
+  .bj-mute {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

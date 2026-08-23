@@ -13,11 +13,12 @@ const MarketingGalaxyBackdrop = dynamic(
 export function MarketingShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isHome = pathname === "/" || pathname === "";
+  const isAdsLp = pathname.startsWith("/booked-jobs");
 
   return (
     <LeadCaptureProvider>
-      <MarketingSideNav />
-      {!isHome ? (
+      {!isAdsLp ? <MarketingSideNav /> : null}
+      {!isHome && !isAdsLp ? (
         <>
           <div className="marketing-subpage-atmosphere" aria-hidden />
           <MarketingGalaxyBackdrop />

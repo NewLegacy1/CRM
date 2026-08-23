@@ -50,7 +50,7 @@ export function buildOnboardingAgreementSections(
     {
       title: "Parties",
       paragraphs: [
-        `This Website & Google Business Profile Services Agreement ("Agreement") is between New Legacy AI ("Provider") and ${clientLabel} ("Client"), contact email ${params.contactEmail}.`,
+        `This Booked Jobs Launch Services Agreement ("Agreement") is between New Legacy AI ("Provider") and ${clientLabel} ("Client"), contact email ${params.contactEmail}.`,
       ],
     },
     {
@@ -58,9 +58,9 @@ export function buildOnboardingAgreementSections(
       paragraphs: [
         "Provider will deliver the following for Client:",
         ...scopeLines.map((line) => `• ${line}`),
-        "Custom landing page website includes layout, responsive design, and integration of Client-supplied or Provider-drafted copy as agreed during the project.",
-        "Google Business Profile setup includes, where applicable: profile creation or claim assistance, verification support, business categories, hours, business description, upload of Client-supplied photos, and initial profile posts as agreed during setup.",
-        "Unless agreed in writing, this does not include paid advertising, ongoing SEO retainers, multi-page expansion beyond one landing page, e-commerce, custom software, content photography, or third-party subscription fees (domain, hosting, etc.).",
+        "Booked Jobs Launch includes, where applicable: Google Business Profile rebuild, a conversion page that routes inbound jobs to Client, missed-call text-back, owner alerts, GA4 setup, and a 30-minute training session.",
+        "Provider captures inbound leads and delivers them to Client. Client answers, quotes, and closes. Provider does not answer Client phones or quote jobs unless a separate Respond agreement is signed.",
+        "Unless agreed in writing, this does not include paid advertising, ongoing SEO retainers, 24/7 live answering, multi-page expansion beyond one conversion page, e-commerce, custom software, content photography, or third-party subscription fees (domain, hosting, etc.). Grow monthly support is not included unless listed as a line item.",
       ],
     },
     {
@@ -74,7 +74,7 @@ export function buildOnboardingAgreementSections(
     {
       title: "3. Timeline",
       paragraphs: [
-        "Provider will use commercially reasonable efforts to complete the services within 2–4 weeks from (a) Client's acceptance of this Agreement and (b) receipt of full payment under Section 4.",
+        "Provider will use commercially reasonable efforts to complete the services within 14 days from (a) Client's acceptance of this Agreement and (b) receipt of full payment under Section 4.",
       ],
     },
     {

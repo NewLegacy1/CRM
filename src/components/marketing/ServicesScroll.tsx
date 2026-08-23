@@ -1,73 +1,45 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Globe,
-  Zap,
-  LayoutDashboard,
-  MessageSquare,
-  BarChart3,
-  Workflow,
-  ArrowUpRight,
-} from "lucide-react";
+import { Globe, LayoutDashboard, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { marketingWhileInView } from "@/lib/marketing-motion-viewport";
 import { useLeadCapture } from "@/components/marketing/LeadCaptureProvider";
 import { MarketingCtaDuo } from "@/components/marketing/MarketingCtaDuo";
 import type { LucideIcon } from "lucide-react";
 
-type ServiceCard = {
+type PathCard = {
+  id: string;
   title: string;
   body: string;
   icon: LucideIcon;
-  span: string;
-  /** Pre-selects this option in the lead form */
-  leadService: string;
+  leadService?: string;
+  href?: string;
 };
 
-const SERVICES: ServiceCard[] = [
+const PATHS: PathCard[] = [
   {
-    title: "Smart websites",
-    body: "A site that welcomes visitors, answers common questions, and captures leads — so your first impression works around the clock.",
+    id: "local",
+    title: "Local Growth",
+    body: "Get found on Google, look trusted, and capture every lead. Websites, Google Business Profile, missed-call text-back — live in 14 days. You close the job.",
     icon: Globe,
-    span: "md:col-span-2",
     leadService: "AI-Powered Website",
   },
   {
-    title: "Lead follow-up",
-    body: "When someone reaches out, they hear back fast — with clear next steps — without you glued to the inbox.",
-    icon: Zap,
-    span: "",
-    leadService: "AI Lead Automation",
-  },
-  {
-    title: "Client work in one place",
-    body: "Pipeline, conversations, and tasks live together — so everyone sees the same picture and nothing slips through the cracks.",
+    id: "custom",
+    title: "Custom Software",
+    body: "CRMs, booking systems, client portals, and AI workflows for firms that outgrew spreadsheets. $5k–$50k builds, phased delivery.",
     icon: LayoutDashboard,
-    span: "",
-    leadService: "Custom CRM & Apps",
-  },
-  {
-    title: "AI assistants for customers",
-    body: "Chat or voice support that handles the repeat questions so your team focuses on the conversations that matter.",
-    icon: MessageSquare,
-    span: "md:col-span-2",
-    leadService: "AI Customer Agents",
-  },
-  {
-    title: "Actionable insights",
-    body: "Turn what’s happening in the business into clear next steps — what’s working, what’s stuck, and what to do about it.",
-    icon: BarChart3,
-    span: "",
-    leadService: "Data & Insights",
-  },
-  {
-    title: "Operations on autopilot",
-    body: "We find the repetitive steps in your day and replace them with reliable workflows your team can actually trust.",
-    icon: Workflow,
-    span: "",
-    leadService: "Business Automation",
+    href: "/crm-intake",
   },
 ];
+
+const MORE_CAPABILITIES = [
+  "Lead follow-up",
+  "AI assistants",
+  "Dashboards",
+  "Workflow automation",
+] as const;
 
 const cardVariants = {
   hidden: { opacity: 1, y: 40 },
@@ -104,56 +76,90 @@ export default function ServicesScroll() {
           viewport={marketingWhileInView}
         >
           <h2 className="text-4xl md:text-5xl lg:text-6xl mb-6 leading-[0.95]">
-            TOOLS THAT{" "}
-            <span className="gradient-text-highlight">TAKE YOU BEYOND.</span>
+            TWO WAYS{" "}
+            <span className="gradient-text-highlight">WE WORK.</span>
           </h2>
           <p className="text-white/90 text-lg md:text-xl max-w-xl leading-relaxed">
-            Practical AI and automation so you win back time, stay in front of leads, and run the business — not the inbox.
+            Pick the path that fits. Same team, same standard: systems that produce revenue, not tech talk.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 md:items-stretch">
-          {SERVICES.map((svc, i) => {
-            const Icon = svc.icon;
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:items-stretch">
+          {PATHS.map((path, i) => {
+            const Icon = path.icon;
+            const inner = (
+              <div className="relative flex min-h-0 flex-1 flex-col rounded-[calc(1.5rem-1px)] card-galaxy-glass p-7 md:p-8 h-full min-h-full ring-1 ring-white/[0.08] transition-colors duration-300 group-hover:ring-white/15">
+                <div className="flex items-start justify-between mb-6">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] ring-1 ring-white/10">
+                    <Icon size={20} className="text-white/75" />
+                  </div>
+                  <ArrowUpRight
+                    size={16}
+                    className="text-white/25 group-hover:text-white/60 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-500 shrink-0"
+                    aria-hidden
+                  />
+                </div>
+                <h3 className="font-heading text-lg font-semibold mb-3 text-[#FAFAFA]">
+                  {path.title}
+                </h3>
+                <p className="flex-1 text-white/90 text-sm leading-relaxed">{path.body}</p>
+              </div>
+            );
+
             return (
               <motion.div
-                key={svc.title}
+                key={path.id}
+                id={path.id}
                 custom={i}
                 variants={cardVariants}
                 initial="hidden"
                 whileInView="visible"
                 viewport={marketingWhileInView}
-                className={`group relative flex h-full min-h-0 flex-col rounded-[1.5rem] border-galaxy-neon ${svc.span}`}
+                className="group relative flex h-full min-h-0 flex-col rounded-[1.5rem] border-galaxy-neon scroll-mt-24"
               >
-                <button
-                  type="button"
-                  onClick={() =>
-                    openLeadForm({ preselectServices: [svc.leadService] })
-                  }
-                  className="flex h-full min-h-0 w-full flex-1 flex-col text-left rounded-[inherit] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400/80"
-                >
-                  <div className="relative flex min-h-0 flex-1 flex-col rounded-[calc(1.5rem-1px)] card-galaxy-glass p-7 md:p-8 h-full min-h-full ring-1 ring-white/[0.08] transition-colors duration-300 group-hover:ring-white/15">
-                    <div className="flex items-start justify-between mb-6">
-                      <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/[0.06] ring-1 ring-white/10">
-                        <Icon size={20} className="text-white/75" />
-                      </div>
-                      <ArrowUpRight
-                        size={16}
-                        className="text-white/25 group-hover:text-white/60 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-500 shrink-0"
-                        aria-hidden
-                      />
-                    </div>
-                    <h3 className="font-heading text-lg font-semibold mb-3 text-[#FAFAFA]">
-                      {svc.title}
-                    </h3>
-                    <p className="flex-1 text-white/90 text-sm leading-relaxed">{svc.body}</p>
-                    <span className="sr-only">Opens contact form with this service selected</span>
-                  </div>
-                </button>
+                {path.href ? (
+                  <Link
+                    href={path.href}
+                    className="flex h-full min-h-0 w-full flex-1 flex-col text-left rounded-[inherit] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400/80"
+                  >
+                    {inner}
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      openLeadForm({
+                        preselectServices: path.leadService
+                          ? [path.leadService]
+                          : undefined,
+                      })
+                    }
+                    className="flex h-full min-h-0 w-full flex-1 flex-col text-left rounded-[inherit] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-400/80"
+                  >
+                    {inner}
+                    <span className="sr-only">Opens contact form</span>
+                  </button>
+                )}
               </motion.div>
             );
           })}
         </div>
+
+        <p className="mt-8 text-sm text-white/50">
+          More capabilities:{" "}
+          {MORE_CAPABILITIES.map((label, i) => (
+            <span key={label}>
+              <button
+                type="button"
+                onClick={() => openLeadForm()}
+                className="text-white/70 underline-offset-4 hover:text-white hover:underline"
+              >
+                {label}
+              </button>
+              {i < MORE_CAPABILITIES.length - 1 ? " · " : ""}
+            </span>
+          ))}
+        </p>
 
         <MarketingCtaDuo className="mt-16" />
       </div>

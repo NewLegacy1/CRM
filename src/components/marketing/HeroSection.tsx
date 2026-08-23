@@ -186,22 +186,22 @@ const SECTIONS = [
   {
     title: "NEW LEGACY",
     lines: [
-      "Your business’s next chapter",
-      "with AI that handles the busywork while you lead, sell, and serve.",
+      "We build the systems that turn attention into revenue —",
+      "for local businesses and growing firms across Canada & the US.",
     ],
   },
   {
-    title: "BUILT FOR GROWTH",
+    title: "LOCAL BUSINESSES",
     lines: [
-      "Websites, follow-up, and day-to-day tasks wired together",
-      "so leads don’t slip away and you’re not carrying it all alone.",
+      "Google Business Profile, a site that converts, and lead capture —",
+      "every lead reaches you fast. You close the job.",
     ],
   },
   {
-    title: "WHAT WE BUILD",
+    title: "GROWING FIRMS",
     lines: [
-      "Keep scrolling — you’ll see the real work: sites, automation,",
-      "and tools built for owners who want outcomes, not tech talk.",
+      "Custom CRMs, booking systems, and automation —",
+      "built when off-the-shelf tools break.",
     ],
   },
 ];

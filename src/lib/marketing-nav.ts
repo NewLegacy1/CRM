@@ -28,11 +28,12 @@ export type MarketingNavEntry =
     };
 
 export const MARKETING_NAV_ENTRIES: MarketingNavEntry[] = [
-  { id: "services", kind: "link", label: "SERVICES", hash: "services" },
-  { id: "case-studies", kind: "link", label: "CASE STUDIES", path: "/case-studies" },
+  { id: "local", kind: "link", label: "LOCAL SYSTEMS", hash: "local" },
+  { id: "custom", kind: "link", label: "CUSTOM SOFTWARE", hash: "custom" },
+  { id: "work", kind: "link", label: "WORK", path: "/case-studies" },
   { id: "industries", kind: "link", label: "INDUSTRIES", path: "/industries" },
   { id: "contact", kind: "lead", label: "CONTACT" },
-  { id: "book", kind: "calendly", label: "BOOK A CONSULTATION" },
+  { id: "book", kind: "calendly", label: "BOOK A CALL" },
   { id: "sign-in", kind: "link", label: "SIGN IN", path: "/login", isGradient: true },
 ];
 

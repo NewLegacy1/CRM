@@ -17,6 +17,10 @@ import {
   isPendingContractReview,
   type ProjectOnboardingLink,
 } from '@/lib/onboarding/project-onboarding'
+import {
+  BOOKED_JOBS_LAUNCH_AMOUNT,
+  BOOKED_JOBS_LAUNCH_DESCRIPTION,
+} from '@/lib/booked-jobs-offer'
 import { Copy, ExternalLink, FileText, Loader2, Plus, RefreshCw, Send } from 'lucide-react'
 
 type Props = {
@@ -34,8 +38,8 @@ function buildDefaultCreateForm(props: Pick<Props, 'projectName' | 'clientName' 
     businessName: props.clientCompany?.trim() || props.projectName.trim(),
     contactName: props.clientName?.trim() || '',
     email: props.clientEmail?.trim() || '',
-    websiteAmount: '1200',
-    gmbAmount: '500',
+    websiteAmount: String(BOOKED_JOBS_LAUNCH_AMOUNT),
+    gmbAmount: '0',
   }
 }
 
@@ -206,15 +210,19 @@ export function ProjectContractsPanel({
           currency: 'cad',
           lineItems: [
             {
-              description: 'Custom landing page website',
+              description: BOOKED_JOBS_LAUNCH_DESCRIPTION,
               quantity: 1,
               unit_amount: Number(createForm.websiteAmount) || 0,
             },
-            {
-              description: 'Google Business Profile setup',
-              quantity: 1,
-              unit_amount: Number(createForm.gmbAmount) || 0,
-            },
+            ...(Number(createForm.gmbAmount) > 0
+              ? [
+                  {
+                    description: 'Add-on',
+                    quantity: 1,
+                    unit_amount: Number(createForm.gmbAmount),
+                  },
+                ]
+              : []),
           ],
         }),
       })
@@ -494,7 +502,7 @@ export function ProjectContractsPanel({
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label htmlFor="pc-web">Website (CAD)</Label>
+                <Label htmlFor="pc-web">Launch (CAD)</Label>
                 <Input
                   id="pc-web"
                   type="number"
@@ -506,7 +514,7 @@ export function ProjectContractsPanel({
                 />
               </div>
               <div>
-                <Label htmlFor="pc-gmb">GMB setup (CAD)</Label>
+                <Label htmlFor="pc-gmb">Add-on (CAD)</Label>
                 <Input
                   id="pc-gmb"
                   type="number"

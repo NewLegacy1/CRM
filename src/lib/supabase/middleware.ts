@@ -52,6 +52,7 @@ export async function updateSession(request: NextRequest) {
     request.nextUrl.pathname.startsWith('/invoices') ||
     request.nextUrl.pathname.startsWith('/onboarding') ||
     request.nextUrl.pathname.startsWith('/leads') ||
+    request.nextUrl.pathname.startsWith('/website-leads') ||
     request.nextUrl.pathname.startsWith('/ads') ||
     request.nextUrl.pathname.startsWith('/funnels') ||
     request.nextUrl.pathname.startsWith('/sites') ||
