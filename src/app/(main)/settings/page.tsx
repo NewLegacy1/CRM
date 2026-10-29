@@ -48,7 +48,7 @@ export default function SettingsPage() {
       <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
         <h2 className="text-lg font-semibold text-zinc-100 mb-4">Cron Jobs</h2>
         <p className="text-sm text-zinc-400">
-          AI insights are generated daily at 8am via Vercel Cron. Manually trigger at <code className="text-violet-400">POST /api/generate-insights</code>.
+          AI insights are generated daily at 8am via Vercel Cron. Manually trigger at <code className="text-violet-400">POST /api/generate-insights</code> with <code className="text-violet-400">Authorization: Bearer &lt;CRON_SECRET&gt;</code>.
         </p>
       </div>
     </div>

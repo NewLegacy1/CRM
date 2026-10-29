@@ -1,11 +1,34 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+/**
+ * Vercel Cron sends `Authorization: Bearer <CRON_SECRET>`. Both GET (cron) and POST (manual)
+ * require it, because this route spends OpenAI credits. Refuse if the secret isn't configured.
+ */
+function requireCronAuth(request: Request): NextResponse | null {
+  const secret = process.env.CRON_SECRET
+  if (!secret) {
+    return NextResponse.json({ error: 'CRON_SECRET not configured' }, { status: 500 })
+  }
+  if (request.headers.get('authorization') !== `Bearer ${secret}`) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  return null
+}
 
-export async function POST(request: NextRequest) {
+export async function GET(request: Request) {
+  return requireCronAuth(request) ?? generateInsights()
+}
+
+export async function POST(request: Request) {
+  return requireCronAuth(request) ?? generateInsights()
+}
+
+async function generateInsights() {
+  const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
   if (!OPENAI_API_KEY) {
     return NextResponse.json(
       { error: 'OPENAI_API_KEY not configured' },
@@ -109,7 +132,10 @@ Format your response as JSON only:
       },
       body: JSON.stringify({
         model: 'gpt-4',
-        messages: [{ role: 'user', content: prompt }],
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
         temperature: 0.7,
       }),
     })
