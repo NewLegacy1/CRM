@@ -43,7 +43,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         </div>
         <nav class="apps" aria-label="Products we built">
           <a href="/work/detailops" data-preview="/site/do-today.webp"><img src="/site/detailops-brandmark.webp" alt=""><span>DetailOps</span></a>
-          <a href="#ownlane" data-preview="/site/ol-dashboard.webp"><span class="ol-dot" aria-hidden="true"></span><span>Ownlane</span></a>
+          <a href="#ownlane" data-preview="/site/ol-dashboard.webp"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10.5" fill="none" stroke="#c5f277" stroke-width="6" stroke-linecap="round" stroke-dasharray="20.5 12.5" transform="rotate(-11 16 16)"/></svg><span>Ownlane</span></a>
           <a href="#ecomops" data-preview="/site/eo-tests.webp"><svg viewBox="0 0 64 56" aria-hidden="true"><g fill="none" stroke-width="8"><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#C5E1F6" stroke-dasharray="15.24 200"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#8ADAE2" stroke-dasharray="15.24 200" stroke-dashoffset="-19.24"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#59E0CA" stroke-dasharray="15.24 200" stroke-dashoffset="-38.48"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#1FA99A" stroke-dasharray="15.24 200" stroke-dashoffset="-57.72"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#0B7F8C" stroke-dasharray="15.24 200" stroke-dashoffset="-76.96"/></g><path d="M32 36L41 20.4" stroke="#E6F4F6" stroke-width="5.5" stroke-linecap="round"/><circle cx="32" cy="36" r="5.5" fill="#E6F4F6"/></svg><span>EcomOps</span></a>
         </nav>
       </div>
@@ -102,6 +102,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
 
     <article class="chapter flip" id="ownlane" style="--tone:#4a463d">
       <div class="ch-copy">
+        <div class="ch-brand"><span class="ol-logo"><svg viewBox="0 0 32 32" role="img" aria-label="Ownlane"><circle cx="16" cy="16" r="10.5" fill="none" stroke="#c5f277" stroke-width="6" stroke-linecap="round" stroke-dasharray="20.5 12.5" transform="rotate(-11 16 16)"/></svg><span>ownlane</span></span></div>
         <h3 class="ch-name display">Ownlane</h3>
         <p class="ch-line">An independent checkout, built in-house.</p>
         <p class="ch-body">A branded checkout and the merchant dashboard behind it. Stores set their own offers and upgrades instead of living with a platform's defaults.</p>
@@ -212,7 +213,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
     <div class="section-head" style="grid-template-columns:1fr auto">
       <div>
         <h2 class="display">Websites and storefronts.</h2>
-        <p style="justify-self:start;margin-top:20px">Tap a phone and scroll. Most of these are the live sites running inside the page.</p>
+        <p style="justify-self:start;margin-top:20px">These are the live sites, running inside the page. Tap a phone and scroll.</p>
       </div>
       <div class="track-controls">
         <button class="round" type="button" data-track="-1" aria-label="Previous sites"><svg><use href="#left"/></svg></button>
@@ -222,9 +223,9 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
   </div>
   <div class="site-track">
     <article class="site-card">
-      <div class="phone"><div class="glass"><div class="tall"><img src="/site/detailops-site-mobile.webp" alt="The DetailOps marketing site on a phone, full length"></div></div></div>
+      <div class="phone" data-live><div class="glass"><img src="/site/detailops-site-mobile.webp" alt=""><iframe title="DetailOps live site" data-src="https://www.detailops.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">DetailOps</h3><p>Product site for auto detailers</p>
-      <div class="row"><span class="muted" style="font-size:13px">Scroll the phone</span><a class="text-link" href="https://www.detailops.ca/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
+      <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://www.detailops.ca/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
     <article class="site-card">
       <div class="phone" data-live><div class="glass"><img src="/site/showroom-mobile.webp" alt=""><iframe title="ShowRoom AutoCare live site" data-src="https://www.showroomautocare.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>

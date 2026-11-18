@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Funnel_Display, Geist, Manrope } from "next/font/google";
+import { Funnel_Display, Geist, Manrope, Sora } from "next/font/google";
 import Script from "next/script";
 import "@/components/site/site.css";
 
 const funnel = Funnel_Display({ subsets: ["latin"], variable: "--font-funnel" });
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
+const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
 
 export const metadata: Metadata = {
   title: {
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
  */
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`nls-root ${funnel.variable} ${geist.variable} ${manrope.variable}`} style={{ display: "contents" }}>
+    <div className={`nls-root ${funnel.variable} ${geist.variable} ${manrope.variable} ${sora.variable}`} style={{ display: "contents" }}>
       {children}
       <Script src="/site/site.js" strategy="afterInteractive" />
     </div>
