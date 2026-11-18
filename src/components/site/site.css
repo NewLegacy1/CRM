@@ -694,3 +694,11 @@ body { background: var(--glow); background-attachment: fixed; }
   .site-groups button { flex: 1; white-space: nowrap; font-size: 13px; padding: 8px 10px; }
   .site-groups button span { display: none; }
 }
+
+@media (max-width: 820px) {
+  .sites .section-head { grid-template-columns: minmax(0, 1fr) !important; gap: 14px; margin-bottom: 28px; }
+  .sites .track-controls { justify-self: end; }
+}
+
+@media (max-width: 820px) { .service-head { grid-template-columns: minmax(0, 1fr) 96px; } }
+@media (max-width: 360px) { .service-head .display { font-size: calc(30px * var(--display-scale)); } .fan img { width: 44px; height: 66px; } .fan { height: 66px; } }
