@@ -12,6 +12,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <a href="#work">Work</a>
       <a href="#services">Services</a>
       <a href="#process">Process</a>
+      <a class="nav-login" href="/login"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.5" r="2.75" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M2.75 13.5c.8-2.3 2.85-3.5 5.25-3.5s4.45 1.2 5.25 3.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Log in</a>
       <a class="btn" href="#contact">Start a project</a>
     </nav>
   </div>
@@ -530,7 +531,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         <div><h3>What we build</h3>
           <a href="/#services">Websites and commerce</a><a href="/#services">Custom software</a><a href="/#services">AI and automation</a><a href="/#process">How a project runs</a></div>
         <div><h3>Talk to us</h3>
-          <a href="mailto:contact@newlegacyai.ca">contact@newlegacyai.ca</a><a href="tel:9059754877">905-975-4877</a><a href="/book">Book a 30-minute call</a></div>
+          <a href="mailto:contact@newlegacyai.ca">contact@newlegacyai.ca</a><a href="tel:9059754877">905-975-4877</a><a href="/book">Book a 30-minute call</a><a href="/login">Client and team login</a></div>
       </nav>
     </div>
   </div>
