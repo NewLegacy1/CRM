@@ -214,6 +214,10 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <div>
         <h2 class="display">Websites and storefronts.</h2>
         <p style="justify-self:start;margin-top:20px">These are the live sites, running inside the page. Tap a phone and scroll.</p>
+      <div class="site-groups" role="tablist" aria-label="Kind of business">
+        <button type="button" role="tab" aria-selected="true" data-group="services">Service businesses <span>4</span></button>
+        <button type="button" role="tab" aria-selected="false" data-group="products">Product brands <span>3</span></button>
+      </div>
       </div>
       <div class="track-controls">
         <button class="round" type="button" data-track="-1" aria-label="Previous sites"><svg><use href="#left"/></svg></button>
@@ -222,40 +226,40 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
     </div>
   </div>
   <div class="site-track">
-    <article class="site-card">
+    <article class="site-card" data-group="services">
       <div class="phone" data-live><div class="glass"><img src="/site/detailops-site-mobile.webp" alt=""><iframe title="DetailOps live site" data-src="https://www.detailops.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">DetailOps</h3><p>Product site for auto detailers</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://www.detailops.ca/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
-    <article class="site-card">
+    <article class="site-card" data-group="services">
       <div class="phone" data-live><div class="glass"><img src="/site/showroom-mobile.webp" alt=""><iframe title="ShowRoom AutoCare live site" data-src="https://www.showroomautocare.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">ShowRoom AutoCare</h3><p>Mobile detailing, Hamilton and the GTA</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://www.showroomautocare.ca/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
-    <article class="site-card">
+    <article class="site-card" data-group="services">
       <div class="phone" data-live><div class="glass"><img src="/site/jay-mobile.webp" alt=""><iframe title="Jay That Drain Guy live site" data-src="https://www.jaythatdrainguy.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Jay That Drain Guy</h3><p>Emergency drain service, Hamilton and the GTA</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://www.jaythatdrainguy.ca/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
-    <article class="site-card">
+    <article class="site-card" data-group="services">
+      <div class="phone" data-live><div class="glass"><img src="/site/motordoc-mobile.webp" alt=""><iframe title="MotorDoc site preview" data-src="https://motordoc.vercel.app/"></iframe><button class="shield" type="button"><span>Scroll the site</span></button></div></div>
+      <h3 class="display">MotorDoc</h3><p>Auto repair, Hamilton</p>
+      <div class="row"><span class="muted" style="font-size:13px">Preview build</span><a class="text-link" href="https://motordoc.vercel.app/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
+    </article>
+    <article class="site-card" data-group="products" hidden>
       <div class="phone" data-live><div class="glass"><img src="/site/dear-latte-mobile.webp" alt=""><iframe title="Dear Latte live storefront" data-src="https://dearlatte.shop/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Dear Latte</h3><p>Storefront for a latte stencil camera</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://dearlatte.shop/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
-    <article class="site-card">
+    <article class="site-card" data-group="products" hidden>
       <div class="phone" data-live><div class="glass"><img src="/site/saha-buy.webp" alt=""><iframe title="Saha live shop page" data-src="https://mysaha.shop/shop"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Saha</h3><p>Shop page and bundle builder</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://mysaha.shop/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
-    <article class="site-card">
+    <article class="site-card" data-group="products" hidden>
       <div class="phone" data-live><div class="glass"><img src="/site/aerase-buy.webp" alt=""><iframe title="Aerase live shop page" data-src="https://aerase.shop/shop/her"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Aerase</h3><p>Shop page and offer picker</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://aerase.shop/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
-    </article>
-    <article class="site-card">
-      <div class="phone" data-live><div class="glass"><img src="/site/motordoc-mobile.webp" alt=""><iframe title="MotorDoc site preview" data-src="https://motordoc.vercel.app/"></iframe><button class="shield" type="button"><span>Scroll the site</span></button></div></div>
-      <h3 class="display">MotorDoc</h3><p>Auto repair, Hamilton</p>
-      <div class="row"><span class="muted" style="font-size:13px">Preview build</span><a class="text-link" href="https://motordoc.vercel.app/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
   </div>
 </section>

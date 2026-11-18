@@ -89,7 +89,7 @@
   const track = document.querySelector(".site-track");
   document.querySelectorAll("[data-track]").forEach((b) => b.addEventListener("click", () => {
     // step exactly one card (card width + gap) so snapping never skips one
-    const cards = [...track.querySelectorAll(".site-card")];
+    const cards = [...track.querySelectorAll(".site-card:not([hidden])")];
     const step = cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : track.clientWidth;
     const mid = track.scrollLeft + track.clientWidth / 2;
     let cur = 0, bd = Infinity;
@@ -204,15 +204,32 @@
     });
   });
 
+
+  // Websites row: switch between service businesses and product brands
+  const groupTabs = [...document.querySelectorAll(".site-groups button")];
+  groupTabs.forEach((t) => t.addEventListener("click", () => {
+    groupTabs.forEach((x) => x.setAttribute("aria-selected", String(x === t)));
+    const track = document.querySelector(".site-track");
+    let n = 0;
+    track.querySelectorAll(".site-card").forEach((c) => {
+      const show = c.dataset.group === t.dataset.group;
+      c.hidden = !show;
+      c.classList.remove("enter", "focus");
+      if (show && !reduced) { void c.offsetWidth; c.style.animationDelay = (n++ * 70) + "ms"; c.classList.add("enter"); }
+    });
+    track.scrollTo({ left: 0 });
+    track.dispatchEvent(new Event("scroll"));
+  }));
+
   // Live sites: the phone nearest the centre is in focus
   const siteTrack = document.querySelector(".site-track");
   if (siteTrack) {
-    const cards = [...siteTrack.querySelectorAll(".site-card")];
+    const cards = () => [...siteTrack.querySelectorAll(".site-card:not([hidden])")];
     const focus = () => {
       const mid = siteTrack.getBoundingClientRect().left + siteTrack.clientWidth / 2;
       let best = null, bd = Infinity;
-      cards.forEach((c) => { const r = c.getBoundingClientRect(); const d = Math.abs(r.left + r.width / 2 - mid); if (d < bd) { bd = d; best = c; } });
-      cards.forEach((c) => c.classList.toggle("focus", c === best));
+      cards().forEach((c) => { const r = c.getBoundingClientRect(); const d = Math.abs(r.left + r.width / 2 - mid); if (d < bd) { bd = d; best = c; } });
+      cards().forEach((c) => c.classList.toggle("focus", c === best));
     };
     siteTrack.addEventListener("scroll", () => requestAnimationFrame(focus), { passive: true });
     focus();
