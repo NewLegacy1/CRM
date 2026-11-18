@@ -35,9 +35,9 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         <div class="window">
           <div class="window-bar"><i></i><i></i><i></i><span class="url">app.detailops.ca</span></div>
           <div class="screen">
-            <div class="shot fit"><img src="/site/do-today.webp" alt="DetailOps Today page"></div>
-            <div class="shot fit"><img src="/site/do-customer.webp" alt="DetailOps customer record"></div>
-            <div class="shot fit"><img src="/site/do-schedule-new.webp" alt="DetailOps week schedule"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/do-today.webp" alt="DetailOps Today page"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/do-customer.webp" alt="DetailOps customer record"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/do-schedule-new.webp" alt="DetailOps week schedule"></div>
             <span class="scroll-hint">Scroll inside</span>
           </div>
         </div>
@@ -49,7 +49,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         <p class="tab-caption"></p>
         <div class="phone" data-live>
           <div class="glass">
-            <img src="/site/detailops-mobile.webp" alt="">
+            <img loading="lazy" decoding="async" src="/site/detailops-mobile.webp" alt="">
             <iframe title="DetailOps live demo booking page" data-src="https://www.detailops.ca/book/demo"></iframe>
             <button class="shield" type="button"><span>Try the live booking page</span></button>
           </div>
@@ -77,7 +77,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         <div class="feature-media center">
           <div class="phone" data-live style="--w:280px">
             <div class="glass">
-              <img src="/site/detailops-mobile.webp" alt="">
+              <img loading="lazy" decoding="async" src="/site/detailops-mobile.webp" alt="">
               <iframe title="DetailOps live demo booking page" data-src="https://www.detailops.ca/book/demo"></iframe>
               <button class="shield" type="button"><span>Book a demo appointment</span></button>
             </div>
@@ -97,13 +97,13 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
           <p>Bookings land on a shared week view with the service, vehicle and duration already filled in. The owner can move jobs, block time and see the gaps worth filling.</p>
           <p class="detail">Each job shows its deposit status, so nobody has to ask whether it’s been paid.</p>
         </div>
-        <div class="feature-media"><div class="crop"><img src="/site/do-schedule-new.webp" alt="DetailOps week schedule with jobs" style="width:100%"></div></div>
+        <div class="feature-media"><div class="crop"><img loading="lazy" decoding="async" src="/site/do-schedule-new.webp" alt="DetailOps week schedule with jobs" style="width:100%"></div></div>
       </div>
 
       <div class="feature">
         <div class="feature-media center">
-          <div class="phone" style="--w:230px"><div class="glass"><img src="/site/do-today-phone.webp" alt="DetailOps today's route on a phone"></div></div>
-          <div class="phone" style="--w:230px"><div class="glass"><img src="/site/do-job-phone.webp" alt="DetailOps job detail on a phone"></div></div>
+          <div class="phone" style="--w:230px"><div class="glass"><img loading="lazy" decoding="async" src="/site/do-today-phone.webp" alt="DetailOps today's route on a phone"></div></div>
+          <div class="phone" style="--w:230px"><div class="glass"><img loading="lazy" decoding="async" src="/site/do-job-phone.webp" alt="DetailOps job detail on a phone"></div></div>
         </div>
         <div class="feature-copy">
           <h3 class="display">The day on a phone</h3>
@@ -117,7 +117,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
   <section class="big-quote">
     <div class="wrap">
       <blockquote class="display">“They built with us, not around us, and the product has scaled way past what I pictured when we started.”</blockquote>
-      <div class="voice-by"><img src="/site/detailops-brandmark.webp" alt="" style="object-fit:contain;background:#141726;padding:6px"><div><strong>Will</strong>DetailOps</div></div>
+      <div class="voice-by"><img loading="lazy" decoding="async" src="/site/detailops-brandmark.webp" alt="" style="object-fit:contain;background:#141726;padding:6px"><div><strong>Will</strong>DetailOps</div></div>
     </div>
   </section>
 
@@ -137,7 +137,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <a class="next" href="/#ownlane">
         <small>Next project</small>
         <span class="display">Ownlane</span>
-        <div class="next-img"><img src="/site/ownlane-offer.webp" alt=""></div>
+        <div class="next-img"><img loading="lazy" decoding="async" src="/site/ownlane-offer.webp" alt=""></div>
       </a>
     </div>
   </section>

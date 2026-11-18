@@ -43,13 +43,13 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
           </div>
         </div>
         <nav class="apps" aria-label="Products we built">
-          <a href="/work/detailops" data-preview="/site/do-today.webp"><img src="/site/detailops-brandmark.webp" alt=""><span>DetailOps</span></a>
-          <a href="#ownlane" data-preview="/site/ol-dashboard.webp"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10.5" fill="none" stroke="#c5f277" stroke-width="6" stroke-linecap="round" stroke-dasharray="20.5 12.5" transform="rotate(-11 16 16)"/></svg><span>Ownlane</span></a>
-          <a href="#ecomops" data-preview="/site/eo-tests.webp"><svg viewBox="0 0 64 56" aria-hidden="true"><g fill="none" stroke-width="8"><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#C5E1F6" stroke-dasharray="15.24 200"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#8ADAE2" stroke-dasharray="15.24 200" stroke-dashoffset="-19.24"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#59E0CA" stroke-dasharray="15.24 200" stroke-dashoffset="-38.48"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#1FA99A" stroke-dasharray="15.24 200" stroke-dashoffset="-57.72"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#0B7F8C" stroke-dasharray="15.24 200" stroke-dashoffset="-76.96"/></g><path d="M32 36L41 20.4" stroke="#E6F4F6" stroke-width="5.5" stroke-linecap="round"/><circle cx="32" cy="36" r="5.5" fill="#E6F4F6"/></svg><span>EcomOps</span></a>
+          <a href="/work/detailops" data-app="detailops"><img loading="lazy" decoding="async" src="/site/detailops-brandmark.webp" alt=""><span>DetailOps</span></a>
+          <a href="#ownlane" data-app="ownlane"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10.5" fill="none" stroke="#c5f277" stroke-width="6" stroke-linecap="round" stroke-dasharray="20.5 12.5" transform="rotate(-11 16 16)"/></svg><span>Ownlane</span></a>
+          <a href="#ecomops" data-app="ecomops"><svg viewBox="0 0 64 56" aria-hidden="true"><g fill="none" stroke-width="8"><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#C5E1F6" stroke-dasharray="15.24 200"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#8ADAE2" stroke-dasharray="15.24 200" stroke-dashoffset="-19.24"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#59E0CA" stroke-dasharray="15.24 200" stroke-dashoffset="-38.48"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#1FA99A" stroke-dasharray="15.24 200" stroke-dashoffset="-57.72"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#0B7F8C" stroke-dasharray="15.24 200" stroke-dashoffset="-76.96"/></g><path d="M32 36L41 20.4" stroke="#E6F4F6" stroke-width="5.5" stroke-linecap="round"/><circle cx="32" cy="36" r="5.5" fill="#E6F4F6"/></svg><span>EcomOps</span></a>
         </nav>
       </div>
     </div>
-    <div class="index-preview" aria-hidden="true"><img alt="" src="/site/do-today.webp"></div>
+    <div class="hero-deck" aria-hidden="true"><figure data-app="detailops"><img src="/site/do-today.webp" alt="" decoding="async"><figcaption>DetailOps</figcaption></figure><figure data-app="ownlane"><img src="/site/ol-dashboard.webp" alt="" decoding="async"><figcaption>Ownlane</figcaption></figure><figure data-app="ecomops"><img src="/site/eo-tests.webp" alt="" decoding="async"><figcaption>EcomOps</figcaption></figure></div>
   </div>
 </div>
 
@@ -63,7 +63,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
 
     <article class="chapter" id="detailops" style="--tone:#3b3157">
       <div class="ch-copy">
-        <div class="ch-brand"><img src="/site/detailops-brandmark.webp" alt=""></div>
+        <div class="ch-brand"><img loading="lazy" decoding="async" src="/site/detailops-brandmark.webp" alt=""></div>
         <h3 class="ch-name display">DetailOps</h3>
         <p class="ch-line">From first booking to final invoice.</p>
         <p class="ch-body">Booking and operations software for auto detailers. Customers book and pay a deposit online, the shop plans the week, and the crew sees the next stop from a phone.</p>
@@ -78,9 +78,9 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         <div class="window">
           <div class="window-bar"><i></i><i></i><i></i><span class="url">app.detailops.ca</span></div>
           <div class="screen">
-            <div class="shot fit"><img src="/site/do-today.webp" alt="DetailOps Today page for the Northline demo shop"></div>
-            <div class="shot fit"><img src="/site/do-schedule-new.webp" alt="DetailOps week schedule"></div>
-            <div class="shot fit"><img src="/site/do-customer.webp" alt="DetailOps customer record"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/do-today.webp" alt="DetailOps Today page for the Northline demo shop"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/do-schedule-new.webp" alt="DetailOps week schedule"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/do-customer.webp" alt="DetailOps customer record"></div>
             <span class="scroll-hint">Scroll inside</span>
           </div>
         </div>
@@ -92,7 +92,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         <p class="tab-caption"></p>
         <div class="phone" data-live>
           <div class="glass">
-            <img src="/site/detailops-mobile.webp" alt="">
+            <img loading="lazy" decoding="async" src="/site/detailops-mobile.webp" alt="">
             <iframe title="DetailOps live demo booking page" data-src="https://www.detailops.ca/book/demo" loading="lazy"></iframe>
             <button class="shield" type="button"><span>Try the live booking page</span></button>
           </div>
@@ -117,10 +117,10 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         <div class="window">
           <div class="window-bar"><i></i><i></i><i></i><span class="url">merchant.ownlane.app</span></div>
           <div class="screen">
-            <div class="shot fit"><img src="/site/ol-dashboard.webp" alt="Ownlane merchant dashboard with revenue and bestsellers"></div>
-            <div class="shot fit"><img src="/site/ol-analytics.webp" alt="Ownlane checkout analytics and funnel"></div>
-            <div class="shot fit"><img src="/site/ol-checkout.webp" alt="Ownlane branded checkout"></div>
-            <div class="shot fit"><img src="/site/ol-offer.webp" alt="Ownlane post-purchase subscription offer"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/ol-dashboard.webp" alt="Ownlane merchant dashboard with revenue and bestsellers"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/ol-analytics.webp" alt="Ownlane checkout analytics and funnel"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/ol-checkout.webp" alt="Ownlane branded checkout"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/ol-offer.webp" alt="Ownlane post-purchase subscription offer"></div>
             <span class="scroll-hint">Scroll inside</span>
           </div>
         </div>
@@ -132,7 +132,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         </div>
         <p class="tab-caption"></p>
         <div class="phone">
-          <div class="glass"><img src="/site/ol-checkout-phone.webp" alt="Ownlane checkout on a phone"></div>
+          <div class="glass"><img loading="lazy" decoding="async" src="/site/ol-checkout-phone.webp" alt="Ownlane checkout on a phone"></div>
           <div class="phone-label">Checkout on a phone</div>
         </div>
       </div>
@@ -154,8 +154,8 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         <div class="window">
           <div class="window-bar"><i></i><i></i><i></i><span class="url">ops.newlegacy</span></div>
           <div class="screen">
-            <div class="shot fit"><img src="/site/eo-tests.webp" alt="EcomOps ad tests in light mode for the Sable Home demo store"></div>
-            <div class="shot fit"><img src="/site/eo-today.webp" alt="EcomOps Today view in light mode"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/eo-tests.webp" alt="EcomOps ad tests in light mode for the Sable Home demo store"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/eo-today.webp" alt="EcomOps Today view in light mode"></div>
             <span class="scroll-hint">Scroll inside</span>
           </div>
         </div>
@@ -165,7 +165,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         </div>
         <p class="tab-caption"></p>
         <div class="phone">
-          <div class="glass"><img src="/site/eo-live-phone.webp" alt="EcomOps live order stream on a phone, dark mode"></div>
+          <div class="glass"><img loading="lazy" decoding="async" src="/site/eo-live-phone.webp" alt="EcomOps live order stream on a phone, dark mode"></div>
           <div class="phone-label">Live orders, dark mode</div>
         </div>
       </div>
@@ -173,7 +173,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
 
     <article class="chapter flip" id="forge" style="--tone:#6c3822">
       <div class="ch-copy">
-        <div class="ch-brand"><img src="/site/forge-brandmark.webp" alt=""></div>
+        <div class="ch-brand"><img loading="lazy" decoding="async" src="/site/forge-brandmark.webp" alt=""></div>
         <h3 class="ch-name display">Forge</h3>
         <p class="ch-line">From brand context to finished creative.</p>
         <p class="ch-body">A workspace for making ad creative. Brand guidelines, references and briefs feed image and video generation, and the direction and estimated cost are shown before anything runs.</p>
@@ -187,9 +187,9 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         <div class="window">
           <div class="window-bar"><i></i><i></i><i></i><span class="url">forge.app/create</span></div>
           <div class="screen">
-            <div class="shot fit"><img src="/site/fg-create.webp" alt="Forge: start a new ad from a template"></div>
-            <div class="shot fit"><img src="/site/fg-editor.webp" alt="Forge ad editor with an animated story ad and timeline"></div>
-            <div class="shot fit"><img src="/site/fg-review.webp" alt="Forge shows the exact prompt and cost before generating"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/fg-create.webp" alt="Forge: start a new ad from a template"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/fg-editor.webp" alt="Forge ad editor with an animated story ad and timeline"></div>
+            <div class="shot fit"><img loading="lazy" decoding="async" src="/site/fg-review.webp" alt="Forge shows the exact prompt and cost before generating"></div>
             <span class="scroll-hint">Scroll inside</span>
           </div>
         </div>
@@ -200,7 +200,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         </div>
         <p class="tab-caption"></p>
         <div class="phone">
-          <div class="glass"><img src="/site/fg-create-phone.webp" alt="Forge: start a new ad from a template, on a phone"></div>
+          <div class="glass"><img loading="lazy" decoding="async" src="/site/fg-create-phone.webp" alt="Forge: start a new ad from a template, on a phone"></div>
           <div class="phone-label">Start an ad on a phone</div>
         </div>
       </div>
@@ -214,11 +214,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
     <div class="section-head" style="grid-template-columns:1fr auto">
       <div>
         <h2 class="display">Websites and storefronts.</h2>
-        <p style="justify-self:start;margin-top:20px">These are the live sites, running inside the page. Tap a phone and scroll.</p>
-      <div class="site-groups" role="tablist" aria-label="Kind of business">
-        <button type="button" role="tab" aria-selected="true" data-group="services">Service businesses <span>4</span></button>
-        <button type="button" role="tab" aria-selected="false" data-group="products">Product brands <span>3</span></button>
-      </div>
+        <p style="justify-self:start;margin-top:20px">Service businesses first, then product brands. These are the live sites: tap a phone and scroll.</p>
       </div>
       <div class="track-controls">
         <button class="round" type="button" data-track="-1" aria-label="Previous sites"><svg><use href="#left"/></svg></button>
@@ -227,38 +223,38 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
     </div>
   </div>
   <div class="site-track">
-    <article class="site-card" data-group="services">
-      <div class="phone" data-live><div class="glass"><img src="/site/detailops-site-mobile.webp" alt=""><iframe title="DetailOps live site" data-src="https://www.detailops.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+    <article class="site-card">
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/detailops-site-mobile.webp" alt=""><iframe title="DetailOps live site" data-src="https://www.detailops.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">DetailOps</h3><p>Product site for auto detailers</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://www.detailops.ca/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
-    <article class="site-card" data-group="services">
-      <div class="phone" data-live><div class="glass"><img src="/site/showroom-mobile.webp" alt=""><iframe title="ShowRoom AutoCare live site" data-src="https://www.showroomautocare.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+    <article class="site-card">
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/showroom-mobile.webp" alt=""><iframe title="ShowRoom AutoCare live site" data-src="https://www.showroomautocare.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">ShowRoom AutoCare</h3><p>Mobile detailing, Hamilton and the GTA</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://www.showroomautocare.ca/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
-    <article class="site-card" data-group="services">
-      <div class="phone" data-live><div class="glass"><img src="/site/jay-mobile.webp" alt=""><iframe title="Jay That Drain Guy live site" data-src="https://www.jaythatdrainguy.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+    <article class="site-card">
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/jay-mobile.webp" alt=""><iframe title="Jay That Drain Guy live site" data-src="https://www.jaythatdrainguy.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Jay That Drain Guy</h3><p>Emergency drain service, Hamilton and the GTA</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://www.jaythatdrainguy.ca/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
-    <article class="site-card" data-group="services">
-      <div class="phone" data-live><div class="glass"><img src="/site/motordoc-mobile.webp" alt=""><iframe title="MotorDoc site preview" data-src="https://motordoc.vercel.app/"></iframe><button class="shield" type="button"><span>Scroll the site</span></button></div></div>
+    <article class="site-card">
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/motordoc-mobile.webp" alt=""><iframe title="MotorDoc site preview" data-src="https://motordoc.vercel.app/"></iframe><button class="shield" type="button"><span>Scroll the site</span></button></div></div>
       <h3 class="display">MotorDoc</h3><p>Auto repair, Hamilton</p>
       <div class="row"><span class="muted" style="font-size:13px">Preview build</span><a class="text-link" href="https://motordoc.vercel.app/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
-    <article class="site-card" data-group="products" hidden>
-      <div class="phone" data-live><div class="glass"><img src="/site/dear-latte-mobile.webp" alt=""><iframe title="Dear Latte live storefront" data-src="https://dearlatte.shop/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+    <article class="site-card">
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/dear-latte-mobile.webp" alt=""><iframe title="Dear Latte live storefront" data-src="https://dearlatte.shop/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Dear Latte</h3><p>Storefront for a latte stencil camera</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://dearlatte.shop/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
-    <article class="site-card" data-group="products" hidden>
-      <div class="phone" data-live><div class="glass"><img src="/site/saha-buy.webp" alt=""><iframe title="Saha live shop page" data-src="https://mysaha.shop/shop"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+    <article class="site-card">
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/saha-buy.webp" alt=""><iframe title="Saha live shop page" data-src="https://mysaha.shop/shop"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Saha</h3><p>Shop page and bundle builder</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://mysaha.shop/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
-    <article class="site-card" data-group="products" hidden>
-      <div class="phone" data-live><div class="glass"><img src="/site/aerase-buy.webp" alt=""><iframe title="Aerase live shop page" data-src="https://aerase.shop/shop/her"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+    <article class="site-card">
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/aerase-buy.webp" alt=""><iframe title="Aerase live shop page" data-src="https://aerase.shop/shop/her"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Aerase</h3><p>Shop page and offer picker</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://aerase.shop/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
@@ -277,7 +273,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <div class="voices-grid">
         <div>
           <blockquote class="voice display">“We needed a site that matched how we work in the field. Clear packages, strong local presence, and a booking path that doesn’t waste our time on the phone. It looks premium, ranks where we need it to, and feeds straight into DetailOps so the crew stays moving.”</blockquote>
-          <div class="voice-by"><img src="https://showroomautocare.ca/logo.png" alt=""><div><strong>Nathan</strong>ShowRoom AutoCare, Hamilton</div></div>
+          <div class="voice-by"><img loading="lazy" decoding="async" src="https://showroomautocare.ca/logo.png" alt=""><div><strong>Nathan</strong>ShowRoom AutoCare, Hamilton</div></div>
         </div>
         <ul class="voice-facts">
           <li><b>135+</b><span>five-star Google reviews</span></li>
@@ -290,7 +286,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <div class="voices-grid">
         <div>
           <blockquote class="voice display">“When someone’s drain is backing up at midnight, your site has one job: make them trust you enough to call. New Legacy built exactly that. Fast, mobile-first, emergency-first, and tuned for every city we cover. I’m proud to send people to it.”</blockquote>
-          <div class="voice-by"><img src="https://www.jaythatdrainguy.ca/favicon.png" alt=""><div><strong>Jay</strong>Jay That Drain Guy, Hamilton and the GTA</div></div>
+          <div class="voice-by"><img loading="lazy" decoding="async" src="https://www.jaythatdrainguy.ca/favicon.png" alt=""><div><strong>Jay</strong>Jay That Drain Guy, Hamilton and the GTA</div></div>
         </div>
         <ul class="voice-facts">
           <li><b>96+</b><span>five-star reviews</span></li>
@@ -303,7 +299,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <div class="voices-grid">
         <div>
           <blockquote class="voice display">“New Legacy helped us turn a messy idea into something detailers actually use every day. Booking, deposits, reminders, the whole loop. They built with us, not around us, and the product has scaled way past what I pictured when we started.”</blockquote>
-          <div class="voice-by"><img src="/site/detailops-brandmark.webp" alt="" style="object-fit:contain;background:#141726;padding:6px"><div><strong>Will</strong>DetailOps</div></div>
+          <div class="voice-by"><img loading="lazy" decoding="async" src="/site/detailops-brandmark.webp" alt="" style="object-fit:contain;background:#141726;padding:6px"><div><strong>Will</strong>DetailOps</div></div>
         </div>
         <ul class="voice-facts">
           <li><b>500+</b><span>detailers on the platform</span></li>
@@ -326,15 +322,15 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <button class="service-head" type="button" aria-expanded="true">
         <span class="display">Websites and commerce</span>
         <p>Sites and storefronts that make the next step obvious on a phone: call, book or buy.</p>
-        <span class="fan" aria-hidden="true"><img src="/site/detailops-site-mobile.webp" alt=""><img src="/site/saha-buy.webp" alt=""><img src="/site/showroom-mobile.webp" alt=""></span>
+        <span class="fan" aria-hidden="true"><img loading="lazy" decoding="async" src="/site/detailops-site-mobile.webp" alt=""><img loading="lazy" decoding="async" src="/site/saha-buy.webp" alt=""><img loading="lazy" decoding="async" src="/site/showroom-mobile.webp" alt=""></span>
       </button>
       <div class="service-body"><div><div class="service-inner">
         <div><h4>A good fit when</h4><ul><li>Your site doesn’t reflect the quality of your work</li><li>Customers can’t book or buy easily on a phone</li><li>Your platform fights the offer you want to run</li></ul></div>
         <div><h4>Usually includes</h4><ul><li>Design and page structure</li><li>Booking, quote or checkout flow</li><li>Local search setup</li><li>Analytics you can read</li></ul></div>
         <div><h4>Related work</h4><div class="related three">
-          <a href="#sites"><img src="/site/showroom.webp" alt="">ShowRoom AutoCare</a>
-          <a href="#sites"><img src="/site/saha.webp" alt="">Saha</a>
-          <a href="https://www.detailops.ca/" target="_blank" rel="noreferrer"><img src="/site/detailops-site-desktop.webp" alt="">DetailOps</a>
+          <a href="#sites"><img loading="lazy" decoding="async" src="/site/showroom.webp" alt="">ShowRoom AutoCare</a>
+          <a href="#sites"><img loading="lazy" decoding="async" src="/site/saha.webp" alt="">Saha</a>
+          <a href="https://www.detailops.ca/" target="_blank" rel="noreferrer"><img loading="lazy" decoding="async" src="/site/detailops-site-desktop.webp" alt="">DetailOps</a>
         </div></div>
       </div></div></div>
     </div>
@@ -343,14 +339,14 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <button class="service-head" type="button" aria-expanded="false">
         <span class="display">Custom software</span>
         <p>Tools shaped around how your team already works, replacing the spreadsheets and group texts.</p>
-        <span class="fan" aria-hidden="true"><img src="/site/ownlane-mobile.webp" alt=""><img src="/site/ecomops-mobile.webp" alt=""><img src="/site/detailops-mobile.webp" alt=""></span>
+        <span class="illus illus-soft" aria-hidden="true"><span class="u-win"><span class="u-bar"><i></i><i></i><i></i></span><span class="u-side"></span><span class="u-rows"><span class="u-row"><b></b><em>Booked</em></span><span class="u-row"><b></b><em>Booked</em></span><span class="u-row"><b></b><em class="go">Done</em></span></span><span class="u-cursor"></span></span></span>
       </button>
       <div class="service-body"><div><div class="service-inner">
         <div><h4>A good fit when</h4><ul><li>Spreadsheets and texts are running the business</li><li>Off-the-shelf tools almost fit, but not quite</li><li>Information lives in five different places</li></ul></div>
         <div><h4>Usually includes</h4><ul><li>Mapping the work as it happens today</li><li>Clickable designs before code</li><li>Web and phone app</li><li>Payments, calendars and messaging connected</li></ul></div>
         <div><h4>Related work</h4><div class="related">
-          <a href="/work/detailops"><img src="/site/detailops.webp" alt="">DetailOps</a>
-          <a href="#ownlane"><img src="/site/ownlane-offer.webp" alt="">Ownlane</a>
+          <a href="/work/detailops"><img loading="lazy" decoding="async" src="/site/detailops.webp" alt="">DetailOps</a>
+          <a href="#ownlane"><img loading="lazy" decoding="async" src="/site/ownlane-offer.webp" alt="">Ownlane</a>
         </div></div>
       </div></div></div>
     </div>
@@ -359,14 +355,14 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <button class="service-head" type="button" aria-expanded="false">
         <span class="display">AI and automation</span>
         <p>Assistants and workflows that take on repeated work, with a person reviewing what matters.</p>
-        <span class="fan" aria-hidden="true"><img src="/site/forge-mobile.webp" alt=""><img src="/site/forge-compose-mobile.webp" alt=""><img src="/site/ecomops-mobile.webp" alt=""></span>
+        <span class="illus illus-ai" aria-hidden="true"><span class="c-msg c-you">Reschedule Thursday</span><span class="c-typing"><i></i><i></i><i></i></span><span class="c-msg c-bot">4 jobs moved to Friday<em>Approve</em></span></span>
       </button>
       <div class="service-body"><div><div class="service-inner">
         <div><h4>A good fit when</h4><ul><li>Repetitive work eats your team’s week</li><li>You want AI help, with control over what it does</li><li>Reports take hours to put together</li></ul></div>
         <div><h4>Usually includes</h4><ul><li>An assistant that drafts, a person who approves</li><li>Automatic follow-up and reminders</li><li>Content and creative workflows</li><li>Spending limits and a record of what ran</li></ul></div>
         <div><h4>Related work</h4><div class="related">
-          <a href="#forge"><img src="/site/forge.webp" alt="">Forge</a>
-          <a href="#ecomops"><img src="/site/ecomops.webp" alt="">EcomOps and Cleo</a>
+          <a href="#forge"><img loading="lazy" decoding="async" src="/site/forge.webp" alt="">Forge</a>
+          <a href="#ecomops"><img loading="lazy" decoding="async" src="/site/ecomops.webp" alt="">EcomOps and Cleo</a>
         </div></div>
       </div></div></div>
     </div>
@@ -411,9 +407,9 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <div class="sp-copy"><span class="step-n">Stage 2 of 4</span><h3 class="display">Design</h3><p>The key screens, clickable on a phone and a computer, before any code is written.</p><p class="sp-get">You get a prototype your team can try.</p></div>
       <div class="artifact proto">
         <div class="minis">
-          <div class="mini-phone"><img src="/site/do-dashboard-phone.webp" alt="Prototype screen: today's route"></div>
-          <div class="mini-phone"><img src="/site/do-job-phone.webp" alt="Prototype screen: job detail"></div>
-          <div class="mini-phone"><img src="/site/do-jobs-phone.webp" alt="Prototype screen: jobs list"></div>
+          <div class="mini-phone"><img loading="lazy" decoding="async" src="/site/do-dashboard-phone.webp" alt="Prototype screen: today's route"></div>
+          <div class="mini-phone"><img loading="lazy" decoding="async" src="/site/do-job-phone.webp" alt="Prototype screen: job detail"></div>
+          <div class="mini-phone"><img loading="lazy" decoding="async" src="/site/do-jobs-phone.webp" alt="Prototype screen: jobs list"></div>
         </div>
         <p class="artifact-cap">Screens from the DetailOps design rounds</p>
       </div>
