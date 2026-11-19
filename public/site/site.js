@@ -190,44 +190,52 @@
     select(0);
   });
 
-  // ---------- live phones: a site loads only once its phone has been on screen for a moment ----------
+  // ---------- live phones: a client's real site runs here only after the visitor taps its phone ----------
+  // Until then the phone shows a screenshot, so nothing from another site loads, plays or tracks by itself.
   const phones = $$(".phone[data-live]");
   const sizePhone = (ph) => { const g = $(".glass", ph); ph.style.setProperty("--k", (g.clientWidth / 390).toFixed(4)); };
   const ro = new ResizeObserver((es) => es.forEach((e) => sizePhone(e.target.closest(".phone"))));
-  // Only a few sites run at once: each is a whole live page, and a screenful of them can exhaust the tab.
+  // Only a few sites run at once: each is a whole live page.
   const MAX_LIVE = matchMedia("(max-width: 820px)").matches ? 2 : 3;
   const live = [];          // least recently used first
-  const onscreen = new Set();
-  const park = (ph) => {
-    const f = $("iframe", ph);
-    ph.classList.remove("loaded", "active");
-    f.removeAttribute("src");
-    try { f.contentWindow.location.replace("about:blank"); } catch { /* cross-origin: dropping src is enough */ }
+  const label = (ph, text) => {
+    const sp = $(".shield span", ph);
+    if (!sp) return;
+    if (!sp.dataset.label) sp.dataset.label = sp.textContent;
+    sp.textContent = text || sp.dataset.label;
   };
-  const load = (ph, asked) => {
+  const park = (ph) => {
+    const at = live.indexOf(ph);
+    if (at >= 0) live.splice(at, 1);
+    ph.classList.remove("loaded", "loading", "active");
+    label(ph);
+    $("iframe", ph).src = "about:blank"; // navigating the frame is what actually shuts the site down
+  };
+  const load = (ph) => {
     const f = $("iframe", ph);
     if (!f) return;
     const at = live.indexOf(ph);
     if (at >= 0) { live.splice(at, 1); live.push(ph); return; }
-    while (live.length >= MAX_LIVE) {
-      const off = live.find((x) => !onscreen.has(x) && !x.classList.contains("active"));
-      if (!off && !asked) return;          // everything live is on screen: wait to be asked
-      const drop = off || live[0];
-      live.splice(live.indexOf(drop), 1); park(drop);
-    }
+    while (live.length >= MAX_LIVE) park(live[0]);
     live.push(ph);
+    ph.classList.add("loading");
+    label(ph, "Loading…");
     f.src = f.dataset.src;
   };
-  const pending = new Map();
+  // a live site that has been scrolled away is shut down again
+  const leaving = new Map();
   const io = new IntersectionObserver((es) => es.forEach((e) => {
-    if (e.isIntersecting) { onscreen.add(e.target); pending.set(e.target, setTimeout(() => load(e.target, false), 450)); }
-    else { onscreen.delete(e.target); clearTimeout(pending.get(e.target)); pending.delete(e.target); }
-  }), { threshold: .35 });
+    clearTimeout(leaving.get(e.target)); leaving.delete(e.target);
+    if (!e.isIntersecting && live.includes(e.target)) leaving.set(e.target, setTimeout(() => park(e.target), 6000));
+  }));
   phones.forEach((ph) => {
     ro.observe($(".glass", ph));
     io.observe(ph);
-    $("iframe", ph)?.addEventListener("load", () => { if (live.includes(ph)) ph.classList.add("loaded"); });
-    $(".shield", ph)?.addEventListener("click", () => { load(ph, true); ph.classList.add("active"); $("iframe", ph).focus(); });
+    $("iframe", ph)?.addEventListener("load", () => {
+      if (!live.includes(ph)) return;
+      ph.classList.remove("loading"); ph.classList.add("loaded"); label(ph);
+    });
+    $(".shield", ph)?.addEventListener("click", () => { load(ph); ph.classList.add("active"); $("iframe", ph).focus(); });
   });
   document.addEventListener("pointerdown", (e) => phones.forEach((ph) => { if (!ph.contains(e.target)) ph.classList.remove("active"); }));
 

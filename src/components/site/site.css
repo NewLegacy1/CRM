@@ -926,6 +926,8 @@ body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-even
 /* ---------- live phones: the poster stays until the real site has loaded ---------- */
 .phone iframe { opacity: 0; transition: opacity .45s ease; }
 .phone.loaded iframe { opacity: 1; }
+/* sites load on tap: while one is on its way the prompt stays, reading "Loading…" */
+.phone.active.loading .shield { opacity: 1; pointer-events: none; }
 
 /* ---------- reduced motion: the settled hero, complete. Later rounds had re-hidden the heading. ---------- */
 @media (prefers-reduced-motion: reduce) {
