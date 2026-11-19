@@ -49,7 +49,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         </nav>
       </div>
     </div>
-    <div class="hero-deck" aria-hidden="true"><figure data-app="detailops"><img src="/site/do-today.webp" alt="" decoding="async"><figcaption>DetailOps</figcaption></figure><figure data-app="ownlane"><img src="/site/ol-dashboard.webp" alt="" decoding="async"><figcaption>Ownlane</figcaption></figure><figure data-app="ecomops"><img src="/site/eo-tests.webp" alt="" decoding="async"><figcaption>EcomOps</figcaption></figure></div>
+    <div class="hero-deck" aria-hidden="true"><figure data-app="detailops"><img src="/site/do-today.webp" alt="" decoding="sync" fetchpriority="high"><figcaption>DetailOps</figcaption></figure><figure data-app="ownlane"><img src="/site/ol-dashboard.webp" alt="" decoding="sync" fetchpriority="high"><figcaption>Ownlane</figcaption></figure><figure data-app="ecomops"><img src="/site/eo-tests.webp" alt="" decoding="sync" fetchpriority="high"><figcaption>EcomOps</figcaption></figure></div>
   </div>
 </div>
 
@@ -61,7 +61,8 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <p>These are the real screens. Switch between them, scroll the long ones, and try the parts that are public.</p>
     </div>
 
-    <article class="chapter" id="detailops" style="--tone:#3b3157">
+    <span class="ch-anchor" id="detailops"></span>
+    <article class="chapter" data-ch="detailops" style="--tone:#3b3157">
       <div class="ch-copy">
         <div class="ch-brand"><img loading="lazy" decoding="async" src="/site/detailops-brandmark.webp" alt=""></div>
         <h3 class="ch-name display">DetailOps</h3>
@@ -93,7 +94,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         <div class="phone" data-live>
           <div class="glass">
             <img loading="lazy" decoding="async" src="/site/detailops-mobile.webp" alt="">
-            <iframe title="DetailOps live demo booking page" data-src="https://www.detailops.ca/book/demo" loading="lazy"></iframe>
+            <iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" title="DetailOps live demo booking page" data-src="https://www.detailops.ca/book/demo" loading="lazy"></iframe>
             <button class="shield" type="button"><span>Try the live booking page</span></button>
           </div>
           <div class="phone-label"><span class="live-dot">Live demo booking</span></div>
@@ -101,7 +102,8 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       </div>
     </article>
 
-    <article class="chapter flip" id="ownlane" style="--tone:#4a463d">
+    <span class="ch-anchor" id="ownlane"></span>
+    <article class="chapter flip" data-ch="ownlane" style="--tone:#4a463d">
       <div class="ch-copy">
         <div class="ch-brand"><span class="ol-logo"><svg viewBox="0 0 32 32" role="img" aria-label="Ownlane"><circle cx="16" cy="16" r="10.5" fill="none" stroke="#c5f277" stroke-width="6" stroke-linecap="round" stroke-dasharray="20.5 12.5" transform="rotate(-11 16 16)"/></svg><span>ownlane</span></span></div>
         <h3 class="ch-name display">Ownlane</h3>
@@ -138,7 +140,8 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       </div>
     </article>
 
-    <article class="chapter" id="ecomops" style="--tone:#1d4b49">
+    <span class="ch-anchor" id="ecomops"></span>
+    <article class="chapter" data-ch="ecomops" style="--tone:#1d4b49">
       <div class="ch-copy">
         <div class="ch-brand"><span class="eo-logo"><svg viewBox="0 0 64 56" width="40" height="35" role="img" aria-label="EcomOps"><g fill="none" stroke-width="8"><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#C5E1F6" stroke-dasharray="15.24 200"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#8ADAE2" stroke-dasharray="15.24 200" stroke-dashoffset="-19.24"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#59E0CA" stroke-dasharray="15.24 200" stroke-dashoffset="-38.48"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#1FA99A" stroke-dasharray="15.24 200" stroke-dashoffset="-57.72"/><path d="M12.95 47A22 22 0 1 1 51.05 47" stroke="#0B7F8C" stroke-dasharray="15.24 200" stroke-dashoffset="-76.96"/></g><path d="M32 36L41 20.4" stroke="#E6F4F6" stroke-width="5.5" stroke-linecap="round"/><circle cx="32" cy="36" r="5.5" fill="#E6F4F6"/></svg><span>ecomops</span></span></div>
         <h3 class="ch-name display">EcomOps</h3>
@@ -171,7 +174,8 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       </div>
     </article>
 
-    <article class="chapter flip" id="forge" style="--tone:#6c3822">
+    <span class="ch-anchor" id="forge"></span>
+    <article class="chapter flip" data-ch="forge" style="--tone:#6c3822">
       <div class="ch-copy">
         <div class="ch-brand"><img loading="lazy" decoding="async" src="/site/forge-brandmark.webp" alt=""></div>
         <h3 class="ch-name display">Forge</h3>
@@ -224,37 +228,37 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
   </div>
   <div class="site-track">
     <article class="site-card">
-      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/detailops-site-mobile.webp" alt=""><iframe title="DetailOps live site" data-src="https://www.detailops.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/detailops-site-poster.webp" alt=""><iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" title="DetailOps live site" data-src="https://www.detailops.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">DetailOps</h3><p>Product site for auto detailers</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://www.detailops.ca/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
     <article class="site-card">
-      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/showroom-mobile.webp" alt=""><iframe title="ShowRoom AutoCare live site" data-src="https://www.showroomautocare.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/showroom-mobile.webp" alt=""><iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" title="ShowRoom AutoCare live site" data-src="https://www.showroomautocare.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">ShowRoom AutoCare</h3><p>Mobile detailing, Hamilton and the GTA</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://www.showroomautocare.ca/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
     <article class="site-card">
-      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/jay-mobile.webp" alt=""><iframe title="Jay That Drain Guy live site" data-src="https://www.jaythatdrainguy.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/jay-mobile.webp" alt=""><iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" title="Jay That Drain Guy live site" data-src="https://www.jaythatdrainguy.ca/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Jay That Drain Guy</h3><p>Emergency drain service, Hamilton and the GTA</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://www.jaythatdrainguy.ca/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
     <article class="site-card">
-      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/motordoc-mobile.webp" alt=""><iframe title="MotorDoc site preview" data-src="https://motordoc.vercel.app/"></iframe><button class="shield" type="button"><span>Scroll the site</span></button></div></div>
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/motordoc-mobile.webp" alt=""><iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" title="MotorDoc site preview" data-src="https://motordoc.vercel.app/"></iframe><button class="shield" type="button"><span>Scroll the site</span></button></div></div>
       <h3 class="display">MotorDoc</h3><p>Auto repair, Hamilton</p>
       <div class="row"><span class="muted" style="font-size:13px">Preview build</span><a class="text-link" href="https://motordoc.vercel.app/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
     <article class="site-card">
-      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/dear-latte-mobile.webp" alt=""><iframe title="Dear Latte live storefront" data-src="https://dearlatte.shop/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/dear-latte-mobile.webp" alt=""><iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" title="Dear Latte live storefront" data-src="https://dearlatte.shop/"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Dear Latte</h3><p>Storefront for a latte stencil camera</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://dearlatte.shop/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
     <article class="site-card">
-      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/saha-buy.webp" alt=""><iframe title="Saha live shop page" data-src="https://mysaha.shop/shop"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/saha-buy.webp" alt=""><iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" title="Saha live shop page" data-src="https://mysaha.shop/shop"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Saha</h3><p>Shop page and bundle builder</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://mysaha.shop/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
     <article class="site-card">
-      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/aerase-buy.webp" alt=""><iframe title="Aerase live shop page" data-src="https://aerase.shop/shop/her"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
+      <div class="phone" data-live><div class="glass"><img loading="lazy" decoding="async" src="/site/aerase-buy.webp" alt=""><iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" title="Aerase live shop page" data-src="https://aerase.shop/shop/her"></iframe><button class="shield" type="button"><span>Scroll the live site</span></button></div></div>
       <h3 class="display">Aerase</h3><p>Shop page and offer picker</p>
       <div class="row"><span class="live-dot">Live</span><a class="text-link" href="https://aerase.shop/" target="_blank" rel="noreferrer">Visit <svg><use href="#arr"/></svg></a></div>
     </article>
@@ -322,7 +326,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
       <button class="service-head" type="button" aria-expanded="true">
         <span class="display">Websites and commerce</span>
         <p>Sites and storefronts that make the next step obvious on a phone: call, book or buy.</p>
-        <span class="fan" aria-hidden="true"><img loading="lazy" decoding="async" src="/site/detailops-site-mobile.webp" alt=""><img loading="lazy" decoding="async" src="/site/saha-buy.webp" alt=""><img loading="lazy" decoding="async" src="/site/showroom-mobile.webp" alt=""></span>
+        <span class="fan" aria-hidden="true"><img loading="lazy" decoding="async" src="/site/detailops-site-poster.webp" alt=""><img loading="lazy" decoding="async" src="/site/saha-buy.webp" alt=""><img loading="lazy" decoding="async" src="/site/showroom-mobile.webp" alt=""></span>
       </button>
       <div class="service-body"><div><div class="service-inner">
         <div><h4>A good fit when</h4><ul><li>Your site doesn’t reflect the quality of your work</li><li>Customers can’t book or buy easily on a phone</li><li>Your platform fights the offer you want to run</li></ul></div>

@@ -50,7 +50,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
         <div class="phone" data-live>
           <div class="glass">
             <img loading="lazy" decoding="async" src="/site/detailops-mobile.webp" alt="">
-            <iframe title="DetailOps live demo booking page" data-src="https://www.detailops.ca/book/demo"></iframe>
+            <iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" title="DetailOps live demo booking page" data-src="https://www.detailops.ca/book/demo"></iframe>
             <button class="shield" type="button"><span>Try the live booking page</span></button>
           </div>
           <div class="phone-label"><span class="live-dot">Live demo booking</span></div>
@@ -78,7 +78,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
           <div class="phone" data-live style="--w:280px">
             <div class="glass">
               <img loading="lazy" decoding="async" src="/site/detailops-mobile.webp" alt="">
-              <iframe title="DetailOps live demo booking page" data-src="https://www.detailops.ca/book/demo"></iframe>
+              <iframe sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" title="DetailOps live demo booking page" data-src="https://www.detailops.ca/book/demo"></iframe>
               <button class="shield" type="button"><span>Book a demo appointment</span></button>
             </div>
           </div>

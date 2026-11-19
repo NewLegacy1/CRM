@@ -13,14 +13,37 @@
   const cta = $(".mobile-cta");
   const chapters = $$(".chapter");
   const stages = $$(".stage");
+  const work = $("#work");
   const stackQuery = matchMedia("(min-width: 1080px) and (min-height: 760px)");
+  const clamp01 = (n) => Math.min(1, Math.max(0, n));
+  // Chapters stack only when every one fits under the header; otherwise they stay in normal flow.
+  let stacking = false;
+  const chapterH = new Map();
+  function measureStack() {
+    let tallest = 0;
+    chapters.forEach((c) => {
+      const copy = $(".ch-copy", c), stage = $(".stage", c);
+      const h = Math.max(copy ? copy.offsetHeight : 0, stage ? stage.offsetHeight + 70 : 0); // 70: the phone and its label hang below the stage
+      chapterH.set(c, h); tallest = Math.max(tallest, h);
+    });
+    const want = !reduced && chapters.length > 1 && stackQuery.matches && tallest + 96 <= innerHeight - 72;
+    if (want !== stacking) {
+      stacking = want;
+      if (work) work.classList.toggle("stack", want);
+      if (!want) chapters.forEach((c) => { c.style.transform = ""; c.style.opacity = ""; c.style.visibility = ""; });
+    }
+  }
   let p = 0; // entrance progress, shared with the star field
   const HOLD_FROM = 0.62; // the hero is fully settled from here to the end of the entrance
 
   // ---------- the scroll loop ----------
   const nearStages = new Set();
   if ("IntersectionObserver" in window) {
-    const sio = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting ? nearStages.add(e.target) : nearStages.delete(e.target)), { rootMargin: "20% 0px" });
+    const sio = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) { nearStages.delete(e.target); return; }
+      nearStages.add(e.target);
+      $$('img[loading="lazy"]', e.target).forEach((im) => { im.loading = "eager"; });
+    }), { rootMargin: "20% 0px" });
     stages.forEach((s) => sio.observe(s));
   }
   let queued = false;
@@ -30,7 +53,6 @@
     // reads
     const er = entrance && entrance.getBoundingClientRect();
     const stageTops = [...nearStages].map((s) => [s, s.getBoundingClientRect().top]);
-    const stacking = !reduced && stackQuery.matches;
     const chapterTops = stacking ? chapters.map((c) => c.getBoundingClientRect().top) : null;
     const contactTop = contact ? contact.getBoundingClientRect().top : Infinity;
     // writes
@@ -53,18 +75,34 @@
     if (stacking) {
       chapters.forEach((c, i) => {
         const nextTop = chapterTops[i + 1];
-        const cover = nextTop === undefined ? 0 : 1 - Math.min(1, Math.max(0, (nextTop - 72) / (vh * .7)));
-        c.style.transform = cover > .002 ? `scale(${(1 - cover * .07).toFixed(4)}) translateY(${(-cover * 24).toFixed(1)}px)` : "";
-        c.style.opacity = cover > .002 ? Math.max(0, 1 - cover * 1.6).toFixed(3) : "";
+        // The chapter holds until the next one's content would touch it, then the next pushes it up
+        // and it dims as it goes: the two are never drawn over each other and the screen is never empty.
+        let push = 0, cover = 0;
+        if (nextTop !== undefined) {
+          const h = chapterH.get(c);
+          push = Math.max(0, 72 + h + vh * .08 - nextTop);
+          cover = clamp01(push / (h * .62));
+        }
+        c.style.transform = push > .5 ? `translateY(${(-push).toFixed(1)}px) scale(${(1 - cover * .04).toFixed(4)})` : "";
+        c.style.opacity = push > .5 ? (1 - cover * cover * (3 - 2 * cover)).toFixed(3) : "";
+        c.style.visibility = cover > .998 ? "hidden" : "";
       });
-    } else if (chapters[0] && chapters[0].style.transform) {
-      chapters.forEach((c) => { c.style.transform = ""; c.style.opacity = ""; });
     }
     if (cta && er) cta.classList.toggle("show", er.bottom < vh * .5 && contactTop > vh);
   }
   const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(frame); } };
   addEventListener("scroll", schedule, { passive: true });
-  addEventListener("resize", schedule);
+  addEventListener("resize", () => { measureStack(); schedule(); });
+  if ("ResizeObserver" in window) {
+    const cro = new ResizeObserver(() => { measureStack(); schedule(); });
+    chapters.forEach((c) => { const copy = $(".ch-copy", c), stage = $(".stage", c); if (copy) cro.observe(copy); if (stage) cro.observe(stage); });
+  }
+  if (reduced && entrance) { // no scroll-driven entrance: show the settled hero
+    p = 1; window.__nlP = 1;
+    entrance.style.setProperty("--p", "1");
+    entrance.classList.add("late");
+  }
+  measureStack();
   frame();
 
   // ---------- the hero holds: when you stop scrolling partway through the entrance, settle on the hero ----------
@@ -156,16 +194,40 @@
   const phones = $$(".phone[data-live]");
   const sizePhone = (ph) => { const g = $(".glass", ph); ph.style.setProperty("--k", (g.clientWidth / 390).toFixed(4)); };
   const ro = new ResizeObserver((es) => es.forEach((e) => sizePhone(e.target.closest(".phone"))));
-  const load = (ph) => { const f = $("iframe", ph); if (f && !f.src) f.src = f.dataset.src; };
+  // Only a few sites run at once: each is a whole live page, and a screenful of them can exhaust the tab.
+  const MAX_LIVE = matchMedia("(max-width: 820px)").matches ? 2 : 3;
+  const live = [];          // least recently used first
+  const onscreen = new Set();
+  const park = (ph) => {
+    const f = $("iframe", ph);
+    ph.classList.remove("loaded", "active");
+    f.removeAttribute("src");
+    try { f.contentWindow.location.replace("about:blank"); } catch { /* cross-origin: dropping src is enough */ }
+  };
+  const load = (ph, asked) => {
+    const f = $("iframe", ph);
+    if (!f) return;
+    const at = live.indexOf(ph);
+    if (at >= 0) { live.splice(at, 1); live.push(ph); return; }
+    while (live.length >= MAX_LIVE) {
+      const off = live.find((x) => !onscreen.has(x) && !x.classList.contains("active"));
+      if (!off && !asked) return;          // everything live is on screen: wait to be asked
+      const drop = off || live[0];
+      live.splice(live.indexOf(drop), 1); park(drop);
+    }
+    live.push(ph);
+    f.src = f.dataset.src;
+  };
   const pending = new Map();
   const io = new IntersectionObserver((es) => es.forEach((e) => {
-    if (e.isIntersecting) pending.set(e.target, setTimeout(() => { load(e.target); io.unobserve(e.target); }, 450));
-    else { clearTimeout(pending.get(e.target)); pending.delete(e.target); }
+    if (e.isIntersecting) { onscreen.add(e.target); pending.set(e.target, setTimeout(() => load(e.target, false), 450)); }
+    else { onscreen.delete(e.target); clearTimeout(pending.get(e.target)); pending.delete(e.target); }
   }), { threshold: .35 });
   phones.forEach((ph) => {
     ro.observe($(".glass", ph));
     io.observe(ph);
-    $(".shield", ph)?.addEventListener("click", () => { load(ph); ph.classList.add("active"); $("iframe", ph).focus(); });
+    $("iframe", ph)?.addEventListener("load", () => { if (live.includes(ph)) ph.classList.add("loaded"); });
+    $(".shield", ph)?.addEventListener("click", () => { load(ph, true); ph.classList.add("active"); $("iframe", ph).focus(); });
   });
   document.addEventListener("pointerdown", (e) => phones.forEach((ph) => { if (!ph.contains(e.target)) ph.classList.remove("active"); }));
 
@@ -363,11 +425,13 @@
     };
     function draw(t) {
       raf = 0;
+      if (!w || !h || !neb.width || !neb.height) return; // not laid out yet; the resize observer kicks again
       const time = reduced ? 0 : t / 1000;
       const p = Math.min(1, window.__nlP / HOLD_FROM || 0); // visuals finish at the hold, then stay put
       ctx.globalCompositeOperation = "source-over";
       ctx.globalAlpha = 1;
-      ctx.drawImage(neb, -30 + Math.sin(time * .05) * 18, -30 + p * h * .12, w + 60, h + 60);
+      // the nebula drifts down by 12% of the height, so it is drawn that much taller: no unpainted band at the top on tall screens
+      ctx.drawImage(neb, -30 + Math.sin(time * .05) * 18, -30 - (1 - p) * h * .12, w + 60, h * 1.12 + 60);
       const hx = w * (.55 - p * .05), hy = h * (.45 + p * .33);
       const haze = ctx.createRadialGradient(hx, hy, 0, hx, hy, Math.max(w, h) * (.62 - p * .12));
       haze.addColorStop(0, `rgba(122,112,205,${.5 + p * .1})`);

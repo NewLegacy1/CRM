@@ -5,8 +5,9 @@ import "@/components/site/site.css";
 
 const funnel = Funnel_Display({ subsets: ["latin"], variable: "--font-funnel" });
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
-const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
-const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
+// Manrope and Sora only set two small product lockups further down the page, so they are not preloaded.
+const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", preload: false });
+const sora = Sora({ subsets: ["latin"], variable: "--font-sora", preload: false });
 
 export const metadata: Metadata = {
   title: {
