@@ -29,7 +29,7 @@ const html = `<svg width="0" height="0" style="position:absolute" aria-hidden="t
 
     <div class="beat beat-one" aria-hidden="true">
       <div class="display">New Legacy</div>
-      <p>Websites, software and AI.</p>
+      <p>Websites, Software and AI.</p>
     </div>
 
     <div class="beat beat-two">
